@@ -26,22 +26,78 @@
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.5);
         }
+
+        /* --- Custom Smooth Animations --- */
+        @keyframes modalPopIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.85) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .animate-pop-in {
+            animation: modalPopIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        /* Transition Effects */
+        .smooth-transition {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-hover-effect {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-hover-effect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.15);
+        }
+        .btn-hover-effect:active {
+            transform: translateY(0) scale(0.97);
+        }
     </style>
 </head>
 <body class="min-h-screen text-slate-800 pb-12">
 
     <!-- NAVBAR -->
-    <nav class="bg-slate-900/80 backdrop-blur-md text-white shadow-lg sticky top-0 z-40 border-b border-white/10">
+    <nav class="bg-slate-900/80 backdrop-blur-md text-white shadow-lg sticky top-0 z-40 border-b border-white/10 transition-all duration-300">
         <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-pink-500 flex items-center justify-center shadow-md">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-pink-500 flex items-center justify-center shadow-md transform hover:rotate-6 transition-transform">
                     <i class="fa-solid fa-building text-white text-lg"></i>
                 </div>
                 <h1 class="font-bold text-xl tracking-wide bg-gradient-to-r from-white to-slate-200 bg-clip-text text-transparent">ระบบเช็กการชำระค่าห้อง</h1>
             </div>
-            <div id="userInfo" class="hidden flex items-center space-x-3">
+            <div id="userInfo" class="hidden flex items-center space-x-3 animate-fade-in">
                 <span id="userBadge" class="bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-1.5 rounded-full text-sm font-medium shadow-sm"></span>
-                <button onclick="logout()" class="text-sm bg-rose-500 hover:bg-rose-600 text-white px-4 py-1.5 rounded-full transition shadow-sm font-medium hover:shadow-md">ออกจากระบบ</button>
+                <button onclick="logout()" class="text-sm bg-rose-500 hover:bg-rose-600 text-white px-4 py-1.5 rounded-full transition shadow-sm font-medium hover:shadow-md btn-hover-effect">ออกจากระบบ</button>
             </div>
         </div>
     </nav>
@@ -49,9 +105,9 @@
     <div class="max-w-6xl mx-auto px-4 pt-10">
 
         <!-- LOGIN SECTION -->
-        <div id="loginSection" class="max-w-md mx-auto glass-card p-8 rounded-2xl shadow-2xl">
+        <div id="loginSection" class="max-w-md mx-auto glass-card p-8 rounded-2xl shadow-2xl animate-fade-in-up">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg text-white text-2xl">
+                <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg text-white text-2xl transform hover:scale-110 transition duration-300">
                     <i class="fa-solid fa-user-check"></i>
                 </div>
                 <h2 class="text-2xl font-bold text-slate-800">เข้าสู่ระบบ</h2>
@@ -60,22 +116,22 @@
             
             <div class="mb-5">
                 <label class="block text-sm font-medium text-slate-700 mb-2">กรอกรหัสนิสิต (10 หลัก)</label>
-                <input type="text" id="studentIdInput" placeholder="เช่น 6920504529" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition bg-white/80">
+                <input type="text" id="studentIdInput" placeholder="เช่น 6920504529" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 bg-white/80">
             </div>
-            <button onclick="loginStudent()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 rounded-xl font-semibold shadow-lg shadow-indigo-500/30 transition duration-200 active:scale-[0.98]">เข้าสู่ระบบนิสิต</button>
+            <button onclick="loginStudent()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 rounded-xl font-semibold shadow-lg shadow-indigo-500/30 btn-hover-effect">เข้าสู่ระบบนิสิต</button>
             
             <hr class="my-6 border-slate-200">
             
             <div class="text-center">
-                <button onclick="openAdminModal()" class="text-xs text-slate-500 hover:text-indigo-600 transition font-medium inline-flex items-center">
-                    <i class="fa-solid fa-user-shield mr-1.5 text-indigo-500"></i> เข้าสู่ระบบผู้ดูแลระบบ (Admin)
+                <button onclick="openAdminModal()" class="text-xs text-slate-500 hover:text-indigo-600 transition-colors duration-200 font-medium inline-flex items-center group">
+                    <i class="fa-solid fa-user-shield mr-1.5 text-indigo-500 group-hover:scale-125 transition-transform"></i> เข้าสู่ระบบผู้ดูแลระบบ (Admin)
                 </button>
             </div>
         </div>
 
         <!-- STUDENT DASHBOARD -->
         <div id="studentDashboard" class="hidden space-y-6">
-            <div class="glass-card p-6 rounded-2xl shadow-xl flex justify-between items-center border-l-8 border-indigo-600">
+            <div class="glass-card p-6 rounded-2xl shadow-xl flex justify-between items-center border-l-8 border-indigo-600 animate-fade-in-up">
                 <div>
                     <h3 class="text-2xl font-bold text-slate-800" id="stdName">---</h3>
                     <p class="text-slate-600 text-sm mt-1">รหัสนิสิต: <span id="stdId" class="font-mono font-semibold text-slate-700">---</span> | ค่าห้องเดือนละ <span class="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">50 บาท</span></p>
@@ -83,22 +139,22 @@
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
-                <div class="glass-card p-6 rounded-2xl shadow-xl flex flex-col items-center text-center">
+                <div class="glass-card p-6 rounded-2xl shadow-xl flex flex-col items-center text-center animate-fade-in-up" style="animation-delay: 0.1s;">
                     <h4 class="font-bold text-lg text-slate-800 mb-1">สแกน QR Code ชำระเงิน</h4>
                     <p class="text-sm text-slate-500 mb-4">บัญชี: ด.ช. ศิรภัทร สินสวัสดิ์ (MAKE by KBank)</p>
-                    <div class="bg-white p-3 rounded-2xl shadow-md border border-slate-100">
+                    <div class="bg-white p-3 rounded-2xl shadow-md border border-slate-100 transform hover:scale-105 transition duration-300">
                         <img src="EED65E55-B40C-4FC8-A7B1-BF444229FBBC.jpeg" alt="QR Code Payment" class="w-52 h-auto mx-auto rounded-xl">
                     </div>
                     <span class="inline-block mt-4 px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">ยอดชำระ: 50.00 บาท</span>
                 </div>
 
-                <div class="glass-card p-6 rounded-2xl shadow-xl">
+                <div class="glass-card p-6 rounded-2xl shadow-xl animate-fade-in-up" style="animation-delay: 0.2s;">
                     <h4 class="font-bold text-lg text-slate-800 mb-4 flex items-center">
                         <i class="fa-solid fa-file-invoice-dollar text-indigo-600 mr-2"></i> ประวัติและแจ้งชำระเงินประจำเดือน
                     </h4>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-slate-700 mb-1">เลือกเดือนที่ต้องการแจ้งจ่าย:</label>
-                        <select id="monthSelect" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500">
+                        <select id="monthSelect" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 transition duration-200">
                             <option value="กันยายน">กันยายน</option>
                             <option value="ตุลาคม">ตุลาคม</option>
                             <option value="พฤศจิกายน">พฤศจิกายน</option>
@@ -116,10 +172,10 @@
 
                     <div class="mb-5">
                         <label class="block text-sm font-medium text-slate-700 mb-1">แนบรูปสลิปการโอนเงิน:</label>
-                        <input type="file" id="slipInput" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer">
+                        <input type="file" id="slipInput" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer transition">
                     </div>
 
-                    <button id="uploadBtn" onclick="submitSlip()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white py-3 rounded-xl font-semibold shadow-lg shadow-emerald-500/20 transition duration-200">
+                    <button id="uploadBtn" onclick="submitSlip()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white py-3 rounded-xl font-semibold shadow-lg shadow-emerald-500/20 btn-hover-effect">
                         <i class="fa-solid fa-upload mr-1.5"></i> ส่งสลิปแจ้งจ่ายเงิน
                     </button>
 
@@ -133,7 +189,7 @@
 
         <!-- ADMIN DASHBOARD -->
         <div id="adminDashboard" class="hidden space-y-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center glass-card p-6 rounded-2xl shadow-xl border-l-8 border-amber-500 gap-4">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center glass-card p-6 rounded-2xl shadow-xl border-l-8 border-amber-500 gap-4 animate-fade-in-up">
                 <div>
                     <h3 class="text-2xl font-bold text-slate-800">แดชบอร์ดผู้ดูแลระบบ (Admin)</h3>
                     <p class="text-slate-600 text-sm mt-1">
@@ -142,11 +198,11 @@
                     </p>
                 </div>
                 <div class="flex flex-wrap gap-3 w-full md:w-auto">
-                    <div class="bg-emerald-50 text-emerald-700 px-4 py-2.5 rounded-xl text-center border border-emerald-200/60 shadow-sm flex-1">
+                    <div class="bg-emerald-50 text-emerald-700 px-4 py-2.5 rounded-xl text-center border border-emerald-200/60 shadow-sm flex-1 transform hover:scale-105 transition duration-200">
                         <span class="block text-xs font-medium">จ่ายครบแล้ว</span>
                         <span id="paidCount" class="font-bold text-xl">0</span>
                     </div>
-                    <div class="bg-rose-50 text-rose-700 px-4 py-2.5 rounded-xl text-center border border-rose-200/60 shadow-sm flex-1">
+                    <div class="bg-rose-50 text-rose-700 px-4 py-2.5 rounded-xl text-center border border-rose-200/60 shadow-sm flex-1 transform hover:scale-105 transition duration-200">
                         <span class="block text-xs font-medium">ยังไม่จ่าย/ค้างจ่าย</span>
                         <span id="unpaidCount" class="font-bold text-xl">0</span>
                     </div>
@@ -156,7 +212,7 @@
             <!-- FINANCIAL SUMMARY & EXPENSE MANAGEMENT CARDS -->
             <div class="grid md:grid-cols-2 gap-6">
                 <!-- สรุปงบประจำเดือน -->
-                <div class="glass-card p-6 rounded-2xl shadow-xl border-t-4 border-indigo-500 flex flex-col justify-between">
+                <div class="glass-card p-6 rounded-2xl shadow-xl border-t-4 border-indigo-500 flex flex-col justify-between animate-fade-in-up" style="animation-delay: 0.1s;">
                     <div>
                         <div class="flex justify-between items-center mb-4">
                             <h4 class="font-bold text-slate-800 flex items-center">
@@ -180,15 +236,15 @@
                         </div>
                     </div>
                     <div class="mt-4 pt-3 border-t border-slate-100 flex gap-2">
-                        <input type="number" id="monthExpenseInput" placeholder="ระบุจำนวนเงินค่าใช้จ่ายเดือนนี้" class="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-                        <button onclick="addExpense('month')" class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm">
+                        <input type="number" id="monthExpenseInput" placeholder="ระบุจำนวนเงินค่าใช้จ่ายเดือนนี้" class="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                        <button onclick="addExpense('month')" class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm btn-hover-effect">
                             <i class="fa-solid fa-minus-circle mr-1"></i> หักงบเดือนนี้
                         </button>
                     </div>
                 </div>
 
                 <!-- สรุปงบรวมสะสมทั้งหมด -->
-                <div class="glass-card p-6 rounded-2xl shadow-xl border-t-4 border-emerald-500 flex flex-col justify-between">
+                <div class="glass-card p-6 rounded-2xl shadow-xl border-t-4 border-emerald-500 flex flex-col justify-between animate-fade-in-up" style="animation-delay: 0.2s;">
                     <div>
                         <div class="flex justify-between items-center mb-4">
                             <h4 class="font-bold text-slate-800 flex items-center">
@@ -212,17 +268,17 @@
                         </div>
                     </div>
                     <div class="mt-4 pt-3 border-t border-slate-100 flex gap-2">
-                        <input type="number" id="overallExpenseInput" placeholder="ระบุจำนวนเงินค่าใช้จ่ายส่วนกลาง" class="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                        <button onclick="addExpense('overall')" class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm">
+                        <input type="number" id="overallExpenseInput" placeholder="ระบุจำนวนเงินค่าใช้จ่ายส่วนกลาง" class="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
+                        <button onclick="addExpense('overall')" class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm btn-hover-effect">
                             <i class="fa-solid fa-minus-circle mr-1"></i> หักงบรวม
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div class="glass-card p-4 rounded-2xl shadow-md flex items-center justify-between">
+            <div class="glass-card p-4 rounded-2xl shadow-md flex items-center justify-between animate-fade-in-up" style="animation-delay: 0.25s;">
                 <label class="font-medium text-slate-700">เลือกเดือนที่ต้องการตรวจสอบ:</label>
-                <select id="adminMonthSelect" onchange="fetchDataAndRender()" class="p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-semibold text-indigo-700">
+                <select id="adminMonthSelect" onchange="fetchDataAndRender()" class="p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-semibold text-indigo-700 transition">
                     <option value="กันยายน">กันยายน</option>
                     <option value="ตุลาคม">ตุลาคม</option>
                     <option value="พฤศจิกายน">พฤศจิกายน</option>
@@ -238,7 +294,7 @@
                 </select>
             </div>
 
-            <div class="glass-card rounded-2xl shadow-xl overflow-hidden border border-white/50">
+            <div class="glass-card rounded-2xl shadow-xl overflow-hidden border border-white/50 animate-fade-in-up" style="animation-delay: 0.3s;">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead class="bg-slate-800 text-white">
@@ -259,17 +315,17 @@
 
     </div>
 
-    <!-- ADMIN MODAL -->
-    <div id="adminModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-        <div class="bg-white p-6 rounded-2xl max-w-sm w-full shadow-2xl border border-slate-100">
+    <!-- ADMIN MODAL (Smoother Popup Animation) -->
+    <div id="adminModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 transition-opacity duration-300">
+        <div id="adminModalContent" class="bg-white p-6 rounded-2xl max-w-sm w-full shadow-2xl border border-slate-100 transform transition-all duration-300">
             <h3 class="text-lg font-bold mb-2 text-slate-800 flex items-center">
-                <i class="fa-solid fa-lock text-amber-500 mr-2"></i> เข้าสู่ระบบผู้ดูแลระบบ
+                <i class="fa-solid fa-lock text-amber-500 mr-2 animate-bounce"></i> เข้าสู่ระบบผู้ดูแลระบบ
             </h3>
             <p class="text-xs text-slate-500 mb-4">กรุณากรอกรหัสนิสิตผู้ดูแลระบบ</p>
-            <input type="password" id="adminPasswordInput" placeholder="กรอกรหัสนิสิต Admin" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl mb-5 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+            <input type="password" id="adminPasswordInput" placeholder="กรอกรหัสนิสิต Admin" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl mb-5 focus:ring-2 focus:ring-amber-500 focus:outline-none transition duration-200">
             <div class="flex justify-end space-x-2">
-                <button onclick="closeAdminModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition">ยกเลิก</button>
-                <button onclick="loginAdmin()" class="px-5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl text-sm font-semibold shadow-md shadow-amber-500/20 transition">เข้าสู่ระบบ</button>
+                <button onclick="closeAdminModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition btn-hover-effect">ยกเลิก</button>
+                <button onclick="loginAdmin()" class="px-5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl text-sm font-semibold shadow-md shadow-amber-500/20 btn-hover-effect">เข้าสู่ระบบ</button>
             </div>
         </div>
     </div>
@@ -316,7 +372,6 @@
             { id: "6920504553", prefix: "นาย", fname: "สุรยุทธ", lname: "แสงพลาย" }
         ];
 
-        // รายชื่อ Admin และรหัสผ่านตรงกับรหัสนิสิต
         const adminAccounts = [
             { id: "6920502038", name: "นางสาว กุลธิดา โพธิ์ใย" },
             { id: "6920502062", name: "นาย ต้องรัก แดวขุนทด" },
@@ -382,7 +437,7 @@
                 const info = stdPayments[m] || { status: 'unpaid' };
                 const isPaid = info.status === 'paid';
                 const div = document.createElement('div');
-                div.className = `p-2.5 rounded-xl border text-center font-medium shadow-sm ${isPaid ? 'bg-emerald-50/80 border-emerald-200 text-emerald-700' : 'bg-rose-50/80 border-rose-200 text-rose-600'}`;
+                div.className = `p-2.5 rounded-xl border text-center font-medium shadow-sm transition-all duration-200 hover:scale-105 ${isPaid ? 'bg-emerald-50/80 border-emerald-200 text-emerald-700' : 'bg-rose-50/80 border-rose-200 text-rose-600'}`;
                 div.innerHTML = `<div>${m}</div><div class="font-bold text-[10px] mt-1">${isPaid ? '✓ จ่ายแล้ว' : '✕ ยังไม่จ่าย'}</div>`;
                 container.appendChild(div);
             });
@@ -446,8 +501,20 @@
             reader.readAsDataURL(file);
         }
 
-        function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
-        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+        function openAdminModal() { 
+            const modal = document.getElementById('adminModal');
+            const modalContent = document.getElementById('adminModalContent');
+            modal.classList.remove('hidden');
+            modalContent.classList.add('animate-pop-in');
+            document.getElementById('adminPasswordInput').focus();
+        }
+
+        function closeAdminModal() { 
+            const modal = document.getElementById('adminModal');
+            const modalContent = document.getElementById('adminModalContent');
+            modalContent.classList.remove('animate-pop-in');
+            modal.classList.add('hidden');
+        }
 
         async function loginAdmin() {
             const pass = document.getElementById('adminPasswordInput').value.trim();
@@ -496,21 +563,21 @@
                 });
 
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-indigo-50/50 transition";
+                tr.className = "hover:bg-indigo-50/60 transition-colors duration-150";
                 tr.innerHTML = `
                     <td class="p-4 text-slate-500">${idx + 1}</td>
                     <td class="p-4 font-mono font-medium text-slate-700">${std.id}</td>
                     <td class="p-4 font-medium">${std.prefix}${std.fname} ${std.lname}</td>
                     <td class="p-4 text-center">
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold ${isPaid ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold transition-all duration-300 ${isPaid ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
                             ${isPaid ? 'จ่ายแล้ว' : 'ยังไม่จ่าย'}
                         </span>
                     </td>
                     <td class="p-4 text-center">
-                        ${stdPay.slip ? `<a href="${stdPay.slip}" target="_blank" class="text-xs bg-slate-100 hover:bg-indigo-100 text-indigo-700 px-3 py-1 rounded-lg border border-indigo-200 inline-block font-medium transition">ดูสลิป Drive</a>` : '<span class="text-slate-300 text-xs">-</span>'}
+                        ${stdPay.slip ? `<a href="${stdPay.slip}" target="_blank" class="text-xs bg-slate-100 hover:bg-indigo-100 text-indigo-700 px-3 py-1 rounded-lg border border-indigo-200 inline-block font-medium btn-hover-effect">ดูสลิป Drive</a>` : '<span class="text-slate-300 text-xs">-</span>'}
                     </td>
                     <td class="p-4 text-center">
-                        <button onclick="toggleStatus('${std.id}', '${currentMonth}')" class="text-xs px-3.5 py-1.5 rounded-lg text-white font-medium shadow-sm transition ${isPaid ? 'bg-amber-500 hover:bg-amber-600' : 'bg-emerald-600 hover:bg-emerald-700'}">
+                        <button onclick="toggleStatus('${std.id}', '${currentMonth}')" class="text-xs px-3.5 py-1.5 rounded-lg text-white font-medium shadow-sm btn-hover-effect ${isPaid ? 'bg-amber-500 hover:bg-amber-600' : 'bg-emerald-600 hover:bg-emerald-700'}">
                             ${isPaid ? 'เปลี่ยนเป็นยังไม่จ่าย' : 'ทำรายการว่าจ่ายแล้ว'}
                         </button>
                     </td>
