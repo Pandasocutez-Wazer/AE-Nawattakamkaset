@@ -454,7 +454,7 @@
             const admin = adminAccounts.find(a => a.id === pass);
 
             if (admin) {
-                currentUser = { type: 'admin', data: admin };
+                currentUser = { type: 'admin', data: { id: admin.id, name: admin.name } };
                 closeAdminModal();
                 document.getElementById('loginSection').classList.add('hidden');
                 document.getElementById('adminDashboard').classList.remove('hidden');
