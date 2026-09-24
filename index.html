@@ -6,7 +6,6 @@
     <title>ระบบเช็กการชำระค่าห้องประจำเดือน</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- นำเข้าฟอนต์ Prompt -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -17,13 +16,11 @@
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
         }
-
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
         .glass-card {
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(12px);
@@ -222,7 +219,7 @@
 
             <div class="glass-card p-4 rounded-2xl shadow-md flex items-center justify-between">
                 <label class="font-medium text-slate-700">เลือกเดือนที่ต้องการตรวจสอบ:</label>
-                <select id="adminMonthSelect" onchange="renderAdminTable()" class="p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-semibold text-indigo-700">
+                <select id="adminMonthSelect" onchange="fetchDataAndRender()" class="p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-semibold text-indigo-700">
                     <option value="กันยายน">กันยายน</option>
                     <option value="ตุลาคม">ตุลาคม</option>
                     <option value="พฤศจิกายน">พฤศจิกายน</option>
@@ -275,7 +272,7 @@
 
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz__vkYQdZTE1hpTk0JDqRt6-3ndYo24Vxz4roZ-0ArtfWd9_Vxp0Gz5TV8HPkv0IlZ/exec";
-        const ROOM_FEE = 50; // ค่าห้องคนละ 50 บาท
+        const ROOM_FEE = 50;
 
         const initialStudents = [
             { id: "6920502020", prefix: "นาย", fname: "กิติศักดิ์", lname: "กาญจนี" },
@@ -319,38 +316,36 @@
         const months = ["กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" ,"มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม"];
 
         let currentUser = null;
+        let globalData = { payments: {}, expenses: { monthly: {}, overall: 0 } };
 
-        // เริ่มต้นสร้าง Structure ของข้อมูลการชำระเงิน
-        if (!localStorage.getItem('room_payments')) {
-            const initialPayments = {};
-            initialStudents.forEach(std => {
-                initialPayments[std.id] = {};
-                months.forEach(m => {
-                    initialPayments[std.id][m] = { status: 'unpaid', slip: null };
-                });
-            });
-            localStorage.setItem('room_payments', JSON.stringify(initialPayments));
+        function getPayments() { return globalData.payments; }
+        function getExpenses() { return globalData.expenses; }
+
+        async function fetchDataAndRender() {
+            try {
+                const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getData`);
+                const data = await res.json();
+                if (data && data.payments) {
+                    globalData = data;
+                }
+            } catch(e) {
+                console.log("Using cached/local structure");
+                if(!globalData.payments || Object.keys(globalData.payments).length === 0) {
+                    initialStudents.forEach(s => {
+                        globalData.payments[s.id] = {};
+                        months.forEach(m => globalData.payments[s.id][m] = { status: 'unpaid', slip: null });
+                    });
+                }
+            }
+
+            if (currentUser && currentUser.type === 'student') {
+                renderStudentStatus();
+            } else if (currentUser && currentUser.type === 'admin') {
+                renderAdminTable();
+            }
         }
 
-        // เริ่มต้นสร้าง Structure ของค่าใช้จ่าย (Expenses)
-        if (!localStorage.getItem('room_expenses')) {
-            const initialExpenses = {
-                monthly: {},
-                overall: 0
-            };
-            months.forEach(m => {
-                initialExpenses.monthly[m] = 0;
-            });
-            localStorage.setItem('room_expenses', JSON.stringify(initialExpenses));
-        }
-
-        function getPayments() { return JSON.parse(localStorage.getItem('room_payments')); }
-        function savePayments(data) { localStorage.setItem('room_payments', JSON.stringify(data)); }
-
-        function getExpenses() { return JSON.parse(localStorage.getItem('room_expenses')); }
-        function saveExpenses(data) { localStorage.setItem('room_expenses', JSON.stringify(data)); }
-
-        function loginStudent() {
+        async function loginStudent() {
             const inputId = document.getElementById('studentIdInput').value.trim();
             const student = initialStudents.find(s => s.id === inputId);
             if (student) {
@@ -361,7 +356,7 @@
                 document.getElementById('userBadge').innerText = `${student.prefix}${student.fname} ${student.lname}`;
                 document.getElementById('stdName').innerText = `${student.prefix}${student.fname} ${student.lname}`;
                 document.getElementById('stdId').innerText = student.id;
-                renderStudentStatus();
+                await fetchDataAndRender();
             } else {
                 alert('ไม่พบรหัสนิสิตนี้ในระบบ');
             }
@@ -419,15 +414,14 @@
                     const resData = await response.json();
 
                     if (resData.result === 'success') {
-                        const payments = getPayments();
-                        payments[currentUser.data.id][month] = {
+                        if(!globalData.payments[currentUser.data.id]) globalData.payments[currentUser.data.id] = {};
+                        globalData.payments[currentUser.data.id][month] = {
                             status: 'paid',
                             slip: resData.fileUrl
                         };
-                        savePayments(payments);
                         alert(`อัปโหลดสลิปแจ้งจ่ายเงินเดือน ${month} เรียบร้อยแล้ว!`);
-                        renderStudentStatus();
                         fileInput.value = '';
+                        await fetchDataAndRender();
                     } else {
                         alert('เกิดข้อผิดพลาด: ' + resData.error);
                     }
@@ -445,7 +439,7 @@
         function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
         function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
 
-        function loginAdmin() {
+        async function loginAdmin() {
             const pass = document.getElementById('adminPasswordInput').value.trim();
             if (adminPasswords.includes(pass)) {
                 currentUser = { type: 'admin' };
@@ -454,7 +448,7 @@
                 document.getElementById('adminDashboard').classList.remove('hidden');
                 document.getElementById('userInfo').classList.remove('hidden');
                 document.getElementById('userBadge').innerText = 'ผู้ดูแลระบบ (Admin)';
-                renderAdminTable();
+                await fetchDataAndRender();
             } else {
                 alert('รหัสผ่านผู้ดูแลระบบไม่ถูกต้อง');
             }
@@ -472,7 +466,7 @@
             let overallTotalReceived = 0;
 
             initialStudents.forEach((std, idx) => {
-                const stdPay = payments[std.id] ? payments[std.id][currentMonth] : { status: 'unpaid', slip: null };
+                const stdPay = (payments[std.id] && payments[std.id][currentMonth]) ? payments[std.id][currentMonth] : { status: 'unpaid', slip: null };
                 const isPaid = stdPay.status === 'paid';
 
                 if (isPaid) {
@@ -516,7 +510,7 @@
 
             // แสดงยอดเงินประจำเดือนที่เลือก
             document.getElementById('summaryMonthTitle').innerText = currentMonth;
-            const currentMonthExpense = expenses.monthly[currentMonth] || 0;
+            const currentMonthExpense = (expenses.monthly && expenses.monthly[currentMonth]) ? expenses.monthly[currentMonth] : 0;
             const currentMonthNet = currentMonthTotalReceived - currentMonthExpense;
 
             document.getElementById('monthReceivedTotal').innerText = currentMonthTotalReceived.toFixed(2) + ' บาท';
@@ -526,7 +520,7 @@
             // แสดงยอดรวมสะสมทั้งหมด
             let totalMonthlyExpenses = 0;
             months.forEach(m => {
-                totalMonthlyExpenses += (expenses.monthly[m] || 0);
+                totalMonthlyExpenses += (expenses.monthly && expenses.monthly[m]) ? expenses.monthly[m] : 0;
             });
             const overallExpense = totalMonthlyExpenses + (expenses.overall || 0);
             const overallNet = overallTotalReceived - overallExpense;
@@ -536,38 +530,72 @@
             document.getElementById('overallNetTotal').innerText = overallNet.toFixed(2) + ' บาท';
         }
 
-        function toggleStatus(stdId, month) {
-            const payments = getPayments();
-            const currentStatus = payments[stdId][month].status;
-            payments[stdId][month].status = (currentStatus === 'paid') ? 'unpaid' : 'paid';
-            savePayments(payments);
+        async function toggleStatus(stdId, month) {
+            if(!globalData.payments[stdId]) globalData.payments[stdId] = {};
+            if(!globalData.payments[stdId][month]) globalData.payments[stdId][month] = { status: 'unpaid', slip: null };
+            
+            const currentStatus = globalData.payments[stdId][month].status;
+            const newStatus = (currentStatus === 'paid') ? 'unpaid' : 'paid';
+            
+            globalData.payments[stdId][month].status = newStatus;
             renderAdminTable();
+
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: "updateStatus",
+                        studentId: stdId,
+                        month: month,
+                        status: newStatus
+                    })
+                });
+            } catch(e) {
+                console.error("Failed to update remote status", e);
+            }
         }
 
-        function addExpense(type) {
-            const expenses = getExpenses();
+        async function addExpense(type) {
+            let amount = 0;
+            let month = null;
+
             if (type === 'month') {
-                const currentMonth = document.getElementById('adminMonthSelect').value;
+                month = document.getElementById('adminMonthSelect').value;
                 const input = document.getElementById('monthExpenseInput');
-                const amount = parseFloat(input.value);
+                amount = parseFloat(input.value);
                 if (isNaN(amount) || amount <= 0) {
                     alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
                     return;
                 }
-                expenses.monthly[currentMonth] = (expenses.monthly[currentMonth] || 0) + amount;
+                if(!globalData.expenses.monthly) globalData.expenses.monthly = {};
+                globalData.expenses.monthly[month] = (globalData.expenses.monthly[month] || 0) + amount;
                 input.value = '';
             } else if (type === 'overall') {
                 const input = document.getElementById('overallExpenseInput');
-                const amount = parseFloat(input.value);
+                amount = parseFloat(input.value);
                 if (isNaN(amount) || amount <= 0) {
                     alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
                     return;
                 }
-                expenses.overall = (expenses.overall || 0) + amount;
+                globalData.expenses.overall = (globalData.expenses.overall || 0) + amount;
                 input.value = '';
             }
-            saveExpenses(expenses);
+
             renderAdminTable();
+
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: "addExpense",
+                        expenseType: type,
+                        month: month,
+                        amount: amount
+                    })
+                });
+            } catch(e) {
+                console.error("Failed to update expense remotely", e);
+            }
         }
 
         function logout() {
