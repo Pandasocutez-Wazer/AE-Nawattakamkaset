@@ -561,8 +561,8 @@
                         studentId: stdId,
                         month: month,
                         status: newStatus,
-                        adminId: currentUser.data.id,
-                        adminName: currentUser.data.name
+                        adminId: currentUser && currentUser.data ? currentUser.data.id : "ADMIN",
+                        adminName: currentUser && currentUser.data ? currentUser.data.name : "ผู้ดูแลระบบ"
                     })
                 });
             } catch(e) {
@@ -606,8 +606,8 @@
                         expenseType: type,
                         month: month,
                         amount: amount,
-                        adminId: currentUser.data.id,
-                        adminName: currentUser.data.name
+                        adminId: currentUser && currentUser.data ? currentUser.data.id : "ADMIN",
+                        adminName: currentUser && currentUser.data ? currentUser.data.name : "ผู้ดูแลระบบ"
                     })
                 });
             } catch(e) {
