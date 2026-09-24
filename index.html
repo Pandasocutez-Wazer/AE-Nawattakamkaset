@@ -471,9 +471,7 @@
             let currentMonthTotalReceived = 0;
             let overallTotalReceived = 0;
 
-            // คำนวณสถานะยอดของแต่ละเดือน และ ยอดรวมทุกเดือน
             initialStudents.forEach((std, idx) => {
-                // คำนวณเดือนที่เลือก
                 const stdPay = payments[std.id] ? payments[std.id][currentMonth] : { status: 'unpaid', slip: null };
                 const isPaid = stdPay.status === 'paid';
 
@@ -484,7 +482,6 @@
                     unpaid++;
                 }
 
-                // คำนวณยอดโอนรวมของทุกเดือนทั้งหมด
                 months.forEach(m => {
                     if (payments[std.id] && payments[std.id][m] && payments[std.id][m].status === 'paid') {
                         overallTotalReceived += ROOM_FEE;
@@ -526,59 +523,50 @@
             document.getElementById('monthExpenseTotal').innerText = currentMonthExpense.toFixed(2) + ' บาท';
             document.getElementById('monthNetTotal').innerText = currentMonthNet.toFixed(2) + ' บาท';
 
-            // คำนวณค่าใช้จ่ายรวมทุกเดือน
+            // แสดงยอดรวมสะสมทั้งหมด
             let totalMonthlyExpenses = 0;
             months.forEach(m => {
                 totalMonthlyExpenses += (expenses.monthly[m] || 0);
             });
-            const totalOverallExpenses = totalMonthlyExpenses + (expenses.overall || 0);
-            const overallNet = overallTotalReceived - totalOverallExpenses;
+            const overallExpense = totalMonthlyExpenses + (expenses.overall || 0);
+            const overallNet = overallTotalReceived - overallExpense;
 
             document.getElementById('overallReceivedTotal').innerText = overallTotalReceived.toFixed(2) + ' บาท';
-            document.getElementById('overallExpenseTotal').innerText = totalOverallExpenses.toFixed(2) + ' บาท';
+            document.getElementById('overallExpenseTotal').innerText = overallExpense.toFixed(2) + ' บาท';
             document.getElementById('overallNetTotal').innerText = overallNet.toFixed(2) + ' บาท';
-        }
-
-        // เพิ่มหรือบันทึกค่าใช้จ่าย (หักงบประมาณ)
-        function addExpense(type) {
-            const expenses = getExpenses();
-            if (type === 'month') {
-                const month = document.getElementById('adminMonthSelect').value;
-                const input = document.getElementById('monthExpenseInput');
-                const amount = parseFloat(input.value);
-
-                if (isNaN(amount) || amount < 0) {
-                    alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
-                    return;
-                }
-
-                expenses.monthly[month] = amount;
-                saveExpenses(expenses);
-                input.value = '';
-                alert(`บันทึกการหักงบประมาณของเดือน${month} เป็น ${amount.toFixed(2)} บาท เรียบร้อยแล้ว`);
-            } else if (type === 'overall') {
-                const input = document.getElementById('overallExpenseInput');
-                const amount = parseFloat(input.value);
-
-                if (isNaN(amount) || amount < 0) {
-                    alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
-                    return;
-                }
-
-                expenses.overall = amount;
-                saveExpenses(expenses);
-                input.value = '';
-                alert(`บันทึกการหักงบประมาณส่วนกลางรวม เป็น ${amount.toFixed(2)} บาท เรียบร้อยแล้ว`);
-            }
-
-            renderAdminTable();
         }
 
         function toggleStatus(stdId, month) {
             const payments = getPayments();
-            const current = payments[stdId][month].status;
-            payments[stdId][month].status = current === 'paid' ? 'unpaid' : 'paid';
+            const currentStatus = payments[stdId][month].status;
+            payments[stdId][month].status = (currentStatus === 'paid') ? 'unpaid' : 'paid';
             savePayments(payments);
+            renderAdminTable();
+        }
+
+        function addExpense(type) {
+            const expenses = getExpenses();
+            if (type === 'month') {
+                const currentMonth = document.getElementById('adminMonthSelect').value;
+                const input = document.getElementById('monthExpenseInput');
+                const amount = parseFloat(input.value);
+                if (isNaN(amount) || amount <= 0) {
+                    alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
+                    return;
+                }
+                expenses.monthly[currentMonth] = (expenses.monthly[currentMonth] || 0) + amount;
+                input.value = '';
+            } else if (type === 'overall') {
+                const input = document.getElementById('overallExpenseInput');
+                const amount = parseFloat(input.value);
+                if (isNaN(amount) || amount <= 0) {
+                    alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
+                    return;
+                }
+                expenses.overall = (expenses.overall || 0) + amount;
+                input.value = '';
+            }
+            saveExpenses(expenses);
             renderAdminTable();
         }
 
