@@ -271,7 +271,7 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz__vkYQdZTE1hpTk0JDqRt6-3ndYo24Vxz4roZ-0ArtfWd9_Vxp0Gz5TV8HPkv0IlZ/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyaBwUUhSN3ak0lFvDAr6i00agO0P_1sXdUvAAbVMJf04PQsOOhTJ1Iw9vmTnAdEmE0wA/exec";
         const ROOM_FEE = 50;
 
         const initialStudents = [
@@ -329,7 +329,7 @@
                     globalData = data;
                 }
             } catch(e) {
-                console.log("Using cached/local structure");
+                console.log("Using local initial structure");
                 if(!globalData.payments || Object.keys(globalData.payments).length === 0) {
                     initialStudents.forEach(s => {
                         globalData.payments[s.id] = {};
@@ -508,7 +508,7 @@
             document.getElementById('paidCount').innerText = paid;
             document.getElementById('unpaidCount').innerText = unpaid;
 
-            // แสดงยอดเงินประจำเดือนที่เลือก
+            // สรุปยอดประจำเดือนที่เลือก
             document.getElementById('summaryMonthTitle').innerText = currentMonth;
             const currentMonthExpense = (expenses.monthly && expenses.monthly[currentMonth]) ? expenses.monthly[currentMonth] : 0;
             const currentMonthNet = currentMonthTotalReceived - currentMonthExpense;
@@ -517,7 +517,7 @@
             document.getElementById('monthExpenseTotal').innerText = currentMonthExpense.toFixed(2) + ' บาท';
             document.getElementById('monthNetTotal').innerText = currentMonthNet.toFixed(2) + ' บาท';
 
-            // แสดงยอดรวมสะสมทั้งหมด
+            // สรุปยอดรวมสะสมทั้งหมด (ทุกเดือน)
             let totalMonthlyExpenses = 0;
             months.forEach(m => {
                 totalMonthlyExpenses += (expenses.monthly && expenses.monthly[m]) ? expenses.monthly[m] : 0;
@@ -551,7 +551,7 @@
                     })
                 });
             } catch(e) {
-                console.error("Failed to update remote status", e);
+                console.error("Failed to update status remotely", e);
             }
         }
 
