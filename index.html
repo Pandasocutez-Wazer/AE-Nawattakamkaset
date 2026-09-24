@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบเช็กการชำระค่าห้องประจำเดือน</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Sarabun', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <nav class="bg-indigo-600 text-white shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid font-bold text-2xl fa-building"></i>
+                <h1 class="font-bold text-xl">ระบบเช็กการชำระค่าห้อง</h1>
+            </div>
+            <div id="userInfo" class="hidden flex items-center space-x-3">
+                <span id="userBadge" class="bg-indigo-700 px-3 py-1 rounded-full text-sm font-medium"></span>
+                <button onclick="logout()" class="text-sm bg-red-500 hover:bg-red-600 px-3 py-1 rounded transition">ออกจากระบบ</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-4 py-8">
+
+        <!-- LOGIN SECTION -->
+        <div id="loginSection" class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg border border-slate-100">
+            <h2 class="text-2xl font-bold text-center mb-6 text-slate-700">เข้าสู่ระบบ</h2>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-slate-600 mb-2">กรอกรหัสนิสิต (10 หลัก)</label>
+                <input type="text" id="studentIdInput" placeholder="เช่น 6920504529" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            <button onclick="loginStudent()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg font-semibold transition">เข้าสู่ระบบนิสิต</button>
+            
+            <hr class="my-6">
+            
+            <div class="text-center">
+                <button onclick="openAdminModal()" class="text-xs text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-user-shield mr-1"></i> เข้าสู่ระบบผู้ดูแลระบบ (Admin)
+                </button>
+            </div>
+        </div>
+
+        <!-- STUDENT DASHBOARD -->
+        <div id="studentDashboard" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-md flex justify-between items-center border-l-4 border-indigo-600">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800" id="stdName">---</h3>
+                    <p class="text-slate-500 text-sm">รหัสนิสิต: <span id="stdId">---</span> | ค่าห้องเดือนละ <span class="font-bold text-indigo-600">50 บาท</span></p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100 flex flex-col items-center text-center">
+                    <h4 class="font-bold text-lg text-slate-700 mb-2">สแกน QR Code ชำระเงิน</h4>
+                    <p class="text-sm text-slate-500 mb-4">บัญชี: ด.ช. ศิรภัทร สินสวัสดิ์ (MAKE by KBank)</p>
+                    <div class="bg-slate-100 p-2 rounded-lg border">
+                        <img src="EED65E55-B40C-4FC8-A7B1-BF444229FBBC.jpeg" alt="QR Code Payment" class="w-48 h-auto mx-auto rounded shadow">
+                    </div>
+                    <p class="text-xs text-slate-400 mt-2">ยอดชำระ: 50.00 บาท</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md border border-slate-100">
+                    <h4 class="font-bold text-lg text-slate-700 mb-4">ประวัติและแจ้งชำระเงินประจำเดือน</h4>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-slate-600 mb-1">เลือกเดือนที่ต้องการแจ้งจ่าย:</label>
+                        <select id="monthSelect" class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500">
+                            <option value="กันยายน">กันยายน</option>
+                            <option value="ตุลาคม">ตุลาคม</option>
+                            <option value="พฤศจิกายน">พฤศจิกายน</option>
+                            <option value="ธันวาคม">ธันวาคม</option>
+                            <option value="มกราคม">มกราคม</option>
+                            <option value="กุมภาพันธ์">กุมภาพันธ์</option>
+                            <option value="มีนาคม">มีนาคม</option>
+                            <option value="เมษายน">เมษายน</option>
+                            <option value="พฤษภาคม">พฤษภาคม</option>
+                            <option value="มิถุนายน">มิถุนายน</option>
+                            <option value="กรกฎาคม">กรกฎาคม</option>
+                            <option value="สิงหาคม">สิงหาคม</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-slate-600 mb-1">แนบรูปสลิปการโอนเงิน:</label>
+                        <input type="file" id="slipInput" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                    </div>
+
+                    <button id="uploadBtn" onclick="submitSlip()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg font-semibold transition">
+                        <i class="fa-solid fa-upload mr-1"></i> ส่งสลิปแจ้งจ่ายเงิน
+                    </button>
+
+                    <div class="mt-6">
+                        <h5 class="font-semibold text-sm text-slate-600 mb-2">สถานะการจ่ายเงินปีนี้:</h5>
+                        <div id="studentStatusList" class="grid grid-cols-3 gap-2 text-xs"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMIN DASHBOARD -->
+        <div id="adminDashboard" class="hidden space-y-6">
+            <div class="flex justify-between items-center bg-white p-6 rounded-xl shadow-md border-l-4 border-amber-500">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800">แดชบอร์ดผู้ดูแลระบบ (Admin)</h3>
+                    <p class="text-slate-500 text-sm">ตรวจสอบสถานะและแก้ไขข้อมูลการจ่ายค่าห้อง (รวม 35 คน)</p>
+                </div>
+                <div class="flex space-x-4">
+                    <div class="bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg text-center border border-emerald-200">
+                        <span class="block text-xs">จ่ายครบแล้ว</span>
+                        <span id="paidCount" class="font-bold text-lg">0</span>
+                    </div>
+                    <div class="bg-rose-50 text-rose-700 px-4 py-2 rounded-lg text-center border border-rose-200">
+                        <span class="block text-xs">ยังไม่จ่าย/ค้างจ่าย</span>
+                        <span id="unpaidCount" class="font-bold text-lg">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-xl shadow-sm border flex items-center justify-between">
+                <label class="font-medium text-slate-700">เลือกเดือนที่ต้องการตรวจสอบ:</label>
+                <select id="adminMonthSelect" onchange="renderAdminTable()" class="p-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 font-semibold text-indigo-700">
+                    <option value="กันยายน">กันยายน</option>
+                    <option value="ตุลาคม">ตุลาคม</option>
+                    <option value="พฤศจิกายน">พฤศจิกายน</option>
+                    <option value="ธันวาคม">ธันวาคม</option>
+                    <option value="มกราคม">มกราคม</option>
+                    <option value="กุมภาพันธ์">กุมภาพันธ์</option>
+                    <option value="มีนาคม">มีนาคม</option>
+                    <option value="เมษายน">เมษายน</option>
+                    <option value="พฤษภาคม">พฤษภาคม</option>
+                    <option value="มิถุนายน">มิถุนายน</option>
+                    <option value="กรกฎาคม">กรกฎาคม</option>
+                    <option value="สิงหาคม">สิงหาคม</option>
+                </select>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md overflow-x-auto border border-slate-100">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-100 border-b">
+                        <tr>
+                            <th class="p-4 text-xs font-semibold text-slate-600">ลำดับ</th>
+                            <th class="p-4 text-xs font-semibold text-slate-600">รหัสนิสิต</th>
+                            <th class="p-4 text-xs font-semibold text-slate-600">ชื่อ - นามสกุล</th>
+                            <th class="p-4 text-xs font-semibold text-slate-600 text-center">สถานะ</th>
+                            <th class="p-4 text-xs font-semibold text-slate-600 text-center">หลักฐานสลิป</th>
+                            <th class="p-4 text-xs font-semibold text-slate-600 text-center">จัดการสถานะ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTableBody" class="divide-y text-sm"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="adminModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+        <div class="bg-white p-6 rounded-xl max-w-sm w-full shadow-2xl">
+            <h3 class="text-lg font-bold mb-4 text-slate-800">ยืนยันตัวตนผู้ดูแลระบบ</h3>
+            <input type="password" id="adminPasswordInput" placeholder="กรอกรหัสผ่าน Admin" class="w-full px-4 py-2 border rounded-lg mb-4 focus:ring-2 focus:ring-amber-500">
+            <div class="flex justify-end space-x-2">
+                <button onclick="closeAdminModal()" class="px-4 py-2 bg-slate-200 rounded-lg text-sm">ยกเลิก</button>
+                <button onclick="loginAdmin()" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-semibold">เข้าสู่ระบบ</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // *** วาง URL ของ Google Apps Script จาก Step 1 ที่นี่ ***
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz__vkYQdZTE1hpTk0JDqRt6-3ndYo24Vxz4roZ-0ArtfWd9_Vxp0Gz5TV8HPkv0IlZ/exec";
+
+        const initialStudents = [
+            { id: "6920502020", prefix: "นาย", fname: "กิติศักดิ์", lname: "กาญจนี" },
+            { id: "6920502038", prefix: "นางสาว", fname: "กุลธิดา", lname: "โพธิ์ใย" },
+            { id: "6920502046", prefix: "นางสาว", fname: "ฑิตฐิตา", lname: "พรามเล็ก" },
+            { id: "6920502054", prefix: "นางสาว", fname: "ณปภา", lname: "ฉัตรวิจิตรกุล" },
+            { id: "6920502062", prefix: "นาย", fname: "ต้องรัก", lname: "แดวขุนทด" },
+            { id: "6920502071", prefix: "นาย", fname: "ทวีชัย", lname: "ใจชนะ" },
+            { id: "6920502089", prefix: "นาย", fname: "ธนสรรค์", lname: "ลิมปนะวิกรม" },
+            { id: "6920502097", prefix: "นาย", fname: "นนท์ปวิธ", lname: "แก้วกัน" },
+            { id: "6920502101", prefix: "นาย", fname: "ปัญญากร", lname: "หลงเปลี่ยว" },
+            { id: "6920502119", prefix: "นางสาว", fname: "พรวิสา", lname: "โอดรัมย์" },
+            { id: "6920502127", prefix: "นางสาว", fname: "พิไลวรรณ", lname: "ใจตรง" },
+            { id: "6920502135", prefix: "นาย", fname: "ภูริพัฒน์", lname: "พันธุ์แสงจิตต์" },
+            { id: "6920502143", prefix: "นาย", fname: "รัฐวิน", lname: "นุชนารถ" },
+            { id: "6920502151", prefix: "นางสาว", fname: "วริษฐา", lname: "ชินพงศ์พาณิชย์" },
+            { id: "6920502160", prefix: "นาย", fname: "ศุภกฤต", lname: "ใจดี" },
+            { id: "6920502178", prefix: "นางสาว", fname: "สุชาวดี", lname: "ละเลิศ" },
+            { id: "6920502186", prefix: "นางสาว", fname: "สุธาสินี", lname: "แก้วเทพ" },
+            { id: "6920502194", prefix: "นาย", fname: "อัฟนัน", lname: "หะสีแม" },
+            { id: "6920504391", prefix: "นาย", fname: "กตัญญู", lname: "อัตโตหิ" },
+            { id: "6920504405", prefix: "นาย", fname: "เกรียงศักดิ์", lname: "ผาติพรพิชิต" },
+            { id: "6920504413", prefix: "นาย", fname: "คุณากร", lname: "กล่อมเดช" },
+            { id: "6920504421", prefix: "นางสาว", fname: "จิรัชญา", lname: "มุสิกะชาติ" },
+            { id: "6920504430", prefix: "นาย", fname: "เจษฎากร", lname: "ไกรหมู" },
+            { id: "6920504448", prefix: "นาย", fname: "ชยุตม์สกล", lname: "สมรูป" },
+            { id: "6920504456", prefix: "นาย", fname: "นที", lname: "ดีไข่" },
+            { id: "6920504464", prefix: "นาย", fname: "นัฐชัย", lname: "สุริยะจันทร์โณ" },
+            { id: "6920504472", prefix: "นาย", fname: "เป็นเลิศ", lname: "เลิศสีดา" },
+            { id: "6920504481", prefix: "นาย", fname: "พีระพัฒน์", lname: "ก้อนด้วง" },
+            { id: "6920504499", prefix: "นางสาว", fname: "ภัคศรัณย์", lname: "แสงขวัญ" },
+            { id: "6920504502", prefix: "นาย", fname: "วรัณญู", lname: "หนูแก้ว" },
+            { id: "6920504511", prefix: "นาย", fname: "ศราวิน", lname: "ก้านเหลือง" },
+            { id: "6920504529", prefix: "นาย", fname: "ศิรภัทร", lname: "สินสวัสดิ์" },
+            { id: "6920504537", prefix: "นาย", fname: "สรยุทธ์", lname: "สุเมนร์" },
+            { id: "6920504545", prefix: "นางสาว", fname: "สิริกร", lname: "กล้วยแดง" },
+            { id: "6920504553", prefix: "นาย", fname: "สุรยุทธ", lname: "แสงพลาย" }
+        ];
+
+        const adminPasswords = ["6920504529", "692052038", "6920502062"];
+        const months = ["กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" ,"มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม"];
+
+        let currentUser = null;
+
+        if (!localStorage.getItem('room_payments')) {
+            const initialPayments = {};
+            initialStudents.forEach(std => {
+                initialPayments[std.id] = {};
+                months.forEach(m => {
+                    initialPayments[std.id][m] = { status: 'unpaid', slip: null };
+                });
+            });
+            localStorage.setItem('room_payments', JSON.stringify(initialPayments));
+        }
+
+        function getPayments() { return JSON.parse(localStorage.getItem('room_payments')); }
+        function savePayments(data) { localStorage.setItem('room_payments', JSON.stringify(data)); }
+
+        function loginStudent() {
+            const inputId = document.getElementById('studentIdInput').value.trim();
+            const student = initialStudents.find(s => s.id === inputId);
+            if (student) {
+                currentUser = { type: 'student', data: student };
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('studentDashboard').classList.remove('hidden');
+                document.getElementById('userInfo').classList.remove('hidden');
+                document.getElementById('userBadge').innerText = `${student.prefix}${student.fname} ${student.lname}`;
+                document.getElementById('stdName').innerText = `${student.prefix}${student.fname} ${student.lname}`;
+                document.getElementById('stdId').innerText = student.id;
+                renderStudentStatus();
+            } else {
+                alert('ไม่พบรหัสนิสิตนี้ในระบบ');
+            }
+        }
+
+        function renderStudentStatus() {
+            const payments = getPayments();
+            const stdPayments = payments[currentUser.data.id] || {};
+            const container = document.getElementById('studentStatusList');
+            container.innerHTML = '';
+
+            months.forEach(m => {
+                const info = stdPayments[m] || { status: 'unpaid' };
+                const isPaid = info.status === 'paid';
+                const div = document.createElement('div');
+                div.className = `p-2 rounded border text-center font-medium ${isPaid ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-rose-50 border-rose-200 text-rose-600'}`;
+                div.innerHTML = `<div>${m}</div><div class="font-bold text-[10px] mt-1">${isPaid ? '✓ จ่ายแล้ว' : '✕ ยังไม่จ่าย'}</div>`;
+                container.appendChild(div);
+            });
+        }
+
+        async function submitSlip() {
+            const month = document.getElementById('monthSelect').value;
+            const fileInput = document.getElementById('slipInput');
+            const btn = document.getElementById('uploadBtn');
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('กรุณาเลือกรูปภาพสลิปการโอนเงิน');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> กำลังอัปโหลด...`;
+
+            reader.onload = async function(e) {
+                const payload = {
+                    type: "uploadSlip",
+                    studentId: currentUser.data.id,
+                    studentName: `${currentUser.data.prefix}${currentUser.data.fname} ${currentUser.data.lname}`,
+                    month: month,
+                    image: e.target.result,
+                    mimeType: file.type,
+                    fileName: `${currentUser.data.id}_${month}_${file.name}`
+                };
+
+                try {
+                    const response = await fetch(GOOGLE_SCRIPT_URL, {
+                        method: 'POST',
+                        body: JSON.stringify(payload)
+                    });
+
+                    const resData = await response.json();
+
+                    if (resData.result === 'success') {
+                        const payments = getPayments();
+                        payments[currentUser.data.id][month] = {
+                            status: 'paid',
+                            slip: resData.fileUrl
+                        };
+                        savePayments(payments);
+                        alert(`อัปโหลดสลิปแจ้งจ่ายเงินเดือน ${month} เรียบร้อยแล้ว!`);
+                        renderStudentStatus();
+                        fileInput.value = '';
+                    } else {
+                        alert('เกิดข้อผิดพลาด: ' + resData.error);
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fa-solid fa-upload mr-1"></i> ส่งสลิปแจ้งจ่ายเงิน`;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
+        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+
+        function loginAdmin() {
+            const pass = document.getElementById('adminPasswordInput').value.trim();
+            if (adminPasswords.includes(pass)) {
+                currentUser = { type: 'admin' };
+                closeAdminModal();
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                document.getElementById('userInfo').classList.remove('hidden');
+                document.getElementById('userBadge').innerText = 'ผู้ดูแลระบบ (Admin)';
+                renderAdminTable();
+            } else {
+                alert('รหัสผ่านผู้ดูแลระบบไม่ถูกต้อง');
+            }
+        }
+
+        function renderAdminTable() {
+            const month = document.getElementById('adminMonthSelect').value;
+            const payments = getPayments();
+            const tbody = document.getElementById('adminTableBody');
+            tbody.innerHTML = '';
+
+            let paid = 0, unpaid = 0;
+
+            initialStudents.forEach((std, idx) => {
+                const stdPay = payments[std.id] ? payments[std.id][month] : { status: 'unpaid', slip: null };
+                const isPaid = stdPay.status === 'paid';
+
+                if (isPaid) paid++; else unpaid++;
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50";
+                tr.innerHTML = `
+                    <td class="p-4 text-slate-500">${idx + 1}</td>
+                    <td class="p-4 font-mono font-medium">${std.id}</td>
+                    <td class="p-4">${std.prefix}${std.fname} ${std.lname}</td>
+                    <td class="p-4 text-center">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-semibold ${isPaid ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                            ${isPaid ? 'จ่ายแล้ว' : 'ยังไม่จ่าย'}
+                        </span>
+                    </td>
+                    <td class="p-4 text-center">
+                        ${stdPay.slip ? `<a href="${stdPay.slip}" target="_blank" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1 rounded border inline-block">ดูสลิป Drive</a>` : '<span class="text-slate-300 text-xs">-</span>'}
+                    </td>
+                    <td class="p-4 text-center">
+                        <button onclick="toggleStatus('${std.id}', '${month}')" class="text-xs px-3 py-1 rounded text-white ${isPaid ? 'bg-amber-500 hover:bg-amber-600' : 'bg-emerald-600 hover:bg-emerald-700'}">
+                            ${isPaid ? 'เปลี่ยนเป็นยังไม่จ่าย' : 'ทำรายการว่าจ่ายแล้ว'}
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('paidCount').innerText = paid;
+            document.getElementById('unpaidCount').innerText = unpaid;
+        }
+
+        function toggleStatus(stdId, month) {
+            const payments = getPayments();
+            const current = payments[stdId][month].status;
+            payments[stdId][month].status = current === 'paid' ? 'unpaid' : 'paid';
+            savePayments(payments);
+            renderAdminTable();
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('userInfo').classList.add('hidden');
+            document.getElementById('studentDashboard').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('studentIdInput').value = '';
+            document.getElementById('adminPasswordInput').value = '';
+        }
+    </script>
+</body>
+</html>
