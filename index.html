@@ -68,10 +68,6 @@
         }
 
         /* Transition Effects */
-        .smooth-transition {
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
         .btn-hover-effect {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -104,29 +100,66 @@
 
     <div class="max-w-6xl mx-auto px-4 pt-10">
 
-        <!-- LOGIN SECTION -->
-        <div id="loginSection" class="max-w-md mx-auto glass-card p-8 rounded-2xl shadow-2xl animate-fade-in-up">
-            <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg text-white text-2xl transform hover:scale-110 transition duration-300">
-                    <i class="fa-solid fa-user-check"></i>
+        <!-- LOGIN CONTAINER & ANNOUNCEMENT CONTAINER -->
+        <div id="loginSection" class="max-w-md mx-auto space-y-6 animate-fade-in-up">
+            
+            <!-- CARD LOGIN -->
+            <div class="glass-card p-8 rounded-2xl shadow-2xl">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg text-white text-2xl transform hover:scale-110 transition duration-300">
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-800">เข้าสู่ระบบ</h2>
+                    <p class="text-sm text-slate-500 mt-1">กรุณากรอกรหัสนิสิตเพื่อเข้าใช้งาน</p>
                 </div>
-                <h2 class="text-2xl font-bold text-slate-800">เข้าสู่ระบบ</h2>
-                <p class="text-sm text-slate-500 mt-1">กรุณากรอกรหัสนิสิตเพื่อเข้าใช้งาน</p>
+                
+                <div class="mb-5">
+                    <label class="block text-sm font-medium text-slate-700 mb-2">กรอกรหัสนิสิต (10 หลัก)</label>
+                    <input type="text" id="studentIdInput" placeholder="เช่น 6920504529" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 bg-white/80">
+                </div>
+                <button onclick="loginStudent()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 rounded-xl font-semibold shadow-lg shadow-indigo-500/30 btn-hover-effect">เข้าสู่ระบบนิสิต</button>
+                
+                <hr class="my-6 border-slate-200">
+                
+                <div class="text-center">
+                    <button onclick="openAdminModal()" class="text-xs text-slate-500 hover:text-indigo-600 transition-colors duration-200 font-medium inline-flex items-center group">
+                        <i class="fa-solid fa-user-shield mr-1.5 text-indigo-500 group-hover:scale-125 transition-transform"></i> เข้าสู่ระบบผู้ดูแลระบบ (Admin)
+                    </button>
+                </div>
             </div>
-            
-            <div class="mb-5">
-                <label class="block text-sm font-medium text-slate-700 mb-2">กรอกรหัสนิสิต (10 หลัก)</label>
-                <input type="text" id="studentIdInput" placeholder="เช่น 6920504529" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 bg-white/80">
+
+            <!-- ================= ANNOUNCEMENT SECTION ================= -->
+            <!-- คุณสามารถแก้ไข/เพิ่มข้อความประกาศได้ที่ตรงนี้ครับ -->
+            <div class="glass-card p-6 rounded-2xl shadow-xl border-l-4 border-indigo-500">
+                <div class="flex items-center mb-3">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center mr-2.5 font-bold">
+                        <i class="fa-solid fa-bullhorn text-sm"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-base">ประกาศ / ประชาสัมพันธ์</h3>
+                </div>
+                
+                <div class="text-sm text-slate-600 space-y-2.5 leading-relaxed pl-1">
+                    <!-- ข้อความประกาศ 1 -->
+                    <div class="flex items-start space-x-2">
+                        <span class="text-indigo-500 font-bold">•</span>
+                        <p>กรุณาชำระค่าห้องภายในวันที่ 5 ของทุกเดือน</p>
+                    </div>
+                    
+                    <!-- ข้อความประกาศ 2 -->
+                    <div class="flex items-start space-x-2">
+                        <span class="text-indigo-500 font-bold">•</span>
+                        <p>เมื่อโอนเงินแล้ว กรุณาแนบรูปภาพสลิปที่ชัดเจนเพื่อความรวดเร็วในการตรวจสอบ</p>
+                    </div>
+
+                    <!-- ข้อความประกาศ 3 (ตัวอย่างเพิ่มเติม) -->
+                    <div class="flex items-start space-x-2">
+                        <span class="text-indigo-500 font-bold">•</span>
+                        <p>หากมีข้อสงสัยเกี่ยวกับยอดเงิน สามารถติดต่อแอดมินได้โดยตรง</p>
+                    </div>
+                </div>
             </div>
-            <button onclick="loginStudent()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 rounded-xl font-semibold shadow-lg shadow-indigo-500/30 btn-hover-effect">เข้าสู่ระบบนิสิต</button>
-            
-            <hr class="my-6 border-slate-200">
-            
-            <div class="text-center">
-                <button onclick="openAdminModal()" class="text-xs text-slate-500 hover:text-indigo-600 transition-colors duration-200 font-medium inline-flex items-center group">
-                    <i class="fa-solid fa-user-shield mr-1.5 text-indigo-500 group-hover:scale-125 transition-transform"></i> เข้าสู่ระบบผู้ดูแลระบบ (Admin)
-                </button>
-            </div>
+            <!-- ================= END ANNOUNCEMENT SECTION ================= -->
+
         </div>
 
         <!-- STUDENT DASHBOARD -->
@@ -315,7 +348,7 @@
 
     </div>
 
-    <!-- ADMIN MODAL (ปรับปรุงเพิ่มความปลอดภัย) -->
+    <!-- ADMIN MODAL -->
     <div id="adminModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 transition-opacity duration-300">
         <div id="adminModalContent" class="bg-white p-6 rounded-2xl max-w-sm w-full shadow-2xl border border-slate-100 transform transition-all duration-300">
             <h3 class="text-lg font-bold mb-2 text-slate-800 flex items-center">
@@ -383,7 +416,6 @@
             { id: "6920504553", prefix: "นาย", fname: "สุรยุทธ", lname: "แสงพลาย" }
         ];
 
-        // กำหนดข้อมูลแอดมินและรหัสผ่านเฉพาะบุคคล
         const adminAccounts = [
             { id: "6920504529", name: "นาย ศิรภัทร สินสวัสดิ์", pass: "1680" },
             { id: "6920502038", name: "นางสาว กุลธิดา โพธิ์ใย", pass: "1111" },
@@ -604,7 +636,6 @@
             document.getElementById('paidCount').innerText = paid;
             document.getElementById('unpaidCount').innerText = unpaid;
 
-            // สรุปยอดประจำเดือนที่เลือก
             document.getElementById('summaryMonthTitle').innerText = currentMonth;
             const currentMonthExpense = (expenses.monthly && expenses.monthly[currentMonth]) ? expenses.monthly[currentMonth] : 0;
             const currentMonthNet = currentMonthTotalReceived - currentMonthExpense;
@@ -613,7 +644,6 @@
             document.getElementById('monthExpenseTotal').innerText = currentMonthExpense.toFixed(2) + ' บาท';
             document.getElementById('monthNetTotal').innerText = currentMonthNet.toFixed(2) + ' บาท';
 
-            // สรุปยอดรวมสะสมทั้งหมด (ทุกเดือน)
             let totalMonthlyExpenses = 0;
             months.forEach(m => {
                 totalMonthlyExpenses += (expenses.monthly && expenses.monthly[m]) ? expenses.monthly[m] : 0;
