@@ -1,10 +1,26 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบเช็กการชำระค่าห้องประจำเดือน</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,183 +28,206 @@
     <style>
         body { 
             font-family: 'Prompt', sans-serif;
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #667eea, #764ba2);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
-        @keyframes gradientBG {
+
+        /* ---------------------------------------------------- */
+        /* Keyframe การสลับสีพื้นหลังแบบพาสเทลและโทนมืด */
+        /* ---------------------------------------------------- */
+        @keyframes customGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+
+        /* Light Mode: สีพาสเทล (ฟ้า -> เขียว -> ม่วง -> ชมพู -> เหลือง -> ส้ม) */
+        .bg-custom-light {
+            background: linear-gradient(-45deg, #bae6fd, #bbf7d0, #e9d5ff, #fbcfe8, #fef08a, #fed7aa);
+            background-size: 500% 500%;
+            animation: customGradient 18s ease infinite;
+        }
+
+        /* Dark Mode: สีโทนมืดตามระบุ (#00536E -> #58006E -> #6E0028 -> #006E51 -> #383838) */
+        .dark .bg-custom-dark {
+            background: linear-gradient(-45deg, #00536E, #58006E, #6E0028, #006E51, #383838);
+            background-size: 500% 500%;
+            animation: customGradient 18s ease infinite;
+        }
+
+        /* Colorful Glassmorphism Cards */
         .glass-card {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .dark .glass-card {
+            background: rgba(18, 24, 38, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
         }
 
-        /* --- Custom Smooth Animations --- */
-        @keyframes modalPopIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.85) translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
+        /* Vibrant Glowing Effects */
+        .glow-indigo { box-shadow: 0 8px 25px -5px rgba(99, 102, 241, 0.4); }
+        .glow-emerald { box-shadow: 0 8px 25px -5px rgba(16, 185, 129, 0.4); }
+        .glow-amber { box-shadow: 0 8px 25px -5px rgba(245, 158, 11, 0.4); }
+        .glow-rose { box-shadow: 0 8px 25px -5px rgba(244, 63, 94, 0.4); }
 
+        /* Keyframe Animations */
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.9) translateY(12px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
         @keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            0% { opacity: 0; transform: translateY(18px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(3deg); }
         }
 
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
+        .animate-pop-in { animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-fade-in-up { animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-float { animation: float 5s ease-in-out infinite; }
 
-        .animate-pop-in {
-            animation: modalPopIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        /* Buttons Hover Effects */
+        .btn-hover {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        .animate-fade-in-up {
-            animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .animate-fade-in {
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-
-        /* Transition Effects */
-        .btn-hover-effect {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .btn-hover-effect:hover {
+        .btn-hover:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.15);
+            filter: brightness(1.1);
         }
-        .btn-hover-effect:active {
+        .btn-hover:active {
             transform: translateY(0) scale(0.97);
         }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 99px; }
+        .dark ::-webkit-scrollbar-thumb { background: #334155; }
     </style>
 </head>
-<body class="min-h-screen text-slate-800 pb-12">
+<body class="min-h-screen bg-custom-light dark:bg-custom-dark text-slate-800 dark:text-slate-100 pb-12 transition-colors duration-500">
 
     <!-- NAVBAR -->
-    <nav class="bg-slate-900/80 backdrop-blur-md text-white shadow-lg sticky top-0 z-40 border-b border-white/10 transition-all duration-300">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+    <nav class="bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl sticky top-0 z-40 border-b border-indigo-100/50 dark:border-slate-800/80 transition-colors duration-300">
+        <div class="max-w-6xl mx-auto px-4 py-3.5 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-pink-500 flex items-center justify-center shadow-md transform hover:rotate-6 transition-transform">
-                    <i class="fa-solid fa-building text-white text-lg"></i>
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 text-white flex items-center justify-center glow-indigo transform hover:rotate-12 transition-transform">
+                    <i class="fa-solid fa-building text-lg"></i>
                 </div>
-                <h1 class="font-bold text-xl tracking-wide bg-gradient-to-r from-white to-slate-200 bg-clip-text text-transparent">ระบบเช็กการชำระค่าห้อง</h1>
+                <h1 class="font-bold text-lg md:text-xl tracking-tight bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">ระบบเช็กการชำระค่าห้อง</h1>
             </div>
-            <div id="userInfo" class="hidden flex items-center space-x-3 animate-fade-in">
-                <span id="userBadge" class="bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-1.5 rounded-full text-sm font-medium shadow-sm"></span>
-                <button onclick="logout()" class="text-sm bg-rose-500 hover:bg-rose-600 text-white px-4 py-1.5 rounded-full transition shadow-sm font-medium hover:shadow-md btn-hover-effect">ออกจากระบบ</button>
+
+            <div class="flex items-center space-x-3">
+                <!-- DARK MODE TOGGLE BUTTON -->
+                <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500/10 to-purple-500/10 dark:from-amber-400/20 dark:to-orange-500/20 text-indigo-600 dark:text-amber-400 border border-indigo-200/50 dark:border-amber-500/30 flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-sm">
+                    <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
+                </button>
+
+                <!-- USER INFO -->
+                <div id="userInfo" class="hidden flex items-center space-x-3">
+                    <span id="userBadge" class="bg-gradient-to-r from-indigo-500/10 to-purple-500/10 dark:from-indigo-900/40 dark:to-purple-900/40 text-indigo-700 dark:text-indigo-300 px-3.5 py-1.5 rounded-2xl text-xs md:text-sm font-semibold border border-indigo-200/60 dark:border-indigo-800/50 shadow-sm"></span>
+                    <button onclick="logout()" class="text-xs md:text-sm bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white px-3.5 py-1.5 rounded-2xl font-medium transition glow-rose btn-hover">
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i> ออกจากระบบ
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="max-w-6xl mx-auto px-4 pt-10">
+    <div class="max-w-6xl mx-auto px-4 pt-8">
 
-        <!-- LOGIN CONTAINER & ANNOUNCEMENT CONTAINER -->
+        <!-- LOGIN CONTAINER & ANNOUNCEMENT -->
         <div id="loginSection" class="max-w-md mx-auto space-y-6 animate-fade-in-up">
             
             <!-- CARD LOGIN -->
-            <div class="glass-card p-8 rounded-2xl shadow-2xl">
-                <div class="text-center mb-8">
-                    <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg text-white text-2xl transform hover:scale-110 transition duration-300">
+            <div class="glass-card p-8 rounded-3xl shadow-xl border">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-3 glow-indigo text-white text-2xl animate-float">
                         <i class="fa-solid fa-user-check"></i>
                     </div>
-                    <h2 class="text-2xl font-bold text-slate-800">เข้าสู่ระบบ</h2>
-                    <p class="text-sm text-slate-500 mt-1">กรุณากรอกรหัสนิสิตเพื่อเข้าใช้งาน</p>
+                    <h2 class="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 dark:from-white dark:to-slate-300 bg-clip-text text-transparent">เข้าสู่ระบบ</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">กรุณากรอกรหัสนิสิตเพื่อเข้าใช้งานระบบ</p>
                 </div>
                 
                 <div class="mb-5">
-                    <label class="block text-sm font-medium text-slate-700 mb-2">กรอกรหัสนิสิต (10 หลัก)</label>
-                    <input type="text" id="studentIdInput" placeholder="เช่น 6920504529" class="w-full px-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 bg-white/80">
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-2">กรอกรหัสนิสิต (10 หลัก)</label>
+                    <input type="text" id="studentIdInput" placeholder="เช่น 6920504529" class="w-full px-4 py-3 border border-indigo-100 dark:border-slate-700 dark:bg-slate-800/80 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-sm shadow-inner">
                 </div>
-                <button onclick="loginStudent()" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 rounded-xl font-semibold shadow-lg shadow-indigo-500/30 btn-hover-effect">เข้าสู่ระบบนิสิต</button>
                 
-                <hr class="my-6 border-slate-200">
+                <button onclick="loginStudent()" class="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:from-indigo-700 hover:to-purple-700 text-white py-3 rounded-2xl font-semibold glow-indigo btn-hover text-sm">
+                    เข้าสู่ระบบนิสิต <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+                
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200 dark:border-slate-700"></div></div>
+                    <div class="relative flex justify-center text-xs"><span class="bg-white/80 dark:bg-slate-800/80 px-3 text-slate-400 rounded-full font-medium backdrop-blur-sm">หรือ</span></div>
+                </div>
                 
                 <div class="text-center">
-                    <button onclick="openAdminModal()" class="text-xs text-slate-500 hover:text-indigo-600 transition-colors duration-200 font-medium inline-flex items-center group">
-                        <i class="fa-solid fa-user-shield mr-1.5 text-indigo-500 group-hover:scale-125 transition-transform"></i> เข้าสู่ระบบผู้ดูแลระบบ (Admin)
+                    <button onclick="openAdminModal()" class="text-xs text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors font-medium inline-flex items-center group">
+                        <i class="fa-solid fa-user-shield mr-1.5 text-amber-500 group-hover:scale-125 transition-transform"></i> เข้าสู่ระบบผู้ดูแลระบบ (Admin)
                     </button>
                 </div>
             </div>
 
-            <!-- ================= ANNOUNCEMENT SECTION ================= -->
-            <!-- คุณสามารถแก้ไข/เพิ่มข้อความประกาศได้ที่ตรงนี้ครับ -->
-            <div class="glass-card p-6 rounded-2xl shadow-xl border-l-4 border-indigo-500">
+            <!-- ANNOUNCEMENT SECTION -->
+            <div class="glass-card p-6 rounded-3xl shadow-lg border-l-4 border-purple-500">
                 <div class="flex items-center mb-3">
-                    <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center mr-2.5 font-bold">
-                        <i class="fa-solid fa-bullhorn text-sm"></i>
+                    <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-500 to-pink-500 text-white flex items-center justify-center mr-3 font-bold shadow-md shadow-purple-500/20">
+                        <i class="fa-solid fa-bullhorn text-xs"></i>
                     </div>
-                    <h3 class="font-bold text-slate-800 text-base">ประกาศ / ประชาสัมพันธ์</h3>
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm">ประกาศ / ประชาสัมพันธ์</h3>
                 </div>
                 
-                <div class="text-sm text-slate-600 space-y-2.5 leading-relaxed pl-1">
-                    <!-- ข้อความประกาศ 1 -->
+                <div class="text-xs text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed">
                     <div class="flex items-start space-x-2">
-                        <span class="text-indigo-500 font-bold">•</span>
-                        <p>ระบบอยู่ระหว่างการทดสอบและพัฒนา ขออภัยในฟามมิสะดวก
-                        </p>
+                        <span class="text-purple-500 font-bold">•</span>
+                        <p>ระบบอยู่ระหว่างการทดสอบและพัฒนา หากพบปัญหาสามารถแจ้งผู้ดูแลระบบได้ตลอดเวลา</p>
                     </div>
-                    
-                    <!-- ข้อความประกาศ 2 -->
                     <div class="flex items-start space-x-2">
-                        <span class="text-indigo-500 font-bold">•</span>
-                        <p><!-- ใส่ข้อความประกาศในบรรทัตที่ 2 ตรงนี้ --></p>
-                    </div>
-
-                    <!-- ข้อความประกาศ 3 (ตัวอย่างเพิ่มเติม) -->
-                    <div class="flex items-start space-x-2">
-                        <span class="text-indigo-500 font-bold">•</span>
-                        <p>Dev By Pandasocutez</p>
+                        <span class="text-purple-500 font-bold">•</span>
+                        <p class="text-center w-full font-medium text-purple-600 dark:text-purple-400">งานเหรัญญิก</p>
                     </div>
                 </div>
             </div>
-            <!-- ================= END ANNOUNCEMENT SECTION ================= -->
 
         </div>
 
         <!-- STUDENT DASHBOARD -->
         <div id="studentDashboard" class="hidden space-y-6">
-            <div class="glass-card p-6 rounded-2xl shadow-xl flex justify-between items-center border-l-8 border-indigo-600 animate-fade-in-up">
-                <div>
-                    <h3 class="text-2xl font-bold text-slate-800" id="stdName">---</h3>
-                    <p class="text-slate-600 text-sm mt-1">รหัสนิสิต: <span id="stdId" class="font-mono font-semibold text-slate-700">---</span> | ค่าห้องเดือนละ <span class="font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">50 บาท</span></p>
-                </div>
+            <div class="glass-card p-6 rounded-3xl shadow-xl border-l-8 border-indigo-600 animate-fade-in-up">
+                <h3 class="text-xl font-bold text-slate-800 dark:text-white" id="stdName">---</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-xs mt-1">รหัสนิสิต: <span id="stdId" class="font-mono font-semibold text-indigo-600 dark:text-indigo-400">---</span> | ค่าห้องเดือนละ <span class="font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 dark:text-emerald-400 px-2 py-0.5 rounded-lg border border-emerald-200/50">50 บาท</span></p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
-                <div class="glass-card p-6 rounded-2xl shadow-xl flex flex-col items-center text-center animate-fade-in-up" style="animation-delay: 0.1s;">
-                    <h4 class="font-bold text-lg text-slate-800 mb-1">สแกน QR Code ชำระเงิน</h4>
-                    <p class="text-sm text-slate-500 mb-4">บัญชี: ด.ช. ศิรภัทร สินสวัสดิ์ (MAKE by KBank)</p>
-                    <div class="bg-white p-3 rounded-2xl shadow-md border border-slate-100 transform hover:scale-105 transition duration-300">
-                        <img src="EED65E55-B40C-4FC8-A7B1-BF444229FBBC.jpeg" alt="QR Code Payment" class="w-52 h-auto mx-auto rounded-xl">
+                <!-- QR CODE -->
+                <div class="glass-card p-6 rounded-3xl shadow-xl flex flex-col items-center text-center animate-fade-in-up">
+                    <h4 class="font-bold text-base text-slate-800 dark:text-white mb-1">สแกน QR Code ชำระเงิน</h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">บัญชี: ด.ช. ศิรภัทร สินสวัสดิ์ (MAKE by KBank)</p>
+                    <div class="bg-white p-3.5 rounded-3xl shadow-md border border-slate-100 transform hover:scale-105 transition duration-300 glow-indigo">
+                        <img src="EED65E55-B40C-4FC8-A7B1-BF444229FBBC.jpeg" alt="QR Code Payment" class="w-48 h-auto mx-auto rounded-2xl">
                     </div>
-                    <span class="inline-block mt-4 px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">ยอดชำระ: 50.00 บาท</span>
+                    <span class="inline-block mt-4 px-4 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full text-xs font-semibold glow-emerald">ยอดชำระ: 50.00 บาท</span>
                 </div>
 
-                <div class="glass-card p-6 rounded-2xl shadow-xl animate-fade-in-up" style="animation-delay: 0.2s;">
-                    <h4 class="font-bold text-lg text-slate-800 mb-4 flex items-center">
-                        <i class="fa-solid fa-file-invoice-dollar text-indigo-600 mr-2"></i> ประวัติและแจ้งชำระเงินประจำเดือน
+                <!-- SLIP UPLOAD -->
+                <div class="glass-card p-6 rounded-3xl shadow-xl animate-fade-in-up" style="animation-delay: 0.1s;">
+                    <h4 class="font-bold text-base text-slate-800 dark:text-white mb-4 flex items-center">
+                        <i class="fa-solid fa-file-invoice-dollar text-indigo-600 dark:text-indigo-400 mr-2"></i> ประวัติและแจ้งชำระเงินประจำเดือน
                     </h4>
                     <div class="mb-4">
-                        <label class="block text-sm font-medium text-slate-700 mb-1">เลือกเดือนที่ต้องการแจ้งจ่าย:</label>
-                        <select id="monthSelect" class="w-full p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 transition duration-200">
+                        <label class="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">เลือกเดือนที่ต้องการแจ้งจ่าย:</label>
+                        <select id="monthSelect" class="w-full p-2.5 bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500/50">
                             <option value="กันยายน">กันยายน</option>
                             <option value="ตุลาคม">ตุลาคม</option>
                             <option value="พฤศจิกายน">พฤศจิกายน</option>
@@ -205,17 +244,17 @@
                     </div>
 
                     <div class="mb-5">
-                        <label class="block text-sm font-medium text-slate-700 mb-1">แนบรูปสลิปการโอนเงิน:</label>
-                        <input type="file" id="slipInput" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer transition">
+                        <label class="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">แนบรูปสลิปการโอนเงิน:</label>
+                        <input type="file" id="slipInput" accept="image/*" class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 dark:file:bg-indigo-950 dark:file:text-indigo-300 hover:file:bg-indigo-100 cursor-pointer transition">
                     </div>
 
-                    <button id="uploadBtn" onclick="submitSlip()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white py-3 rounded-xl font-semibold shadow-lg shadow-emerald-500/20 btn-hover-effect">
+                    <button id="uploadBtn" onclick="submitSlip()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white py-3 rounded-2xl font-semibold glow-emerald btn-hover text-xs">
                         <i class="fa-solid fa-upload mr-1.5"></i> ส่งสลิปแจ้งจ่ายเงิน
                     </button>
 
                     <div class="mt-6">
-                        <h5 class="font-semibold text-sm text-slate-700 mb-3">สถานะการจ่ายเงินปีนี้:</h5>
-                        <div id="studentStatusList" class="grid grid-cols-3 gap-2.5 text-xs"></div>
+                        <h5 class="font-semibold text-xs text-slate-700 dark:text-slate-300 mb-3">สถานะการจ่ายเงินปีนี้:</h5>
+                        <div id="studentStatusList" class="grid grid-cols-3 gap-2 text-xs"></div>
                     </div>
                 </div>
             </div>
@@ -223,96 +262,70 @@
 
         <!-- ADMIN DASHBOARD -->
         <div id="adminDashboard" class="hidden space-y-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center glass-card p-6 rounded-2xl shadow-xl border-l-8 border-amber-500 gap-4 animate-fade-in-up">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center glass-card p-6 rounded-3xl shadow-xl border-l-8 border-amber-500 gap-4 animate-fade-in-up">
                 <div>
-                    <h3 class="text-2xl font-bold text-slate-800">แดชบอร์ดผู้ดูแลระบบ (Admin)</h3>
-                    <p class="text-slate-600 text-sm mt-1">
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-white">แดชบอร์ดผู้ดูแลระบบ (Admin)</h3>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs mt-1">
                         <i class="fa-solid fa-user-gear text-amber-500 mr-1"></i> ผู้ดูแลระบบขณะนี้: 
-                        <span id="adminDisplayName" class="font-bold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded-lg border border-amber-200">---</span>
+                        <span id="adminDisplayName" class="font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/60 px-2 py-0.5 rounded-lg border border-amber-200 dark:border-amber-900/40">---</span>
                     </p>
                 </div>
                 <div class="flex flex-wrap gap-3 w-full md:w-auto">
-                    <div class="bg-emerald-50 text-emerald-700 px-4 py-2.5 rounded-xl text-center border border-emerald-200/60 shadow-sm flex-1 transform hover:scale-105 transition duration-200">
-                        <span class="block text-xs font-medium">จ่ายครบแล้ว</span>
-                        <span id="paidCount" class="font-bold text-xl">0</span>
+                    <div class="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 text-emerald-700 dark:text-emerald-400 px-4 py-2.5 rounded-2xl text-center border border-emerald-200/60 dark:border-emerald-900/40 shadow-sm flex-1 transform hover:scale-105 transition duration-200">
+                        <span class="block text-[10px] font-medium">จ่ายครบแล้ว</span>
+                        <span id="paidCount" class="font-bold text-lg">0</span>
                     </div>
-                    <div class="bg-rose-50 text-rose-700 px-4 py-2.5 rounded-xl text-center border border-rose-200/60 shadow-sm flex-1 transform hover:scale-105 transition duration-200">
-                        <span class="block text-xs font-medium">ยังไม่จ่าย/ค้างจ่าย</span>
-                        <span id="unpaidCount" class="font-bold text-xl">0</span>
+                    <div class="bg-gradient-to-br from-rose-500/10 to-pink-500/10 text-rose-700 dark:text-rose-400 px-4 py-2.5 rounded-2xl text-center border border-rose-200/60 dark:border-rose-900/40 shadow-sm flex-1 transform hover:scale-105 transition duration-200">
+                        <span class="block text-[10px] font-medium">ยังไม่จ่าย/ค้างจ่าย</span>
+                        <span id="unpaidCount" class="font-bold text-lg">0</span>
                     </div>
                 </div>
             </div>
 
-            <!-- FINANCIAL SUMMARY & EXPENSE MANAGEMENT CARDS -->
+            <!-- FINANCIAL SUMMARY CARDS -->
             <div class="grid md:grid-cols-2 gap-6">
                 <!-- สรุปงบประจำเดือน -->
-                <div class="glass-card p-6 rounded-2xl shadow-xl border-t-4 border-indigo-500 flex flex-col justify-between animate-fade-in-up" style="animation-delay: 0.1s;">
+                <div class="glass-card p-6 rounded-3xl shadow-xl border-t-4 border-indigo-500 flex flex-col justify-between animate-fade-in-up" style="animation-delay: 0.1s;">
                     <div>
-                        <div class="flex justify-between items-center mb-4">
-                            <h4 class="font-bold text-slate-800 flex items-center">
-                                <i class="fa-solid fa-calendar-check text-indigo-500 mr-2"></i> สรุปเงินประจำเดือน (<span id="summaryMonthTitle" class="text-indigo-600">กันยายน</span>)
-                            </h4>
-                        </div>
-                        <div class="space-y-3 bg-slate-50/80 p-4 rounded-xl border border-slate-100">
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-slate-600">ยอดโอนเข้ามาประจำเดือน:</span>
-                                <span class="font-semibold text-emerald-600 text-base" id="monthReceivedTotal">0.00 บาท</span>
-                            </div>
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-slate-600">ค่าใช้จ่าย/หักงบประจำเดือน:</span>
-                                <span class="font-semibold text-rose-500 text-base" id="monthExpenseTotal">0.00 บาท</span>
-                            </div>
-                            <hr class="border-slate-200">
-                            <div class="flex justify-between items-center text-sm font-bold">
-                                <span class="text-slate-800">คงเหลือประจำเดือน:</span>
-                                <span class="text-indigo-600 text-lg" id="monthNetTotal">0.00 บาท</span>
-                            </div>
+                        <h4 class="font-bold text-slate-800 dark:text-white mb-4 flex items-center text-sm">
+                            <i class="fa-solid fa-calendar-check text-indigo-500 mr-2"></i> สรุปเงินประจำเดือน (<span id="summaryMonthTitle" class="text-indigo-600 dark:text-indigo-400">กันยายน</span>)
+                        </h4>
+                        <div class="space-y-2.5 bg-indigo-50/40 dark:bg-slate-800/50 p-4 rounded-2xl border border-indigo-100/60 dark:border-slate-700/50 text-xs">
+                            <div class="flex justify-between items-center"><span class="text-slate-500 dark:text-slate-400">ยอดโอนเข้ามาประจำเดือน:</span><span class="font-semibold text-emerald-600 dark:text-emerald-400 text-sm" id="monthReceivedTotal">0.00 บาท</span></div>
+                            <div class="flex justify-between items-center"><span class="text-slate-500 dark:text-slate-400">ค่าใช้จ่าย/หักงบประจำเดือน:</span><span class="font-semibold text-rose-500 dark:text-rose-400 text-sm" id="monthExpenseTotal">0.00 บาท</span></div>
+                            <hr class="border-slate-200 dark:border-slate-700">
+                            <div class="flex justify-between items-center font-bold"><span class="text-slate-800 dark:text-white">คงเหลือประจำเดือน:</span><span class="text-indigo-600 dark:text-indigo-400 text-base" id="monthNetTotal">0.00 บาท</span></div>
                         </div>
                     </div>
-                    <div class="mt-4 pt-3 border-t border-slate-100 flex gap-2">
-                        <input type="number" id="monthExpenseInput" placeholder="ระบุจำนวนเงินค่าใช้จ่ายเดือนนี้" class="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
-                        <button onclick="addExpense('month')" class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm btn-hover-effect">
-                            <i class="fa-solid fa-minus-circle mr-1"></i> หักงบเดือนนี้
-                        </button>
+                    <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex gap-2">
+                        <input type="number" id="monthExpenseInput" placeholder="จำนวนเงินค่าใช้จ่ายเดือนนี้" class="flex-1 px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-xl focus:outline-none">
+                        <button onclick="addExpense('month')" class="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white px-3.5 py-2 rounded-xl text-xs font-medium transition glow-rose btn-hover">หักงบเดือนนี้</button>
                     </div>
                 </div>
 
-                <!-- สรุปงบรวมสะสมทั้งหมด -->
-                <div class="glass-card p-6 rounded-2xl shadow-xl border-t-4 border-emerald-500 flex flex-col justify-between animate-fade-in-up" style="animation-delay: 0.2s;">
+                <!-- สรุปงบรวมสะสม -->
+                <div class="glass-card p-6 rounded-3xl shadow-xl border-t-4 border-emerald-500 flex flex-col justify-between animate-fade-in-up" style="animation-delay: 0.2s;">
                     <div>
-                        <div class="flex justify-between items-center mb-4">
-                            <h4 class="font-bold text-slate-800 flex items-center">
-                                <i class="fa-solid fa-vault text-emerald-500 mr-2"></i> สรุปงบประมาณรวมสะสม (ทุกเดือน)
-                            </h4>
-                        </div>
-                        <div class="space-y-3 bg-slate-50/80 p-4 rounded-xl border border-slate-100">
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-slate-600">ยอดรวมโอนเข้าสะสมทั้งหมด:</span>
-                                <span class="font-semibold text-emerald-600 text-base" id="overallReceivedTotal">0.00 บาท</span>
-                            </div>
-                            <div class="flex justify-between items-center text-sm">
-                                <span class="text-slate-600">ค่าใช้จ่าย/หักงบรวมทั้งหมด:</span>
-                                <span class="font-semibold text-rose-500 text-base" id="overallExpenseTotal">0.00 บาท</span>
-                            </div>
-                            <hr class="border-slate-200">
-                            <div class="flex justify-between items-center text-sm font-bold">
-                                <span class="text-slate-800">เงินคงเหลือกองกลางรวม:</span>
-                                <span class="text-emerald-600 text-lg" id="overallNetTotal">0.00 บาท</span>
-                            </div>
+                        <h4 class="font-bold text-slate-800 dark:text-white mb-4 flex items-center text-sm">
+                            <i class="fa-solid fa-vault text-emerald-500 mr-2"></i> สรุปงบประมาณรวมสะสม (ทุกเดือน)
+                        </h4>
+                        <div class="space-y-2.5 bg-emerald-50/40 dark:bg-slate-800/50 p-4 rounded-2xl border border-emerald-100/60 dark:border-slate-700/50 text-xs">
+                            <div class="flex justify-between items-center"><span class="text-slate-500 dark:text-slate-400">ยอดรวมโอนเข้าสะสมทั้งหมด:</span><span class="font-semibold text-emerald-600 dark:text-emerald-400 text-sm" id="overallReceivedTotal">0.00 บาท</span></div>
+                            <div class="flex justify-between items-center"><span class="text-slate-500 dark:text-slate-400">ค่าใช้จ่าย/หักงบรวมทั้งหมด:</span><span class="font-semibold text-rose-500 dark:text-rose-400 text-sm" id="overallExpenseTotal">0.00 บาท</span></div>
+                            <hr class="border-slate-200 dark:border-slate-700">
+                            <div class="flex justify-between items-center font-bold"><span class="text-slate-800 dark:text-white">เงินคงเหลือกองกลางรวม:</span><span class="text-emerald-600 dark:text-emerald-400 text-base" id="overallNetTotal">0.00 บาท</span></div>
                         </div>
                     </div>
-                    <div class="mt-4 pt-3 border-t border-slate-100 flex gap-2">
-                        <input type="number" id="overallExpenseInput" placeholder="ระบุจำนวนเงินค่าใช้จ่ายส่วนกลาง" class="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
-                        <button onclick="addExpense('overall')" class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm btn-hover-effect">
-                            <i class="fa-solid fa-minus-circle mr-1"></i> หักงบรวม
-                        </button>
+                    <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex gap-2">
+                        <input type="number" id="overallExpenseInput" placeholder="จำนวนเงินค่าใช้จ่ายส่วนกลาง" class="flex-1 px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-xl focus:outline-none">
+                        <button onclick="addExpense('overall')" class="bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white px-3.5 py-2 rounded-xl text-xs font-medium transition glow-rose btn-hover">หักงบรวม</button>
                     </div>
                 </div>
             </div>
 
             <div class="glass-card p-4 rounded-2xl shadow-md flex items-center justify-between animate-fade-in-up" style="animation-delay: 0.25s;">
-                <label class="font-medium text-slate-700">เลือกเดือนที่ต้องการตรวจสอบ:</label>
-                <select id="adminMonthSelect" onchange="fetchDataAndRender()" class="p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-semibold text-indigo-700 transition">
+                <label class="font-medium text-xs text-slate-700 dark:text-slate-300">เลือกเดือนที่ต้องการตรวจสอบ:</label>
+                <select id="adminMonthSelect" onchange="fetchDataAndRender()" class="p-2 bg-white/80 dark:bg-slate-800 border border-indigo-100 dark:border-slate-700 rounded-xl font-semibold text-indigo-600 dark:text-indigo-400 text-xs focus:ring-2 focus:ring-indigo-500/50">
                     <option value="กันยายน">กันยายน</option>
                     <option value="ตุลาคม">ตุลาคม</option>
                     <option value="พฤศจิกายน">พฤศจิกายน</option>
@@ -328,20 +341,20 @@
                 </select>
             </div>
 
-            <div class="glass-card rounded-2xl shadow-xl overflow-hidden border border-white/50 animate-fade-in-up" style="animation-delay: 0.3s;">
+            <div class="glass-card rounded-3xl shadow-xl overflow-hidden border animate-fade-in-up" style="animation-delay: 0.3s;">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
-                        <thead class="bg-slate-800 text-white">
+                        <thead class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white text-xs">
                             <tr>
-                                <th class="p-4 text-xs font-semibold">ลำดับ</th>
-                                <th class="p-4 text-xs font-semibold">รหัสนิสิต</th>
-                                <th class="p-4 text-xs font-semibold">ชื่อ - นามสกุล</th>
-                                <th class="p-4 text-xs font-semibold text-center">สถานะ</th>
-                                <th class="p-4 text-xs font-semibold text-center">หลักฐานสลิป</th>
-                                <th class="p-4 text-xs font-semibold text-center">จัดการสถานะ</th>
+                                <th class="p-4 font-semibold">ลำดับ</th>
+                                <th class="p-4 font-semibold">รหัสนิสิต</th>
+                                <th class="p-4 font-semibold">ชื่อ - นามสกุล</th>
+                                <th class="p-4 font-semibold text-center">สถานะ</th>
+                                <th class="p-4 font-semibold text-center">หลักฐานสลิป</th>
+                                <th class="p-4 font-semibold text-center">จัดการสถานะ</th>
                             </tr>
                         </thead>
-                        <tbody id="adminTableBody" class="divide-y divide-slate-200/60 text-sm bg-white/60"></tbody>
+                        <tbody id="adminTableBody" class="divide-y divide-slate-200/50 dark:divide-slate-800 text-xs"></tbody>
                     </table>
                 </div>
             </div>
@@ -349,29 +362,41 @@
 
     </div>
 
-    <!-- ADMIN MODAL -->
-    <div id="adminModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 transition-opacity duration-300">
-        <div id="adminModalContent" class="bg-white p-6 rounded-2xl max-w-sm w-full shadow-2xl border border-slate-100 transform transition-all duration-300">
-            <h3 class="text-lg font-bold mb-2 text-slate-800 flex items-center">
-                <i class="fa-solid fa-lock text-amber-500 mr-2 animate-bounce"></i> เข้าสู่ระบบผู้ดูแลระบบ
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="adminModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 z-50 transition-opacity">
+        <div id="adminModalContent" class="bg-white dark:bg-slate-800 p-6 rounded-3xl max-w-sm w-full shadow-2xl border border-slate-100 dark:border-slate-700">
+            <h3 class="text-base font-bold mb-1 text-slate-800 dark:text-white flex items-center">
+                <i class="fa-solid fa-lock text-amber-500 mr-2"></i> เข้าสู่ระบบผู้ดูแลระบบ
             </h3>
-            <p class="text-xs text-slate-500 mb-4">กรุณากรอกรหัสนิสิตและรหัสผ่านเพื่อเข้าใช้งาน</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">กรุณากรอกรหัสนิสิตและรหัสผ่านเพื่อเข้าใช้งาน</p>
             
             <div class="space-y-3 mb-5">
                 <div>
-                    <label class="block text-xs font-medium text-slate-600 mb-1">รหัสนิสิต Admin:</label>
-                    <input type="text" id="adminIdInput" placeholder="กรอกรหัสนิสิต Admin" class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm transition duration-200">
+                    <label class="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">รหัสนิสิต Admin:</label>
+                    <input type="text" id="adminIdInput" placeholder="กรอกรหัสนิสิต Admin" class="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-700 dark:bg-slate-900 rounded-xl text-xs focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-600 mb-1">รหัสผ่าน:</label>
-                    <input type="password" id="adminPasswordInput" placeholder="กรอกรหัสผ่าน" class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm transition duration-200">
+                    <label class="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">รหัสผ่าน:</label>
+                    <input type="password" id="adminPasswordInput" placeholder="กรอกรหัสผ่าน" class="w-full px-3.5 py-2 border border-slate-200 dark:border-slate-700 dark:bg-slate-900 rounded-xl text-xs focus:outline-none">
                 </div>
             </div>
 
             <div class="flex justify-end space-x-2">
-                <button onclick="closeAdminModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition btn-hover-effect">ยกเลิก</button>
-                <button onclick="loginAdmin()" class="px-5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl text-sm font-semibold shadow-md shadow-amber-500/20 btn-hover-effect">เข้าสู่ระบบ</button>
+                <button onclick="closeAdminModal()" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-medium transition btn-hover">ยกเลิก</button>
+                <button onclick="loginAdmin()" class="px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl text-xs font-semibold glow-amber btn-hover">เข้าสู่ระบบ</button>
             </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM POPUP NOTIFICATION MODAL -->
+    <div id="customPopup" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div id="customPopupContent" class="bg-white dark:bg-slate-800 p-6 rounded-3xl max-w-xs w-full text-center shadow-2xl border border-slate-100 dark:border-slate-700">
+            <div id="popupIconContainer" class="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl">
+                <i id="popupIcon" class="fa-solid"></i>
+            </div>
+            <h4 id="popupTitle" class="font-bold text-base text-slate-800 dark:text-white mb-1">แจ้งเตือน</h4>
+            <p id="popupMessage" class="text-xs text-slate-500 dark:text-slate-300 mb-5">รายละเอียดข้อความ...</p>
+            <button onclick="closePopup()" class="w-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 py-2.5 rounded-xl font-semibold text-xs btn-hover">ตกลง</button>
         </div>
     </div>
 
@@ -428,6 +453,65 @@
         let currentUser = null;
         let globalData = { payments: {}, expenses: { monthly: {}, overall: 0 } };
 
+        // --- DARK MODE FUNCTIONALITY ---
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('themeIcon').className = 'fa-solid fa-sun text-lg';
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('themeIcon').className = 'fa-solid fa-moon text-lg';
+            }
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.className = 'fa-solid fa-moon text-lg';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                icon.className = 'fa-solid fa-sun text-lg';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+        initTheme();
+
+        // --- CUSTOM POPUP SYSTEM ---
+        function showPopup(title, message, type = 'info') {
+            const popup = document.getElementById('customPopup');
+            const popupContent = document.getElementById('customPopupContent');
+            const iconContainer = document.getElementById('popupIconContainer');
+            const icon = document.getElementById('popupIcon');
+            
+            document.getElementById('popupTitle').innerText = title;
+            document.getElementById('popupMessage').innerText = message;
+
+            if (type === 'success') {
+                iconContainer.className = "w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl bg-gradient-to-tr from-emerald-500 to-teal-500 text-white glow-emerald";
+                icon.className = "fa-solid fa-check";
+            } else if (type === 'error') {
+                iconContainer.className = "w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl bg-gradient-to-tr from-rose-500 to-pink-500 text-white glow-rose";
+                icon.className = "fa-solid fa-triangle-exclamation";
+            } else {
+                iconContainer.className = "w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl bg-gradient-to-tr from-indigo-500 to-purple-500 text-white glow-indigo";
+                icon.className = "fa-solid fa-circle-info";
+            }
+
+            popup.classList.remove('hidden');
+            popupContent.classList.add('animate-pop-in');
+        }
+
+        function closePopup() {
+            const popup = document.getElementById('customPopup');
+            const popupContent = document.getElementById('customPopupContent');
+            popupContent.classList.remove('animate-pop-in');
+            popup.classList.add('hidden');
+        }
+
         function getPayments() { return globalData.payments; }
         function getExpenses() { return globalData.expenses; }
 
@@ -439,7 +523,6 @@
                     globalData = data;
                 }
             } catch(e) {
-                console.log("Using local initial structure");
                 if(!globalData.payments || Object.keys(globalData.payments).length === 0) {
                     initialStudents.forEach(s => {
                         globalData.payments[s.id] = {};
@@ -468,7 +551,7 @@
                 document.getElementById('stdId').innerText = student.id;
                 await fetchDataAndRender();
             } else {
-                alert('ไม่พบรหัสนิสิตนี้ในระบบ');
+                showPopup('เข้าสู่ระบบไม่สำเร็จ', 'ไม่พบรหัสนิสิตนี้ในระบบ กรุณาตรวจสอบอีกครั้ง', 'error');
             }
         }
 
@@ -482,8 +565,8 @@
                 const info = stdPayments[m] || { status: 'unpaid' };
                 const isPaid = info.status === 'paid';
                 const div = document.createElement('div');
-                div.className = `p-2.5 rounded-xl border text-center font-medium shadow-sm transition-all duration-200 hover:scale-105 ${isPaid ? 'bg-emerald-50/80 border-emerald-200 text-emerald-700' : 'bg-rose-50/80 border-rose-200 text-rose-600'}`;
-                div.innerHTML = `<div>${m}</div><div class="font-bold text-[10px] mt-1">${isPaid ? '✓ จ่ายแล้ว' : '✕ ยังไม่จ่าย'}</div>`;
+                div.className = `p-2.5 rounded-2xl border text-center font-medium shadow-sm transition-all duration-300 hover:scale-105 ${isPaid ? 'bg-gradient-to-b from-emerald-50 to-teal-50 dark:from-emerald-950/40 dark:to-teal-950/40 border-emerald-200 dark:border-emerald-800/50 text-emerald-700 dark:text-emerald-400' : 'bg-gradient-to-b from-rose-50 to-pink-50 dark:from-rose-950/40 dark:to-pink-950/40 border-rose-200 dark:border-rose-800/50 text-rose-600 dark:text-rose-400'}`;
+                div.innerHTML = `<div>${m}</div><div class="font-bold text-[10px] mt-0.5">${isPaid ? '✓ จ่ายแล้ว' : '✕ ยังไม่จ่าย'}</div>`;
                 container.appendChild(div);
             });
         }
@@ -494,7 +577,7 @@
             const btn = document.getElementById('uploadBtn');
 
             if (!fileInput.files || fileInput.files.length === 0) {
-                alert('กรุณาเลือกรูปภาพสลิปการโอนเงิน');
+                showPopup('แจ้งเตือน', 'กรุณาเลือกรูปภาพสลิปการโอนเงินก่อนทำรายการ', 'error');
                 return;
             }
 
@@ -529,15 +612,14 @@
                             status: 'paid',
                             slip: resData.fileUrl
                         };
-                        alert(`อัปโหลดสลิปแจ้งจ่ายเงินเดือน ${month} เรียบร้อยแล้ว!`);
+                        showPopup('สำเร็จ', `อัปโหลดสลิปแจ้งจ่ายเงินประจำเดือน ${month} เรียบร้อยแล้ว!`, 'success');
                         fileInput.value = '';
                         await fetchDataAndRender();
                     } else {
-                        alert('เกิดข้อผิดพลาด: ' + resData.error);
+                        showPopup('ผิดพลาด', 'เกิดข้อผิดพลาด: ' + resData.error, 'error');
                     }
                 } catch (err) {
-                    console.error(err);
-                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
+                    showPopup('ผิดพลาด', 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์', 'error');
                 } finally {
                     btn.disabled = false;
                     btn.innerHTML = `<i class="fa-solid fa-upload mr-1.5"></i> ส่งสลิปแจ้งจ่ายเงิน`;
@@ -579,7 +661,7 @@
                 document.getElementById('adminDisplayName').innerText = `${admin.name} (${admin.id})`;
                 await fetchDataAndRender();
             } else {
-                alert('รหัสนิสิตหรือรหัสผ่านผู้ดูแลระบบไม่ถูกต้อง');
+                showPopup('เข้าสู่ระบบไม่สำเร็จ', 'รหัสนิสิตหรือรหัสผ่านผู้ดูแลระบบไม่ถูกต้อง', 'error');
             }
         }
 
@@ -612,21 +694,21 @@
                 });
 
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-indigo-50/60 transition-colors duration-150";
+                tr.className = "hover:bg-indigo-50/50 dark:hover:bg-slate-800/60 transition-colors duration-150";
                 tr.innerHTML = `
-                    <td class="p-4 text-slate-500">${idx + 1}</td>
-                    <td class="p-4 font-mono font-medium text-slate-700">${std.id}</td>
-                    <td class="p-4 font-medium">${std.prefix}${std.fname} ${std.lname}</td>
-                    <td class="p-4 text-center">
-                        <span class="px-3 py-1 rounded-full text-xs font-semibold transition-all duration-300 ${isPaid ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                    <td class="p-3.5 text-slate-400">${idx + 1}</td>
+                    <td class="p-3.5 font-mono font-medium">${std.id}</td>
+                    <td class="p-3.5 font-medium">${std.prefix}${std.fname} ${std.lname}</td>
+                    <td class="p-3.5 text-center">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-semibold shadow-sm ${isPaid ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white' : 'bg-gradient-to-r from-rose-500 to-pink-500 text-white'}">
                             ${isPaid ? 'จ่ายแล้ว' : 'ยังไม่จ่าย'}
                         </span>
                     </td>
-                    <td class="p-4 text-center">
-                        ${stdPay.slip ? `<a href="${stdPay.slip}" target="_blank" class="text-xs bg-slate-100 hover:bg-indigo-100 text-indigo-700 px-3 py-1 rounded-lg border border-indigo-200 inline-block font-medium btn-hover-effect">ดูสลิป Drive</a>` : '<span class="text-slate-300 text-xs">-</span>'}
+                    <td class="p-3.5 text-center">
+                        ${stdPay.slip ? `<a href="${stdPay.slip}" target="_blank" class="text-[10px] bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 px-2.5 py-1 rounded-lg border border-indigo-200 dark:border-indigo-900/50 inline-block font-medium transition">ดูสลิป Drive</a>` : '<span class="text-slate-300 dark:text-slate-600 text-xs">-</span>'}
                     </td>
-                    <td class="p-4 text-center">
-                        <button onclick="toggleStatus('${std.id}', '${currentMonth}')" class="text-xs px-3.5 py-1.5 rounded-lg text-white font-medium shadow-sm btn-hover-effect ${isPaid ? 'bg-amber-500 hover:bg-amber-600' : 'bg-emerald-600 hover:bg-emerald-700'}">
+                    <td class="p-3.5 text-center">
+                        <button onclick="toggleStatus('${std.id}', '${currentMonth}')" class="text-[10px] px-3 py-1 rounded-xl text-white font-medium shadow-sm btn-hover ${isPaid ? 'bg-gradient-to-r from-amber-500 to-orange-500 glow-amber' : 'bg-gradient-to-r from-emerald-500 to-teal-600 glow-emerald'}">
                             ${isPaid ? 'เปลี่ยนเป็นยังไม่จ่าย' : 'ทำรายการว่าจ่ายแล้ว'}
                         </button>
                     </td>
@@ -693,7 +775,7 @@
                 const input = document.getElementById('monthExpenseInput');
                 amount = parseFloat(input.value);
                 if (isNaN(amount) || amount <= 0) {
-                    alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
+                    showPopup('เตือน', 'กรุณากรอกจำนวนเงินที่ถูกต้อง', 'error');
                     return;
                 }
                 if(!globalData.expenses.monthly) globalData.expenses.monthly = {};
@@ -703,7 +785,7 @@
                 const input = document.getElementById('overallExpenseInput');
                 amount = parseFloat(input.value);
                 if (isNaN(amount) || amount <= 0) {
-                    alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
+                    showPopup('เตือน', 'กรุณากรอกจำนวนเงินที่ถูกต้อง', 'error');
                     return;
                 }
                 globalData.expenses.overall = (globalData.expenses.overall || 0) + amount;
@@ -711,6 +793,7 @@
             }
 
             renderAdminTable();
+            showPopup('บันทึกสำเร็จ', 'บันทึกรายการหักงบประมาณเรียบร้อยแล้ว', 'success');
 
             try {
                 await fetch(GOOGLE_SCRIPT_URL, {
