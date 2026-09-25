@@ -238,10 +238,10 @@
                             <input type="text" id="monthNoteInput" placeholder="รายละเอียด/เหตุผล (เช่น ค่าถ่ายเอกสาร)" class="w-2/3 px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
                         </div>
                         <div class="flex gap-2">
-                            <button onclick="addTransaction('month', 'EXPENSE')" class="flex-1 bg-rose-500 hover:bg-rose-600 text-white py-2 rounded-xl text-xs font-semibold transition shadow-sm btn-hover-effect">
+                            <button id="btnMonthExpense" onclick="addTransaction('month', 'EXPENSE')" class="flex-1 bg-rose-500 hover:bg-rose-600 text-white py-2 rounded-xl text-xs font-semibold transition shadow-sm btn-hover-effect">
                                 <i class="fa-solid fa-minus-circle mr-1"></i> หักค่าใช้จ่าย (-)
                             </button>
-                            <button onclick="addTransaction('month', 'INCOME')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-semibold transition shadow-sm btn-hover-effect">
+                            <button id="btnMonthIncome" onclick="addTransaction('month', 'INCOME')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-semibold transition shadow-sm btn-hover-effect">
                                 <i class="fa-solid fa-plus-circle mr-1"></i> เพิ่มเงินสมทบ (+)
                             </button>
                         </div>
@@ -280,10 +280,10 @@
                             <input type="text" id="overallNoteInput" placeholder="รายละเอียด/เหตุผล (เช่น สปอนเซอร์เข้า)" class="w-2/3 px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
                         </div>
                         <div class="flex gap-2">
-                            <button onclick="addTransaction('overall', 'EXPENSE')" class="flex-1 bg-rose-500 hover:bg-rose-600 text-white py-2 rounded-xl text-xs font-semibold transition shadow-sm btn-hover-effect">
+                            <button id="btnOverallExpense" onclick="addTransaction('overall', 'EXPENSE')" class="flex-1 bg-rose-500 hover:bg-rose-600 text-white py-2 rounded-xl text-xs font-semibold transition shadow-sm btn-hover-effect">
                                 <i class="fa-solid fa-minus-circle mr-1"></i> หักงบรวม (-)
                             </button>
-                            <button onclick="addTransaction('overall', 'INCOME')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-semibold transition shadow-sm btn-hover-effect">
+                            <button id="btnOverallIncome" onclick="addTransaction('overall', 'INCOME')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-semibold transition shadow-sm btn-hover-effect">
                                 <i class="fa-solid fa-plus-circle mr-1"></i> สมทบงบรวม (+)
                             </button>
                         </div>
@@ -354,7 +354,7 @@
 
     </div>
 
-    <!-- ADMIN MODAL (ปรับให้กรอกทั้ง รหัสนิสิต และ รหัสผ่าน 0000) -->
+    <!-- ADMIN MODAL -->
     <div id="adminModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 transition-opacity duration-300">
         <div id="adminModalContent" class="bg-white p-6 rounded-2xl max-w-sm w-full shadow-2xl border border-slate-100 transform transition-all duration-300">
             <h3 class="text-lg font-bold mb-2 text-slate-800 flex items-center">
@@ -444,7 +444,7 @@
                     globalData = data;
                 }
             } catch(e) {
-                console.log("Using local initial structure");
+                console.log("Error fetching data, using fallback structure", e);
                 if(!globalData.payments || Object.keys(globalData.payments).length === 0) {
                     initialStudents.forEach(s => {
                         globalData.payments[s.id] = {};
@@ -744,8 +744,6 @@
                     alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
                     return;
                 }
-                amtInput.value = '';
-                noteInput.value = '';
             } else if (scope === 'overall') {
                 month = "ส่วนกลาง";
                 const amtInput = document.getElementById('overallExpenseInput');
@@ -757,16 +755,14 @@
                     alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
                     return;
                 }
-                amtInput.value = '';
-                noteInput.value = '';
             }
 
             try {
-                await fetch(GOOGLE_SCRIPT_URL, {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     body: JSON.stringify({
                         type: "addTransaction",
-                        transType: transType, // 'INCOME' หรือ 'EXPENSE'
+                        transType: transType,
                         month: month,
                         amount: amount,
                         note: note || (transType === 'INCOME' ? 'นำเข้าเงินสมทบ' : 'หักค่าใช้จ่าย'),
@@ -774,9 +770,20 @@
                         adminName: currentUser && currentUser.data ? currentUser.data.name : "ผู้ดูแลระบบ"
                     })
                 });
+                
+                // ล้างค่าอินพุตเมื่อบันทึกสำเร็จ
+                if (scope === 'month') {
+                    document.getElementById('monthExpenseInput').value = '';
+                    document.getElementById('monthNoteInput').value = '';
+                } else {
+                    document.getElementById('overallExpenseInput').value = '';
+                    document.getElementById('overallNoteInput').value = '';
+                }
+
                 await fetchDataAndRender();
             } catch(e) {
                 console.error("Failed to update transaction remotely", e);
+                alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง");
             }
         }
 
