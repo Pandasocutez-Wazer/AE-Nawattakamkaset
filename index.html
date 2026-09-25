@@ -522,25 +522,16 @@
                 };
 
                 try {
-                    const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
 
-                    const resData = await response.json();
-
-                    if (resData.result === 'success') {
-                        if(!globalData.payments[currentUser.data.id]) globalData.payments[currentUser.data.id] = {};
-                        globalData.payments[currentUser.data.id][month] = {
-                            status: 'paid',
-                            slip: resData.fileUrl
-                        };
-                        alert(`อัปโหลดสลิปแจ้งจ่ายเงินเดือน ${month} เรียบร้อยแล้ว!`);
-                        fileInput.value = '';
-                        await fetchDataAndRender();
-                    } else {
-                        alert('เกิดข้อผิดพลาด: ' + resData.error);
-                    }
+                    alert(`อัปโหลดสลิปแจ้งจ่ายเงินเดือน ${month} เรียบร้อยแล้ว!`);
+                    fileInput.value = '';
+                    setTimeout(fetchDataAndRender, 1500);
                 } catch (err) {
                     console.error(err);
                     alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
@@ -713,6 +704,8 @@
             try {
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         type: "updateStatus",
                         studentId: stdId,
@@ -722,7 +715,7 @@
                         adminName: currentUser && currentUser.data ? currentUser.data.name : "ผู้ดูแลระบบ"
                     })
                 });
-                await fetchDataAndRender();
+                setTimeout(fetchDataAndRender, 1200);
             } catch(e) {
                 console.error("Failed to update status remotely", e);
             }
@@ -758,8 +751,10 @@
             }
 
             try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         type: "addTransaction",
                         transType: transType,
@@ -771,7 +766,7 @@
                     })
                 });
                 
-                // ล้างค่าอินพุตเมื่อบันทึกสำเร็จ
+                // ล้างช่องกรอกข้อมูล
                 if (scope === 'month') {
                     document.getElementById('monthExpenseInput').value = '';
                     document.getElementById('monthNoteInput').value = '';
@@ -780,7 +775,8 @@
                     document.getElementById('overallNoteInput').value = '';
                 }
 
-                await fetchDataAndRender();
+                // หน่วงเวลาเล็กน้อยเพื่อให้ Google Sheets บันทึกข้อมูลเสร็จแล้วดึงข้อมูลใหม่
+                setTimeout(fetchDataAndRender, 1500);
             } catch(e) {
                 console.error("Failed to update transaction remotely", e);
                 alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง");
