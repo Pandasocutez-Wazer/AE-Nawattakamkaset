@@ -67,6 +67,11 @@
             animation: fadeIn 0.3s ease-out forwards;
         }
 
+        /* Transition Effects */
+        .smooth-transition {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         .btn-hover-effect {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -204,7 +209,7 @@
                 </div>
             </div>
 
-            <!-- FINANCIAL SUMMARY CARDS -->
+            <!-- FINANCIAL SUMMARY & EXPENSE MANAGEMENT CARDS -->
             <div class="grid md:grid-cols-2 gap-6">
                 <!-- สรุปงบประจำเดือน -->
                 <div class="glass-card p-6 rounded-2xl shadow-xl border-t-4 border-indigo-500 flex flex-col justify-between animate-fade-in-up" style="animation-delay: 0.1s;">
@@ -216,7 +221,7 @@
                         </div>
                         <div class="space-y-3 bg-slate-50/80 p-4 rounded-xl border border-slate-100">
                             <div class="flex justify-between items-center text-sm">
-                                <span class="text-slate-600">ยอดโอน/สมทบเข้าประจำเดือน:</span>
+                                <span class="text-slate-600">ยอดโอนเข้ามาประจำเดือน:</span>
                                 <span class="font-semibold text-emerald-600 text-base" id="monthReceivedTotal">0.00 บาท</span>
                             </div>
                             <div class="flex justify-between items-center text-sm">
@@ -230,18 +235,11 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- ฟอร์มเพิ่ม/หักเงิน ประจำเดือน (เหลือเฉพาะช่องเงิน) -->
-                    <div class="mt-4 pt-3 border-t border-slate-100 space-y-2">
-                        <input type="number" id="monthExpenseInput" placeholder="ระบุจำนวนเงิน (บาท)" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
-                        <div class="flex gap-2">
-                            <button id="btnMonthExpense" onclick="addTransaction('month', 'EXPENSE')" class="flex-1 bg-rose-500 hover:bg-rose-600 text-white py-2 rounded-xl text-xs font-semibold transition shadow-sm btn-hover-effect">
-                                <i class="fa-solid fa-minus-circle mr-1"></i> หักค่าใช้จ่าย (-)
-                            </button>
-                            <button id="btnMonthIncome" onclick="addTransaction('month', 'INCOME')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-semibold transition shadow-sm btn-hover-effect">
-                                <i class="fa-solid fa-plus-circle mr-1"></i> เพิ่มเงินสมทบ (+)
-                            </button>
-                        </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex gap-2">
+                        <input type="number" id="monthExpenseInput" placeholder="ระบุจำนวนเงินค่าใช้จ่ายเดือนนี้" class="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none transition">
+                        <button onclick="addExpense('month')" class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm btn-hover-effect">
+                            <i class="fa-solid fa-minus-circle mr-1"></i> หักงบเดือนนี้
+                        </button>
                     </div>
                 </div>
 
@@ -269,23 +267,16 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- ฟอร์มเพิ่ม/หักเงิน กองกลางรวม (เหลือเฉพาะช่องเงิน) -->
-                    <div class="mt-4 pt-3 border-t border-slate-100 space-y-2">
-                        <input type="number" id="overallExpenseInput" placeholder="ระบุจำนวนเงิน (บาท)" class="w-full px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
-                        <div class="flex gap-2">
-                            <button id="btnOverallExpense" onclick="addTransaction('overall', 'EXPENSE')" class="flex-1 bg-rose-500 hover:bg-rose-600 text-white py-2 rounded-xl text-xs font-semibold transition shadow-sm btn-hover-effect">
-                                <i class="fa-solid fa-minus-circle mr-1"></i> หักงบรวม (-)
-                            </button>
-                            <button id="btnOverallIncome" onclick="addTransaction('overall', 'INCOME')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-xl text-xs font-semibold transition shadow-sm btn-hover-effect">
-                                <i class="fa-solid fa-plus-circle mr-1"></i> สมทบงบรวม (+)
-                            </button>
-                        </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex gap-2">
+                        <input type="number" id="overallExpenseInput" placeholder="ระบุจำนวนเงินค่าใช้จ่ายส่วนกลาง" class="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none transition">
+                        <button onclick="addExpense('overall')" class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm btn-hover-effect">
+                            <i class="fa-solid fa-minus-circle mr-1"></i> หักงบรวม
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="glass-card p-4 rounded-2xl shadow-md flex items-center justify-between animate-fade-in-up" style="animation-delay: 0.3s;">
+            <div class="glass-card p-4 rounded-2xl shadow-md flex items-center justify-between animate-fade-in-up" style="animation-delay: 0.25s;">
                 <label class="font-medium text-slate-700">เลือกเดือนที่ต้องการตรวจสอบ:</label>
                 <select id="adminMonthSelect" onchange="fetchDataAndRender()" class="p-2.5 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 font-semibold text-indigo-700 transition">
                     <option value="กันยายน">กันยายน</option>
@@ -303,7 +294,7 @@
                 </select>
             </div>
 
-            <div class="glass-card rounded-2xl shadow-xl overflow-hidden border border-white/50 animate-fade-in-up" style="animation-delay: 0.35s;">
+            <div class="glass-card rounded-2xl shadow-xl overflow-hidden border border-white/50 animate-fade-in-up" style="animation-delay: 0.3s;">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead class="bg-slate-800 text-white">
@@ -324,25 +315,14 @@
 
     </div>
 
-    <!-- ADMIN MODAL -->
+    <!-- ADMIN MODAL (Smoother Popup Animation) -->
     <div id="adminModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 transition-opacity duration-300">
         <div id="adminModalContent" class="bg-white p-6 rounded-2xl max-w-sm w-full shadow-2xl border border-slate-100 transform transition-all duration-300">
             <h3 class="text-lg font-bold mb-2 text-slate-800 flex items-center">
                 <i class="fa-solid fa-lock text-amber-500 mr-2 animate-bounce"></i> เข้าสู่ระบบผู้ดูแลระบบ
             </h3>
-            <p class="text-xs text-slate-500 mb-4">ยืนยันตัวตนด้วยรหัสนิสิต และรหัสผ่าน Admin</p>
-            
-            <div class="space-y-3 mb-5">
-                <div>
-                    <label class="block text-xs font-medium text-slate-600 mb-1">รหัสนิสิต Admin:</label>
-                    <input type="text" id="adminIdInput" placeholder="เช่น 6920504529" class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm transition">
-                </div>
-                <div>
-                    <label class="block text-xs font-medium text-slate-600 mb-1">รหัสผ่าน Admin (0000):</label>
-                    <input type="password" id="adminPasswordInput" placeholder="กรอกรหัสผ่าน 4 หลัก" class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm transition">
-                </div>
-            </div>
-
+            <p class="text-xs text-slate-500 mb-4">กรุณากรอกรหัสนิสิตผู้ดูแลระบบ</p>
+            <input type="password" id="adminPasswordInput" placeholder="กรอกรหัสนิสิต Admin" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl mb-5 focus:ring-2 focus:ring-amber-500 focus:outline-none transition duration-200">
             <div class="flex justify-end space-x-2">
                 <button onclick="closeAdminModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition btn-hover-effect">ยกเลิก</button>
                 <button onclick="loginAdmin()" class="px-5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl text-sm font-semibold shadow-md shadow-amber-500/20 btn-hover-effect">เข้าสู่ระบบ</button>
@@ -401,21 +381,20 @@
         const months = ["กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" ,"มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม"];
 
         let currentUser = null;
-        let globalData = { payments: {}, expenses: { monthly: {}, monthlyIncomes: {}, overall: 0, overallIncomes: 0 } };
+        let globalData = { payments: {}, expenses: { monthly: {}, overall: 0 } };
 
         function getPayments() { return globalData.payments; }
         function getExpenses() { return globalData.expenses; }
 
         async function fetchDataAndRender() {
             try {
-                // เพิ่ม timestamp เพื่อไม่ให้เบราว์เซอร์จำ Cache เก่า ทำให้ข้อมูลเรียลไทม์เสมอ
-                const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getData&t=${new Date().getTime()}`);
+                const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getData`);
                 const data = await res.json();
                 if (data && data.payments) {
                     globalData = data;
                 }
             } catch(e) {
-                console.log("Error fetching data, using fallback structure", e);
+                console.log("Using local initial structure");
                 if(!globalData.payments || Object.keys(globalData.payments).length === 0) {
                     initialStudents.forEach(s => {
                         globalData.payments[s.id] = {};
@@ -492,16 +471,25 @@
                 };
 
                 try {
-                    await fetch(GOOGLE_SCRIPT_URL, {
+                    const response = await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
 
-                    alert(`อัปโหลดสลิปแจ้งจ่ายเงินเดือน ${month} เรียบร้อยแล้ว!`);
-                    fileInput.value = '';
-                    setTimeout(fetchDataAndRender, 1500);
+                    const resData = await response.json();
+
+                    if (resData.result === 'success') {
+                        if(!globalData.payments[currentUser.data.id]) globalData.payments[currentUser.data.id] = {};
+                        globalData.payments[currentUser.data.id][month] = {
+                            status: 'paid',
+                            slip: resData.fileUrl
+                        };
+                        alert(`อัปโหลดสลิปแจ้งจ่ายเงินเดือน ${month} เรียบร้อยแล้ว!`);
+                        fileInput.value = '';
+                        await fetchDataAndRender();
+                    } else {
+                        alert('เกิดข้อผิดพลาด: ' + resData.error);
+                    }
                 } catch (err) {
                     console.error(err);
                     alert('เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์');
@@ -518,7 +506,7 @@
             const modalContent = document.getElementById('adminModalContent');
             modal.classList.remove('hidden');
             modalContent.classList.add('animate-pop-in');
-            document.getElementById('adminIdInput').focus();
+            document.getElementById('adminPasswordInput').focus();
         }
 
         function closeAdminModal() { 
@@ -526,16 +514,13 @@
             const modalContent = document.getElementById('adminModalContent');
             modalContent.classList.remove('animate-pop-in');
             modal.classList.add('hidden');
-            document.getElementById('adminIdInput').value = '';
-            document.getElementById('adminPasswordInput').value = '';
         }
 
         async function loginAdmin() {
-            const idInput = document.getElementById('adminIdInput').value.trim();
-            const passInput = document.getElementById('adminPasswordInput').value.trim();
-            const admin = adminAccounts.find(a => a.id === idInput);
+            const pass = document.getElementById('adminPasswordInput').value.trim();
+            const admin = adminAccounts.find(a => a.id === pass);
 
-            if (admin && passInput === "0000") {
+            if (admin) {
                 currentUser = { type: 'admin', data: { id: admin.id, name: admin.name } };
                 closeAdminModal();
                 document.getElementById('loginSection').classList.add('hidden');
@@ -544,10 +529,8 @@
                 document.getElementById('userBadge').innerText = `Admin: ${admin.name}`;
                 document.getElementById('adminDisplayName').innerText = `${admin.name} (${admin.id})`;
                 await fetchDataAndRender();
-            } else if (!admin) {
-                alert('ไม่พบรหัสนิสิตผู้ดูแลระบบนี้ในระบบ');
             } else {
-                alert('รหัสผ่าน Admin ไม่ถูกต้อง (รหัสผ่านคือ 0000)');
+                alert('รหัสนิสิตผู้ดูแลระบบไม่ถูกต้อง');
             }
         }
 
@@ -559,8 +542,8 @@
             tbody.innerHTML = '';
 
             let paid = 0, unpaid = 0;
-            let currentMonthStudentPaid = 0;
-            let overallStudentPaid = 0;
+            let currentMonthTotalReceived = 0;
+            let overallTotalReceived = 0;
 
             initialStudents.forEach((std, idx) => {
                 const stdPay = (payments[std.id] && payments[std.id][currentMonth]) ? payments[std.id][currentMonth] : { status: 'unpaid', slip: null };
@@ -568,14 +551,14 @@
 
                 if (isPaid) {
                     paid++;
-                    currentMonthStudentPaid += ROOM_FEE;
+                    currentMonthTotalReceived += ROOM_FEE;
                 } else {
                     unpaid++;
                 }
 
                 months.forEach(m => {
                     if (payments[std.id] && payments[std.id][m] && payments[std.id][m].status === 'paid') {
-                        overallStudentPaid += ROOM_FEE;
+                        overallTotalReceived += ROOM_FEE;
                     }
                 });
 
@@ -605,10 +588,8 @@
             document.getElementById('paidCount').innerText = paid;
             document.getElementById('unpaidCount').innerText = unpaid;
 
-            // คำนวณสรุปยอดประจำเดือนที่เลือก
+            // สรุปยอดประจำเดือนที่เลือก
             document.getElementById('summaryMonthTitle').innerText = currentMonth;
-            const monthExtraIncome = (expenses.monthlyIncomes && expenses.monthlyIncomes[currentMonth]) ? expenses.monthlyIncomes[currentMonth] : 0;
-            const currentMonthTotalReceived = currentMonthStudentPaid + monthExtraIncome;
             const currentMonthExpense = (expenses.monthly && expenses.monthly[currentMonth]) ? expenses.monthly[currentMonth] : 0;
             const currentMonthNet = currentMonthTotalReceived - currentMonthExpense;
 
@@ -616,15 +597,11 @@
             document.getElementById('monthExpenseTotal').innerText = currentMonthExpense.toFixed(2) + ' บาท';
             document.getElementById('monthNetTotal').innerText = currentMonthNet.toFixed(2) + ' บาท';
 
-            // คำนวณสรุปยอดรวมสะสมทั้งหมด (ทุกเดือน)
+            // สรุปยอดรวมสะสมทั้งหมด (ทุกเดือน)
             let totalMonthlyExpenses = 0;
-            let totalMonthlyIncomes = 0;
             months.forEach(m => {
                 totalMonthlyExpenses += (expenses.monthly && expenses.monthly[m]) ? expenses.monthly[m] : 0;
-                totalMonthlyIncomes += (expenses.monthlyIncomes && expenses.monthlyIncomes[m]) ? expenses.monthlyIncomes[m] : 0;
             });
-
-            const overallTotalReceived = overallStudentPaid + totalMonthlyIncomes + (expenses.overallIncomes || 0);
             const overallExpense = totalMonthlyExpenses + (expenses.overall || 0);
             const overallNet = overallTotalReceived - overallExpense;
 
@@ -644,63 +621,64 @@
             renderAdminTable();
 
             try {
-                const adminId = currentUser && currentUser.data ? currentUser.data.id : "ADMIN";
-                const adminName = currentUser && currentUser.data ? currentUser.data.name : "ผู้ดูแลระบบ";
-                const queryUrl = `${GOOGLE_SCRIPT_URL}?action=updateStatus&studentId=${encodeURIComponent(stdId)}&month=${encodeURIComponent(month)}&status=${encodeURIComponent(newStatus)}&adminId=${encodeURIComponent(adminId)}&adminName=${encodeURIComponent(adminName)}`;
-                
-                await fetch(queryUrl, { mode: 'no-cors' });
-                setTimeout(fetchDataAndRender, 1500);
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: "updateStatus",
+                        studentId: stdId,
+                        month: month,
+                        status: newStatus,
+                        adminId: currentUser && currentUser.data ? currentUser.data.id : "ADMIN",
+                        adminName: currentUser && currentUser.data ? currentUser.data.name : "ผู้ดูแลระบบ"
+                    })
+                });
             } catch(e) {
                 console.error("Failed to update status remotely", e);
             }
         }
 
-        async function addTransaction(scope, transType) {
+        async function addExpense(type) {
             let amount = 0;
             let month = null;
 
-            if (scope === 'month') {
+            if (type === 'month') {
                 month = document.getElementById('adminMonthSelect').value;
-                const amtInput = document.getElementById('monthExpenseInput');
-                amount = parseFloat(amtInput.value);
-
+                const input = document.getElementById('monthExpenseInput');
+                amount = parseFloat(input.value);
                 if (isNaN(amount) || amount <= 0) {
                     alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
                     return;
                 }
-            } else if (scope === 'overall') {
-                month = "ส่วนกลาง";
-                const amtInput = document.getElementById('overallExpenseInput');
-                amount = parseFloat(amtInput.value);
-
+                if(!globalData.expenses.monthly) globalData.expenses.monthly = {};
+                globalData.expenses.monthly[month] = (globalData.expenses.monthly[month] || 0) + amount;
+                input.value = '';
+            } else if (type === 'overall') {
+                const input = document.getElementById('overallExpenseInput');
+                amount = parseFloat(input.value);
                 if (isNaN(amount) || amount <= 0) {
                     alert('กรุณากรอกจำนวนเงินที่ถูกต้อง');
                     return;
                 }
+                globalData.expenses.overall = (globalData.expenses.overall || 0) + amount;
+                input.value = '';
             }
 
+            renderAdminTable();
+
             try {
-                const adminId = currentUser && currentUser.data ? currentUser.data.id : "ADMIN";
-                const adminName = currentUser && currentUser.data ? currentUser.data.name : "ผู้ดูแลระบบ";
-                
-                const queryUrl = `${GOOGLE_SCRIPT_URL}?action=addTransaction&transType=${encodeURIComponent(transType)}&month=${encodeURIComponent(month)}&amount=${encodeURIComponent(amount)}&adminId=${encodeURIComponent(adminId)}&adminName=${encodeURIComponent(adminName)}`;
-
-                // ใช้ mode: no-cors บังคับส่งข้อมูลให้ Apps Script บันทึกลง Sheet ได้แน่นอน
-                await fetch(queryUrl, { mode: 'no-cors' });
-
-                if (scope === 'month') {
-                    document.getElementById('monthExpenseInput').value = '';
-                } else {
-                    document.getElementById('overallExpenseInput').value = '';
-                }
-                
-                alert('ทำการบันทึกเรียบร้อยแล้ว!');
-                
-                // ดึงข้อมูลใหม่หลังจากส่งสำเร็จ
-                setTimeout(fetchDataAndRender, 1200);
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: "addExpense",
+                        expenseType: type,
+                        month: month,
+                        amount: amount,
+                        adminId: currentUser && currentUser.data ? currentUser.data.id : "ADMIN",
+                        adminName: currentUser && currentUser.data ? currentUser.data.name : "ผู้ดูแลระบบ"
+                    })
+                });
             } catch(e) {
-                console.error("Failed to update transaction remotely", e);
-                alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง");
+                console.error("Failed to update expense remotely", e);
             }
         }
 
@@ -711,7 +689,6 @@
             document.getElementById('adminDashboard').classList.add('hidden');
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('studentIdInput').value = '';
-            document.getElementById('adminIdInput').value = '';
             document.getElementById('adminPasswordInput').value = '';
         }
     </script>
