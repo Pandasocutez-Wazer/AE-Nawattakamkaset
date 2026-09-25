@@ -315,14 +315,25 @@
 
     </div>
 
-    <!-- ADMIN MODAL (Smoother Popup Animation) -->
+    <!-- ADMIN MODAL (ปรับปรุงเพิ่มความปลอดภัย) -->
     <div id="adminModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 transition-opacity duration-300">
         <div id="adminModalContent" class="bg-white p-6 rounded-2xl max-w-sm w-full shadow-2xl border border-slate-100 transform transition-all duration-300">
             <h3 class="text-lg font-bold mb-2 text-slate-800 flex items-center">
                 <i class="fa-solid fa-lock text-amber-500 mr-2 animate-bounce"></i> เข้าสู่ระบบผู้ดูแลระบบ
             </h3>
-            <p class="text-xs text-slate-500 mb-4">กรุณากรอกรหัสนิสิตผู้ดูแลระบบ</p>
-            <input type="password" id="adminPasswordInput" placeholder="กรอกรหัสนิสิต Admin" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl mb-5 focus:ring-2 focus:ring-amber-500 focus:outline-none transition duration-200">
+            <p class="text-xs text-slate-500 mb-4">กรุณากรอกรหัสนิสิตและรหัสผ่านเพื่อเข้าใช้งาน</p>
+            
+            <div class="space-y-3 mb-5">
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">รหัสนิสิต Admin:</label>
+                    <input type="text" id="adminIdInput" placeholder="กรอกรหัสนิสิต Admin" class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm transition duration-200">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-600 mb-1">รหัสผ่าน:</label>
+                    <input type="password" id="adminPasswordInput" placeholder="กรอกรหัสผ่าน" class="w-full px-4 py-2 border border-slate-200 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none text-sm transition duration-200">
+                </div>
+            </div>
+
             <div class="flex justify-end space-x-2">
                 <button onclick="closeAdminModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-medium transition btn-hover-effect">ยกเลิก</button>
                 <button onclick="loginAdmin()" class="px-5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl text-sm font-semibold shadow-md shadow-amber-500/20 btn-hover-effect">เข้าสู่ระบบ</button>
@@ -372,10 +383,11 @@
             { id: "6920504553", prefix: "นาย", fname: "สุรยุทธ", lname: "แสงพลาย" }
         ];
 
+        // กำหนดข้อมูลแอดมินและรหัสผ่านเฉพาะบุคคล
         const adminAccounts = [
-            { id: "6920502038", name: "นางสาว กุลธิดา โพธิ์ใย" },
-            { id: "6920502062", name: "นาย ต้องรัก แดวขุนทด" },
-            { id: "6920504529", name: "นาย ศิรภัทร สินสวัสดิ์" }
+            { id: "6920504529", name: "นาย ศิรภัทร สินสวัสดิ์", pass: "1680" },
+            { id: "6920502038", name: "นางสาว กุลธิดา โพธิ์ใย", pass: "1111" },
+            { id: "6920502062", name: "นาย ต้องรัก แดวขุนทด", pass: "2222" }
         ];
 
         const months = ["กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" ,"มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม"];
@@ -506,7 +518,7 @@
             const modalContent = document.getElementById('adminModalContent');
             modal.classList.remove('hidden');
             modalContent.classList.add('animate-pop-in');
-            document.getElementById('adminPasswordInput').focus();
+            document.getElementById('adminIdInput').focus();
         }
 
         function closeAdminModal() { 
@@ -514,11 +526,15 @@
             const modalContent = document.getElementById('adminModalContent');
             modalContent.classList.remove('animate-pop-in');
             modal.classList.add('hidden');
+            document.getElementById('adminIdInput').value = '';
+            document.getElementById('adminPasswordInput').value = '';
         }
 
         async function loginAdmin() {
-            const pass = document.getElementById('adminPasswordInput').value.trim();
-            const admin = adminAccounts.find(a => a.id === pass);
+            const idInput = document.getElementById('adminIdInput').value.trim();
+            const passInput = document.getElementById('adminPasswordInput').value.trim();
+            
+            const admin = adminAccounts.find(a => a.id === idInput && a.pass === passInput);
 
             if (admin) {
                 currentUser = { type: 'admin', data: { id: admin.id, name: admin.name } };
@@ -530,7 +546,7 @@
                 document.getElementById('adminDisplayName').innerText = `${admin.name} (${admin.id})`;
                 await fetchDataAndRender();
             } else {
-                alert('รหัสนิสิตผู้ดูแลระบบไม่ถูกต้อง');
+                alert('รหัสนิสิตหรือรหัสผ่านผู้ดูแลระบบไม่ถูกต้อง');
             }
         }
 
@@ -689,6 +705,7 @@
             document.getElementById('adminDashboard').classList.add('hidden');
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('studentIdInput').value = '';
+            document.getElementById('adminIdInput').value = '';
             document.getElementById('adminPasswordInput').value = '';
         }
     </script>
