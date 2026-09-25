@@ -702,20 +702,12 @@
             renderAdminTable();
 
             try {
-                await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        type: "updateStatus",
-                        studentId: stdId,
-                        month: month,
-                        status: newStatus,
-                        adminId: currentUser && currentUser.data ? currentUser.data.id : "ADMIN",
-                        adminName: currentUser && currentUser.data ? currentUser.data.name : "ผู้ดูแลระบบ"
-                    })
-                });
-                setTimeout(fetchDataAndRender, 1200);
+                const adminId = currentUser && currentUser.data ? currentUser.data.id : "ADMIN";
+                const adminName = currentUser && currentUser.data ? currentUser.data.name : "ผู้ดูแลระบบ";
+                const queryUrl = `${GOOGLE_SCRIPT_URL}?action=updateStatus&studentId=${encodeURIComponent(stdId)}&month=${encodeURIComponent(month)}&status=${encodeURIComponent(newStatus)}&adminId=${encodeURIComponent(adminId)}&adminName=${encodeURIComponent(adminName)}`;
+                
+                await fetch(queryUrl);
+                await fetchDataAndRender();
             } catch(e) {
                 console.error("Failed to update status remotely", e);
             }
@@ -751,32 +743,28 @@
             }
 
             try {
-                await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        type: "addTransaction",
-                        transType: transType,
-                        month: month,
-                        amount: amount,
-                        note: note || (transType === 'INCOME' ? 'นำเข้าเงินสมทบ' : 'หักค่าใช้จ่าย'),
-                        adminId: currentUser && currentUser.data ? currentUser.data.id : "ADMIN",
-                        adminName: currentUser && currentUser.data ? currentUser.data.name : "ผู้ดูแลระบบ"
-                    })
-                });
+                const adminId = currentUser && currentUser.data ? currentUser.data.id : "ADMIN";
+                const adminName = currentUser && currentUser.data ? currentUser.data.name : "ผู้ดูแลระบบ";
+                const noteText = note || (transType === 'INCOME' ? 'นำเข้าเงินสมทบ' : 'หักค่าใช้จ่าย');
                 
-                // ล้างช่องกรอกข้อมูล
-                if (scope === 'month') {
-                    document.getElementById('monthExpenseInput').value = '';
-                    document.getElementById('monthNoteInput').value = '';
-                } else {
-                    document.getElementById('overallExpenseInput').value = '';
-                    document.getElementById('overallNoteInput').value = '';
-                }
+                const queryUrl = `${GOOGLE_SCRIPT_URL}?action=addTransaction&transType=${encodeURIComponent(transType)}&month=${encodeURIComponent(month)}&amount=${encodeURIComponent(amount)}&note=${encodeURIComponent(noteText)}&adminId=${encodeURIComponent(adminId)}&adminName=${encodeURIComponent(adminName)}`;
 
-                // หน่วงเวลาเล็กน้อยเพื่อให้ Google Sheets บันทึกข้อมูลเสร็จแล้วดึงข้อมูลใหม่
-                setTimeout(fetchDataAndRender, 1500);
+                const res = await fetch(queryUrl);
+                const result = await res.json();
+
+                if (result && result.result === 'success') {
+                    if (scope === 'month') {
+                        document.getElementById('monthExpenseInput').value = '';
+                        document.getElementById('monthNoteInput').value = '';
+                    } else {
+                        document.getElementById('overallExpenseInput').value = '';
+                        document.getElementById('overallNoteInput').value = '';
+                    }
+                    alert('บันทึกรายการเรียบร้อยแล้ว!');
+                    await fetchDataAndRender();
+                } else {
+                    alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+                }
             } catch(e) {
                 console.error("Failed to update transaction remotely", e);
                 alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง");
