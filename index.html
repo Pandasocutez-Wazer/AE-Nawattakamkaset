@@ -294,6 +294,22 @@
                     </button>
                 </div>
                 <p id="siteModeStatus" class="text-[11px] text-slate-400 dark:text-slate-500 mt-3"></p>
+
+                <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/40">
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
+                        ทดสอบส่งอีเมลแจ้งเตือนค่าห้องได้ทันที (ไม่ต้องรอถึงวันที่ 1/10/20/25/30) — <b>จะส่งจริง</b> ไปยังนิสิตทุกคนที่ยังไม่จ่ายค่าห้องของเดือนปัจจุบัน
+                    </p>
+                    <div class="flex flex-wrap gap-2 items-center">
+                        <select id="testReminderVariant" class="px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-xl focus:outline-none">
+                            <option value="new_month">แบบวันที่ 1 (เข้าเดือนใหม่)</option>
+                            <option value="mid_month" selected>แบบวันที่ 10/20 (ค้างจ่าย รีบจ่าย)</option>
+                            <option value="end_month">แบบวันที่ 25/30 (ใกล้สิ้นเดือน)</option>
+                        </select>
+                        <button onclick="testSendReminder()" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
+                            <i class="fa-solid fa-paper-plane mr-1.5"></i> ทดสอบส่งอีเมลตอนนี้
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center glass-card p-6 rounded-3xl shadow-xl border-l-8 border-amber-500 gap-4 animate-fade-in-up">
                 <div>
@@ -487,7 +503,7 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDHf8aMebZyJhUUnspgJiFPVLrlaDCr8C21HKk7_pLtzcjltiJjgXGPDEcBU_kDSPp/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxMBPhPERCtR6Oa5aTCAwO8cguLSuzY_giI_4GI4jNOSqc-6I6a_sjncQazrLHCsMMt/exec";
         const ROOM_FEE = 50;
 
         const initialStudents = [
@@ -512,7 +528,6 @@
             { id: "6920504391", prefix: "นาย", fname: "กตัญญู", lname: "อัตโตหิ" },
             { id: "6920504405", prefix: "นาย", fname: "เกรียงศักดิ์", lname: "ผาติพรพิชิต" },
             { id: "6920504413", prefix: "นาย", fname: "คุณากร", lname: "กล่อมเดช" },
-            { id: "6920504421", prefix: "นางสาว", fname: "จิรัชญา", lname: "มุสิกะชาติ" },
             { id: "6920504430", prefix: "นาย", fname: "เจษฎากร", lname: "ไกรหมู" },
             { id: "6920504448", prefix: "นาย", fname: "ชยุตม์สกล", lname: "สมรูป" },
             { id: "6920504456", prefix: "นาย", fname: "นที", lname: "ดีไข่" },
@@ -1186,6 +1201,37 @@
                     await fetchDataAndRender();
                 } else {
                     showPopup('ผิดพลาด', result.error || 'ไม่สามารถล้างแคชได้', 'error');
+                }
+            } catch(e) {
+                showPopup('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
+            }
+        }
+
+        // ทดสอบส่งอีเมลแจ้งเตือนค่าห้องทันที (เฉพาะผู้พัฒนาระบบ) โดยไม่ต้องรอถึงวันที่ตั้งไว้จริง
+        async function testSendReminder() {
+            const variant = document.getElementById('testReminderVariant').value;
+            const variantLabel = {
+                new_month: 'วันที่ 1 (เข้าเดือนใหม่)',
+                mid_month: 'วันที่ 10/20 (ค้างจ่าย รีบจ่าย)',
+                end_month: 'วันที่ 25/30 (ใกล้สิ้นเดือน)'
+            }[variant] || variant;
+
+            if (!confirm(`ยืนยันส่งอีเมลแจ้งเตือนจริงแบบ "${variantLabel}" ไปยังนิสิตทุกคนที่ยังไม่จ่ายค่าห้องของเดือนปัจจุบันตอนนี้เลยใช่หรือไม่?`)) return;
+
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: 'testSendReminder',
+                        variant: variant,
+                        adminId: currentUser && currentUser.data ? currentUser.data.id : ''
+                    })
+                });
+                const result = await res.json();
+                if (result.result === 'success') {
+                    showPopup('สำเร็จ', `ส่งอีเมลแจ้งเตือนแล้วทั้งหมด ${result.sentCount} คน (เฉพาะคนที่ยังไม่จ่าย)`, 'success');
+                } else {
+                    showPopup('ผิดพลาด', result.error || 'ไม่สามารถส่งอีเมลได้', 'error');
                 }
             } catch(e) {
                 showPopup('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
