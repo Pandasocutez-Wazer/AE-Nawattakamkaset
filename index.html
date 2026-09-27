@@ -241,7 +241,6 @@
                     <div class="mb-4">
                         <label class="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">เลือกเดือนที่ต้องการแจ้งจ่าย:</label>
                         <select id="monthSelect" class="w-full p-2.5 bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500/50">
-                            <option value="กันยายน">กันยายน</option>
                             <option value="ตุลาคม">ตุลาคม</option>
                             <option value="พฤศจิกายน">พฤศจิกายน</option>
                             <option value="ธันวาคม">ธันวาคม</option>
@@ -310,6 +309,24 @@
                         </button>
                     </div>
                 </div>
+
+                <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/40">
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
+                        ส่งอีเมลทดสอบระบบ (ข้อความคงที่ "(KU_AE) ทดสอบระบบการแจ้งเตือน โปรดเพิกเฉย") — เลือกผู้รับได้เอง ไม่เกี่ยวกับสถานะการจ่ายเงิน
+                    </p>
+                    <div class="flex items-center gap-2 mb-2">
+                        <label class="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 cursor-pointer">
+                            <input type="checkbox" id="testEmailSelectAll" onchange="toggleAllTestEmailRecipients()" class="w-3.5 h-3.5">
+                            เลือกทั้งหมด (34 คน)
+                        </label>
+                    </div>
+                    <div id="testEmailStudentList" class="max-h-40 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-1 p-3 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px]">
+                        <!-- รายชื่อนิสิตจะถูกสร้างด้วย JavaScript จาก initialStudents -->
+                    </div>
+                    <button onclick="sendCustomTestEmail()" class="mt-3 bg-gradient-to-r from-sky-500 to-cyan-600 hover:from-sky-600 hover:to-cyan-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
+                        <i class="fa-solid fa-envelope-circle-check mr-1.5"></i> ส่งอีเมลทดสอบให้ผู้ที่เลือก
+                    </button>
+                </div>
             </div>
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center glass-card p-6 rounded-3xl shadow-xl border-l-8 border-amber-500 gap-4 animate-fade-in-up">
                 <div>
@@ -337,7 +354,7 @@
                 <div class="glass-card p-6 rounded-3xl shadow-xl border-t-4 border-indigo-500 flex flex-col justify-between animate-fade-in-up" style="animation-delay: 0.1s;">
                     <div>
                         <h4 class="font-bold text-slate-800 dark:text-white mb-4 flex items-center text-sm">
-                            <i class="fa-solid fa-calendar-check text-indigo-500 mr-2"></i> สรุปเงินประจำเดือน (<span id="summaryMonthTitle" class="text-indigo-600 dark:text-indigo-400">กันยายน</span>)
+                            <i class="fa-solid fa-calendar-check text-indigo-500 mr-2"></i> สรุปเงินประจำเดือน (<span id="summaryMonthTitle" class="text-indigo-600 dark:text-indigo-400">ตุลาคม</span>)
                         </h4>
                         <div class="space-y-2.5 bg-indigo-50/40 dark:bg-slate-800/50 p-4 rounded-2xl border border-indigo-100/60 dark:border-slate-700/50 text-xs">
                             <div class="flex justify-between items-center"><span class="text-slate-500 dark:text-slate-400">ยอดค่าห้องที่โอนเข้ามา:</span><span class="font-semibold text-emerald-600 dark:text-emerald-400 text-sm" id="monthReceivedTotal">0.00 บาท</span></div>
@@ -401,7 +418,6 @@
             <div class="glass-card p-4 rounded-2xl shadow-md flex items-center justify-between animate-fade-in-up" style="animation-delay: 0.25s;">
                 <label class="font-medium text-xs text-slate-700 dark:text-slate-300">เลือกเดือนที่ต้องการตรวจสอบ:</label>
                 <select id="adminMonthSelect" onchange="fetchDataAndRender()" class="p-2 bg-white/80 dark:bg-slate-800 border border-indigo-100 dark:border-slate-700 rounded-xl font-semibold text-indigo-600 dark:text-indigo-400 text-xs focus:ring-2 focus:ring-indigo-500/50">
-                    <option value="กันยายน">กันยายน</option>
                     <option value="ตุลาคม">ตุลาคม</option>
                     <option value="พฤศจิกายน">พฤศจิกายน</option>
                     <option value="ธันวาคม">ธันวาคม</option>
@@ -503,7 +519,7 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxMBPhPERCtR6Oa5aTCAwO8cguLSuzY_giI_4GI4jNOSqc-6I6a_sjncQazrLHCsMMt/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxF6eVxk4haMaMqGccchoUfC1eT92DqPmUdYV5uHuhBLkfODFCwYLmNS0uGwggfcr2c/exec";
         const ROOM_FEE = 50;
 
         const initialStudents = [
@@ -549,7 +565,7 @@
             { id: "6920502062", name: "นาย ต้องรัก แดวขุนทด", pass: "2222" }
         ];
 
-        const months = ["กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" ,"มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม"];
+        const months = ["ตุลาคม", "พฤศจิกายน", "ธันวาคม" ,"มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม"];
 
         // รหัสนิสิตของผู้พัฒนาระบบ ใช้เพื่อแสดงแดชบอร์ดผู้พัฒนาระบบและตรวจสอบสิทธิ์ฝั่งหน้าเว็บ
         // (ฝั่ง Apps Script ก็ตรวจสอบซ้ำอีกชั้นหนึ่งเช่นกัน เพื่อความปลอดภัย)
@@ -854,6 +870,7 @@
                 if (admin.id === DEVELOPER_ADMIN_ID) {
                     document.getElementById('devDashboard').classList.remove('hidden');
                     refreshSiteModeStatus();
+                    renderTestEmailStudentList();
                 } else {
                     document.getElementById('devDashboard').classList.add('hidden');
                 }
@@ -1230,6 +1247,57 @@
                 const result = await res.json();
                 if (result.result === 'success') {
                     showPopup('สำเร็จ', `ส่งอีเมลแจ้งเตือนแล้วทั้งหมด ${result.sentCount} คน (เฉพาะคนที่ยังไม่จ่าย)`, 'success');
+                } else {
+                    showPopup('ผิดพลาด', result.error || 'ไม่สามารถส่งอีเมลได้', 'error');
+                }
+            } catch(e) {
+                showPopup('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
+            }
+        }
+
+        // สร้างรายการ checkbox รายชื่อนิสิตสำหรับเลือกผู้รับอีเมลทดสอบ (สร้างครั้งเดียว ไม่สร้างซ้ำทุกครั้งที่ล็อกอิน)
+        function renderTestEmailStudentList() {
+            const container = document.getElementById('testEmailStudentList');
+            if (!container || container.dataset.rendered === 'true') return;
+            container.innerHTML = initialStudents.map(std => `
+                <label class="flex items-center gap-1.5 cursor-pointer" title="${std.prefix}${std.fname} ${std.lname} (${std.id})">
+                    <input type="checkbox" class="test-email-checkbox w-3.5 h-3.5 shrink-0" value="${std.id}">
+                    <span class="truncate">${std.fname}</span>
+                </label>
+            `).join('');
+            container.dataset.rendered = 'true';
+        }
+
+        // ติ๊ก/ยกเลิกติ๊กช่องเลือกผู้รับทั้งหมดพร้อมกัน ตามสถานะของ checkbox "เลือกทั้งหมด"
+        function toggleAllTestEmailRecipients() {
+            const selectAll = document.getElementById('testEmailSelectAll').checked;
+            document.querySelectorAll('.test-email-checkbox').forEach(cb => cb.checked = selectAll);
+        }
+
+        // ส่งอีเมลทดสอบข้อความคงที่ (ประกาศทดสอบระบบ) ไปยังนิสิตที่เลือกไว้เท่านั้น
+        async function sendCustomTestEmail() {
+            const checkedBoxes = document.querySelectorAll('.test-email-checkbox:checked');
+            const studentIds = Array.from(checkedBoxes).map(cb => cb.value);
+
+            if (studentIds.length === 0) {
+                showPopup('แจ้งเตือน', 'กรุณาเลือกผู้รับอย่างน้อย 1 คนก่อนส่ง', 'error');
+                return;
+            }
+
+            if (!confirm(`ยืนยันส่งอีเมลทดสอบระบบ "(KU_AE) ทดสอบระบบการแจ้งเตือน โปรดเพิกเฉย" ไปยัง ${studentIds.length} คนที่เลือกไว้ตอนนี้เลยใช่หรือไม่?`)) return;
+
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: 'testCustomEmail',
+                        studentIds: studentIds,
+                        adminId: currentUser && currentUser.data ? currentUser.data.id : ''
+                    })
+                });
+                const result = await res.json();
+                if (result.result === 'success') {
+                    showPopup('สำเร็จ', `ส่งอีเมลทดสอบแล้วทั้งหมด ${result.sentCount} คน`, 'success');
                 } else {
                     showPopup('ผิดพลาด', result.error || 'ไม่สามารถส่งอีเมลได้', 'error');
                 }
