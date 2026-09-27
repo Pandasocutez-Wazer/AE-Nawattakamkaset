@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ระบบเช็กการชำระค่าห้องประจำเดือน</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -486,7 +487,7 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDHf8aMebZyJhUUnspgJiFPVLrlaDCr8C21HKk7_pLtzcjltiJjgXGPDEcBU_kDSPp/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwTkznmteYNAVFqpZlQz2i5QaNMDaU04YdHai4J2ZuWM4n0eQYcgy3axXrluHPcKT7x9Q/exec";
         const ROOM_FEE = 50;
 
         const initialStudents = [
@@ -682,6 +683,50 @@
             });
         }
 
+        // ตรวจสอบว่ารูปภาพที่แนบมามี QR Code อยู่หรือไม่ (สลิปโอนเงินจากแอปธนาคาร/PromptPay จะมี QR สำหรับตรวจสอบอยู่เสมอ)
+        // หมายเหตุ: นี่เป็นการกรอง "รูปที่ชัดเจนว่าไม่ใช่สลิป" (เช่น รูปถ่ายทั่วไป, สกรีนช็อตอื่น ๆ) เบื้องต้นเท่านั้น
+        // ไม่ได้ยืนยันว่ายอดเงิน/ความถูกต้องของสลิปครบ 100% แอดมินควรตรวจสอบยอดจริงกับสเตทเมนต์ธนาคารเป็นระยะด้วย
+        function detectQrCodeInFile(file) {
+            return new Promise((resolve, reject) => {
+                if (typeof jsQR === 'undefined') {
+                    // ถ้าโหลดไลบรารีไม่สำเร็จ (เช่น เน็ตหลุด) ให้ข้ามการเช็กนี้ไปเลย ไม่บล็อกผู้ใช้
+                    resolve(true);
+                    return;
+                }
+                const img = new Image();
+                const objectUrl = URL.createObjectURL(file);
+                img.onload = function() {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        const maxDim = 1200; // จำกัดขนาดรูปที่ใช้สแกน ช่วยให้ประมวลผลเร็วขึ้นโดยไม่เสียความแม่นยำมาก
+                        let w = img.naturalWidth;
+                        let h = img.naturalHeight;
+                        if (w > maxDim || h > maxDim) {
+                            const scale = maxDim / Math.max(w, h);
+                            w = Math.round(w * scale);
+                            h = Math.round(h * scale);
+                        }
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, w, h);
+                        const imageData = ctx.getImageData(0, 0, w, h);
+                        const qrResult = jsQR(imageData.data, imageData.width, imageData.height);
+                        URL.revokeObjectURL(objectUrl);
+                        resolve(!!qrResult);
+                    } catch (err) {
+                        URL.revokeObjectURL(objectUrl);
+                        reject(err);
+                    }
+                };
+                img.onerror = function() {
+                    URL.revokeObjectURL(objectUrl);
+                    reject(new Error('ไม่สามารถอ่านไฟล์รูปภาพนี้ได้'));
+                };
+                img.src = objectUrl;
+            });
+        }
+
         async function submitSlip() {
             const month = document.getElementById('monthSelect').value;
             const fileInput = document.getElementById('slipInput');
@@ -693,9 +738,28 @@
             }
 
             const file = fileInput.files[0];
-            const reader = new FileReader();
 
             btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> กำลังตรวจสอบรูปภาพ...`;
+
+            // เช็กก่อนว่ารูปนี้มี QR Code อยู่หรือไม่ ถ้าไม่มีแปลว่าไม่น่าจะเป็นสลิปโอนเงิน ให้บล็อกไว้ก่อน
+            try {
+                const hasQr = await detectQrCodeInFile(file);
+                if (!hasQr) {
+                    showPopup('แจ้งเตือน', 'ไม่พบ QR Code สำหรับตรวจสอบในรูปภาพนี้ กรุณาแนบรูปสลิปการโอนเงินที่ถูกต้อง', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = `<i class="fa-solid fa-upload mr-1.5"></i> ส่งสลิปแจ้งจ่ายเงิน`;
+                    return;
+                }
+            } catch (err) {
+                showPopup('แจ้งเตือน', 'ไม่สามารถตรวจสอบรูปภาพนี้ได้ กรุณาลองแนบไฟล์รูปภาพใหม่อีกครั้ง', 'error');
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-upload mr-1.5"></i> ส่งสลิปแจ้งจ่ายเงิน`;
+                return;
+            }
+
+            const reader = new FileReader();
+
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> กำลังอัปโหลด...`;
 
             reader.onload = async function(e) {
