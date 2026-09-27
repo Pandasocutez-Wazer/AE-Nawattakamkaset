@@ -202,7 +202,19 @@
 
         </div>
 
-        <!-- STUDENT DASHBOARD -->
+        <!-- MAINTENANCE SECTION (แสดงแทนหน้า Login เมื่อผู้พัฒนาระบบเปิดโหมดปิดปรับปรุง) -->
+        <div id="maintenanceSection" class="hidden max-w-md mx-auto animate-fade-in-up">
+            <div class="glass-card p-10 rounded-3xl shadow-xl border text-center">
+                <div class="w-20 h-20 bg-gradient-to-tr from-amber-400 to-orange-500 rounded-3xl flex items-center justify-center mx-auto mb-5 glow-amber text-white text-3xl animate-float">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800 dark:text-white mb-2">ขออภัยในความไม่สะดวก</h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">ระบบกำลังอยู่ระหว่างการปรับปรุงและทดสอบ<br>กรุณากลับมาใหม่อีกครั้งในภายหลัง</p>
+                <button onclick="openAdminModal()" class="mt-8 text-[10px] text-slate-300 dark:text-slate-700 hover:text-slate-400 dark:hover:text-slate-600 transition-colors">
+                    สำหรับผู้ดูแลระบบ
+                </button>
+            </div>
+        </div>
         <div id="studentDashboard" class="hidden space-y-6">
             <div class="glass-card p-6 rounded-3xl shadow-xl border-l-8 border-indigo-600 animate-fade-in-up">
                 <h3 class="text-xl font-bold text-slate-800 dark:text-white" id="stdName">---</h3>
@@ -262,6 +274,26 @@
 
         <!-- ADMIN DASHBOARD -->
         <div id="adminDashboard" class="hidden space-y-6">
+
+            <!-- DEVELOPER DASHBOARD (มองเห็นได้เฉพาะผู้พัฒนาระบบ 6920504529 เท่านั้น) -->
+            <div id="devDashboard" class="hidden glass-card p-6 rounded-3xl shadow-xl border-2 border-dashed border-purple-400 dark:border-purple-600 bg-purple-50/40 dark:bg-purple-950/20 animate-fade-in-up">
+                <h3 class="text-base font-bold text-purple-700 dark:text-purple-300 flex items-center mb-1">
+                    <i class="fa-solid fa-code mr-2"></i> แดชบอร์ดผู้พัฒนาระบบ
+                </h3>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4">เครื่องมือส่วนนี้มองเห็นได้เฉพาะผู้พัฒนาระบบเท่านั้น ใช้สำหรับการทดสอบและตั้งค่าระบบก่อนเปิดใช้งานจริง</p>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="requestClearCache()" class="bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
+                        <i class="fa-solid fa-trash-can mr-1.5"></i> ล้างแคชระบบ (รีเซ็ตข้อมูลที่แสดงผล)
+                    </button>
+                    <button onclick="setSiteMode('normal')" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
+                        <i class="fa-solid fa-door-open mr-1.5"></i> เปิดใช้งานจริง (หน้าล็อกอินปกติ)
+                    </button>
+                    <button onclick="setSiteMode('maintenance')" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
+                        <i class="fa-solid fa-screwdriver-wrench mr-1.5"></i> ปิดปรับปรุงระบบ (ซ่อนหน้าล็อกอิน)
+                    </button>
+                </div>
+                <p id="siteModeStatus" class="text-[11px] text-slate-400 dark:text-slate-500 mt-3"></p>
+            </div>
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center glass-card p-6 rounded-3xl shadow-xl border-l-8 border-amber-500 gap-4 animate-fade-in-up">
                 <div>
                     <h3 class="text-xl font-bold text-slate-800 dark:text-white">แดชบอร์ดผู้ดูแลระบบ (Admin)</h3>
@@ -454,7 +486,7 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8zBRXgN6vSRRo9vOwC9hCeDyA3RTsqdE5Xiw5MihaM3bTIOpxReP9SydV-_4YbNBq/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDHf8aMebZyJhUUnspgJiFPVLrlaDCr8C21HKk7_pLtzcjltiJjgXGPDEcBU_kDSPp/exec";
         const ROOM_FEE = 50;
 
         const initialStudents = [
@@ -503,6 +535,10 @@
 
         const months = ["กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม" ,"มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม"];
 
+        // รหัสนิสิตของผู้พัฒนาระบบ ใช้เพื่อแสดงแดชบอร์ดผู้พัฒนาระบบและตรวจสอบสิทธิ์ฝั่งหน้าเว็บ
+        // (ฝั่ง Apps Script ก็ตรวจสอบซ้ำอีกชั้นหนึ่งเช่นกัน เพื่อความปลอดภัย)
+        const DEVELOPER_ADMIN_ID = "6920504529";
+
         let currentUser = null;
         let globalData = { payments: {}, expenses: { monthly: {}, overall: 0 }, donations: { monthly: {}, overall: 0 }, transactions: [] };
 
@@ -531,7 +567,26 @@
                 localStorage.setItem('theme', 'dark');
             }
         }
+        // ตรวจสอบสถานะเว็บไซต์ (ปกติ/ปิดปรับปรุง) จากเซิร์ฟเวอร์ตอนโหลดหน้าเว็บ
+        // ถ้าปิดปรับปรุงอยู่ จะซ่อนหน้า Login แล้วแสดงหน้า "ขออภัยในความไม่สะดวก" แทน
+        // ถ้าเช็กไม่สำเร็จ (เช่น เน็ตหลุด) จะปล่อยให้เห็นหน้า Login ตามปกติ กันไม่ให้ทุกคนเข้าเว็บไม่ได้โดยไม่ตั้งใจ
+        async function checkSiteMode() {
+            try {
+                const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getSiteMode`);
+                const data = await res.json();
+                if (data && data.mode === 'maintenance') {
+                    document.getElementById('loginSection').classList.add('hidden');
+                    document.getElementById('maintenanceSection').classList.remove('hidden');
+                } else {
+                    document.getElementById('maintenanceSection').classList.add('hidden');
+                }
+            } catch(e) {
+                console.error('ไม่สามารถตรวจสอบสถานะเว็บไซต์ได้', e);
+            }
+        }
+
         initTheme();
+        checkSiteMode();
 
         // --- CUSTOM POPUP SYSTEM ---
         function showPopup(title, message, type = 'info') {
@@ -711,10 +766,19 @@
                 currentUser = { type: 'admin', data: { id: admin.id, name: admin.name } };
                 closeAdminModal();
                 document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('maintenanceSection').classList.add('hidden');
                 document.getElementById('adminDashboard').classList.remove('hidden');
                 document.getElementById('userInfo').classList.remove('hidden');
                 document.getElementById('userBadge').innerText = `Admin: ${admin.name}`;
                 document.getElementById('adminDisplayName').innerText = `${admin.name} (${admin.id})`;
+
+                if (admin.id === DEVELOPER_ADMIN_ID) {
+                    document.getElementById('devDashboard').classList.remove('hidden');
+                    refreshSiteModeStatus();
+                } else {
+                    document.getElementById('devDashboard').classList.add('hidden');
+                }
+
                 await fetchDataAndRender();
             } else {
                 showPopup('เข้าสู่ระบบไม่สำเร็จ', 'รหัสนิสิตหรือรหัสผ่านผู้ดูแลระบบไม่ถูกต้อง', 'error');
@@ -981,15 +1045,101 @@
             }
         }
 
+        // ตรวจสอบและแสดงสถานะเว็บไซต์ปัจจุบันในแดชบอร์ดผู้พัฒนาระบบ
+        async function refreshSiteModeStatus() {
+            const el = document.getElementById('siteModeStatus');
+            if (!el) return;
+            el.innerText = 'กำลังตรวจสอบสถานะระบบ...';
+            try {
+                const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getSiteMode`);
+                const data = await res.json();
+                el.innerText = 'สถานะปัจจุบันของเว็บไซต์: ' + (data.mode === 'maintenance'
+                    ? '🟠 ปิดปรับปรุงระบบ (คนอื่นจะเห็นหน้าแจ้งปิดปรับปรุงแทนหน้าล็อกอิน)'
+                    : '🟢 เปิดใช้งานปกติ (ทุกคนเข้าหน้าล็อกอินได้ตามปกติ)');
+            } catch(e) {
+                el.innerText = 'ไม่สามารถตรวจสอบสถานะระบบได้ในขณะนี้';
+            }
+        }
+
+        // สลับโหมดเว็บไซต์ (เฉพาะผู้พัฒนาระบบ) — มีผลกับทุกคนที่เข้าลิงก์ ไม่ใช่แค่เบราว์เซอร์ตัวเอง
+        async function setSiteMode(mode) {
+            const label = (mode === 'maintenance')
+                ? 'ปิดปรับปรุงระบบ (ผู้ใช้คนอื่นจะเห็นหน้าแจ้งปิดปรับปรุงแทนหน้าล็อกอิน)'
+                : 'เปิดใช้งานจริง (กลับไปเป็นหน้าล็อกอินปกติ)';
+
+            if (!confirm(`ยืนยันเปลี่ยนสถานะเว็บไซต์เป็น:\n"${label}"\n\nใช่หรือไม่?`)) return;
+
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: 'setSiteMode',
+                        mode: mode,
+                        adminId: currentUser && currentUser.data ? currentUser.data.id : ''
+                    })
+                });
+                const result = await res.json();
+                if (result.result === 'success') {
+                    showPopup('สำเร็จ', 'เปลี่ยนสถานะเว็บไซต์เรียบร้อยแล้ว', 'success');
+                    refreshSiteModeStatus();
+                } else {
+                    showPopup('ผิดพลาด', result.error || 'ไม่สามารถเปลี่ยนสถานะเว็บไซต์ได้', 'error');
+                }
+            } catch(e) {
+                showPopup('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
+            }
+        }
+
+        // ล้างแคชระบบ (เฉพาะผู้พัฒนาระบบ) — ยืนยัน 2 ชั้น: กด confirm ก่อน แล้วกรอกรหัสผ่านซ้ำอีกครั้ง
+        async function requestClearCache() {
+            const confirmed = confirm(
+                'คุณต้องการล้างแคชระบบและรีเซ็ตข้อมูลที่แสดงผลใช่หรือไม่?\n\n' +
+                'ข้อมูลในชีตจะไม่ถูกลบ แต่หน้าเว็บจะไปอ่านข้อมูลจากชีตใหม่ทั้งหมด ' +
+                '(ถ้าลบแถวข้อมูลทดสอบในชีตไปแล้ว ยอดต่าง ๆ ที่แสดงจะกลับไปเป็น 0 ตามข้อมูลจริงในชีต)'
+            );
+            if (!confirmed) return;
+
+            const password = prompt('กรุณากรอกรหัสผ่านผู้ดูแลระบบของผู้พัฒนาระบบ (รหัสเดียวกับที่ใช้ล็อกอิน) เพื่อยืนยันอีกครั้ง:');
+            if (password === null) return; // ผู้ใช้กดยกเลิก
+
+            const developer = adminAccounts.find(a => a.id === DEVELOPER_ADMIN_ID);
+            if (!developer || password !== developer.pass) {
+                showPopup('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง ยกเลิกการล้างแคช', 'error');
+                return;
+            }
+
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: 'clearCache',
+                        adminId: DEVELOPER_ADMIN_ID
+                    })
+                });
+                const result = await res.json();
+                if (result.result === 'success') {
+                    showPopup('สำเร็จ', 'ล้างแคชระบบเรียบร้อยแล้ว กำลังโหลดข้อมูลใหม่...', 'success');
+                    await fetchDataAndRender();
+                } else {
+                    showPopup('ผิดพลาด', result.error || 'ไม่สามารถล้างแคชได้', 'error');
+                }
+            } catch(e) {
+                showPopup('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
+            }
+        }
+
         function logout() {
             currentUser = null;
             document.getElementById('userInfo').classList.add('hidden');
             document.getElementById('studentDashboard').classList.add('hidden');
             document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('devDashboard').classList.add('hidden');
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('studentIdInput').value = '';
             document.getElementById('adminIdInput').value = '';
             document.getElementById('adminPasswordInput').value = '';
+            // เช็กสถานะเว็บไซต์อีกครั้งหลังออกจากระบบ เผื่อระหว่างนี้มีการเปิดโหมดปิดปรับปรุงไว้
+            checkSiteMode();
         }
     </script>
 </body>
