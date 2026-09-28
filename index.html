@@ -296,7 +296,7 @@
 
                 <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/40">
                     <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
-                        ทดสอบส่งอีเมลแจ้งเตือนค่าห้องได้ทันที (ไม่ต้องรอถึงวันที่ 1/10/20/25/30) — <b>จะส่งจริง</b> โดยค่าเริ่มต้นจะส่งให้นิสิตทุกคนที่ยังไม่จ่ายค่าห้องของเดือนปัจจุบัน (หรือเลือกส่งเฉพาะบางคนได้ด้านล่าง)
+                        ทดสอบส่งอีเมลแจ้งเตือนค่าห้องทันที (ไม่ต้องรอถึงวันที่ 1/10/20/25/30) — <b>จะส่งจริง</b> ไปยังคนที่เลือกไว้เท่านั้น <b>โดยไม่สนใจว่าจ่ายแล้วหรือยังไม่จ่าย</b>
                     </p>
                     <div class="flex flex-wrap gap-2 items-center">
                         <select id="testReminderVariant" class="px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-xl focus:outline-none">
@@ -310,7 +310,7 @@
                     </div>
 
                     <button type="button" onclick="toggleCollapse('reminderRecipientPanel')" class="mt-3 text-[11px] text-indigo-600 dark:text-indigo-400 font-medium flex items-center gap-1 hover:underline">
-                        <i class="fa-solid fa-chevron-down text-[9px]" id="reminderRecipientPanelIcon"></i> เลือกผู้รับเฉพาะบางคน (ไม่บังคับ)
+                        <i class="fa-solid fa-chevron-down text-[9px]" id="reminderRecipientPanelIcon"></i> เลือกผู้รับ (ต้องเลือกอย่างน้อย 1 คนก่อนส่ง)
                     </button>
                     <div id="reminderRecipientPanel" class="hidden mt-2">
                         <div class="flex items-center gap-2 mb-2">
@@ -322,7 +322,7 @@
                         <div id="reminderStudentList" class="max-h-40 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-1 p-3 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px]">
                             <!-- รายชื่อนิสิตจะถูกสร้างด้วย JavaScript จาก initialStudents -->
                         </div>
-                        <p class="text-[10px] text-slate-400 mt-1.5">ถ้าไม่ติ๊กเลือกใครเลย ระบบจะส่งให้ทุกคนที่ยังไม่จ่ายตามค่าเริ่มต้น</p>
+                        <p class="text-[10px] text-slate-400 mt-1.5">ระบบจะส่งให้ทุกคนที่ติ๊กเลือกเท่านั้น ไม่ว่าจะจ่ายค่าห้องแล้วหรือยัง</p>
                     </div>
                 </div>
 
@@ -540,7 +540,7 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxbAN7gpNRpEx6srT_joTyKRBGN_iu3ZoimguXElzJjvchBMqYHLy9eXlS4d0v_dpf3/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiug2qhju7uwid54YAPM2wAtEqh3kSwyW6_G-j8L69ixOZ4hU0cq7mQ0FsHetomE70/exec";
         const ROOM_FEE = 50;
 
         const initialStudents = [
@@ -1269,12 +1269,16 @@
                 end_month: 'วันที่ 25/30 (ใกล้สิ้นเดือน)'
             }[variant] || variant;
 
-            // ถ้ามีการติ๊กเลือกผู้รับเฉพาะบางคนไว้ ให้ส่งเฉพาะคนที่เลือก ถ้าไม่เลือกใครเลยจะส่งให้ทุกคนที่ยังไม่จ่ายตามค่าเริ่มต้น
+            // ปุ่มนี้เป็นปุ่มทดสอบ: ส่งให้เฉพาะคนที่ติ๊กเลือกไว้ โดยไม่สนสถานะจ่ายเงิน
             const checkedBoxes = document.querySelectorAll('.reminder-email-checkbox:checked');
             const selectedIds = Array.from(checkedBoxes).map(cb => cb.value);
-            const recipientDesc = selectedIds.length > 0 ? `เฉพาะ ${selectedIds.length} คนที่เลือกไว้ (เฉพาะคนที่ยังไม่จ่าย)` : 'นิสิตทุกคนที่ยังไม่จ่ายค่าห้องของเดือนปัจจุบัน';
 
-            if (!confirm(`ยืนยันส่งอีเมลแจ้งเตือนจริงแบบ "${variantLabel}" ไปยัง${recipientDesc} ตอนนี้เลยใช่หรือไม่?`)) return;
+            if (selectedIds.length === 0) {
+                showPopup('แจ้งเตือน', 'กรุณากด "เลือกผู้รับ" แล้วติ๊กเลือกอย่างน้อย 1 คนก่อนส่ง', 'error');
+                return;
+            }
+
+            if (!confirm(`ยืนยันส่งอีเมลทดสอบแบบ "${variantLabel}" ไปยัง ${selectedIds.length} คนที่เลือกไว้ตอนนี้เลยใช่หรือไม่?\n(ส่งให้ทุกคนที่เลือก ไม่สนว่าจ่ายค่าห้องแล้วหรือยัง)`)) return;
             if (!verifyDeveloperPassword()) return;
 
             try {
@@ -1283,13 +1287,13 @@
                     body: JSON.stringify({
                         type: 'testSendReminder',
                         variant: variant,
-                        studentIds: selectedIds.length > 0 ? selectedIds : null,
+                        studentIds: selectedIds,
                         adminId: currentUser && currentUser.data ? currentUser.data.id : ''
                     })
                 });
                 const result = await res.json();
                 if (result.result === 'success') {
-                    showPopup('สำเร็จ', `ส่งอีเมลแจ้งเตือนแล้วทั้งหมด ${result.sentCount} คน (เฉพาะคนที่ยังไม่จ่าย)`, 'success');
+                    showPopup('สำเร็จ', `ส่งอีเมลทดสอบแล้วทั้งหมด ${result.sentCount} คน`, 'success');
                 } else {
                     showPopup('ผิดพลาด', result.error || 'ไม่สามารถส่งอีเมลได้', 'error');
                 }
