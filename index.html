@@ -308,6 +308,19 @@
                 <p id="siteModeStatus" class="text-[11px] text-slate-400 dark:text-slate-500 mt-3"></p>
 
                 <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/40">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <p class="text-xs font-semibold text-slate-700 dark:text-slate-200"><i class="fa-solid fa-robot mr-1.5 text-purple-500"></i> ส่งอีเมลแจ้งเตือนค่าห้องอัตโนมัติ (วันที่ 1, 10, 20, 25, 30 เวลา 9:00 น.)</p>
+                            <p id="autoReminderStatus" class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">กำลังตรวจสอบสถานะ...</p>
+                        </div>
+                        <button id="autoReminderToggleBtn" onclick="toggleAutoReminder()" class="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-slate-400 btn-hover" disabled>
+                            กำลังโหลด...
+                        </button>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-1.5">ปิดสวิตช์นี้จะหยุดเฉพาะการส่งอัตโนมัติ ปุ่มทดสอบส่งด้านล่างยังใช้งานได้ตามปกติ</p>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/40">
                     <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
                         ทดสอบส่งอีเมลแจ้งเตือนค่าห้องทันที (ไม่ต้องรอถึงวันที่ 1/10/20/25/30) — <b>จะส่งจริง</b> ไปยังคนที่เลือกไว้เท่านั้น <b>โดยไม่สนใจว่าจ่ายแล้วหรือยังไม่จ่าย</b>
                     </p>
@@ -553,7 +566,7 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwiug2qhju7uwid54YAPM2wAtEqh3kSwyW6_G-j8L69ixOZ4hU0cq7mQ0FsHetomE70/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxzkQ8IePAgbi0dKO26sdTiAZw6oodrThIz_XmLYuwV0bfdnXWETkkFKiVovjMLCRLR/exec";
         const ROOM_FEE = 50;
 
         const initialStudents = [
@@ -904,6 +917,7 @@
                 if (admin.id === DEVELOPER_ADMIN_ID) {
                     document.getElementById('devDashboard').classList.remove('hidden');
                     refreshSiteModeStatus();
+                    refreshAutoReminderStatus();
                     renderTestEmailStudentList();
                 } else {
                     document.getElementById('devDashboard').classList.add('hidden');
@@ -1176,6 +1190,73 @@
         }
 
         // ตรวจสอบและแสดงสถานะเว็บไซต์ปัจจุบันในแดชบอร์ดผู้พัฒนาระบบ
+        // ===== สวิตช์เปิด/ปิดการส่งอีเมลแจ้งเตือนอัตโนมัติ (เฉพาะผู้พัฒนาระบบ) =====
+        let autoReminderEnabled = null;
+
+        function renderAutoReminderUI() {
+            const statusEl = document.getElementById('autoReminderStatus');
+            const btn = document.getElementById('autoReminderToggleBtn');
+            if (!statusEl || !btn) return;
+            if (autoReminderEnabled === null) {
+                statusEl.innerText = 'ไม่สามารถตรวจสอบสถานะได้ในขณะนี้';
+                btn.disabled = true;
+                btn.className = 'px-4 py-2 rounded-xl text-xs font-semibold text-white bg-slate-400 btn-hover';
+                btn.innerText = 'ตรวจสอบสถานะไม่ได้';
+                return;
+            }
+            btn.disabled = false;
+            if (autoReminderEnabled) {
+                statusEl.innerText = '🟢 เปิดอยู่ — ระบบจะส่งอีเมลให้คนที่ยังไม่จ่ายตามวันที่กำหนด';
+                btn.className = 'px-4 py-2 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-rose-500 to-red-600 btn-hover';
+                btn.innerText = 'ปิดการส่งอัตโนมัติ';
+            } else {
+                statusEl.innerText = '🔴 ปิดอยู่ — ระบบจะไม่ส่งอีเมลอัตโนมัติจนกว่าจะเปิดใหม่';
+                btn.className = 'px-4 py-2 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-emerald-500 to-teal-600 btn-hover';
+                btn.innerText = 'เปิดการส่งอัตโนมัติ';
+            }
+        }
+
+        async function refreshAutoReminderStatus() {
+            try {
+                const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getAutoReminderStatus`);
+                const data = await res.json();
+                autoReminderEnabled = (typeof data.enabled === 'boolean') ? data.enabled : null;
+            } catch(e) {
+                autoReminderEnabled = null;
+            }
+            renderAutoReminderUI();
+        }
+
+        async function toggleAutoReminder() {
+            if (autoReminderEnabled === null) return;
+            const target = !autoReminderEnabled;
+            const msg = target
+                ? 'ยืนยันเปิดการส่งอีเมลแจ้งเตือนอัตโนมัติ (วันที่ 1, 10, 20, 25, 30) ใช่หรือไม่?'
+                : 'ยืนยันปิดการส่งอีเมลแจ้งเตือนอัตโนมัติ? (ระบบจะไม่ส่งอีเมลทวงค่าห้องเองจนกว่าจะเปิดใหม่)';
+            if (!confirm(msg)) return;
+
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: 'setAutoReminder',
+                        enabled: target,
+                        adminId: currentUser && currentUser.data ? currentUser.data.id : ''
+                    })
+                });
+                const result = await res.json();
+                if (result.result === 'success') {
+                    autoReminderEnabled = result.enabled;
+                    renderAutoReminderUI();
+                    showPopup('สำเร็จ', result.enabled ? 'เปิดการส่งอีเมลอัตโนมัติแล้ว' : 'ปิดการส่งอีเมลอัตโนมัติแล้ว', 'success');
+                } else {
+                    showPopup('ผิดพลาด', result.error || 'ไม่สามารถเปลี่ยนสถานะได้', 'error');
+                }
+            } catch(e) {
+                showPopup('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
+            }
+        }
+
         async function refreshSiteModeStatus() {
             const el = document.getElementById('siteModeStatus');
             if (!el) return;
