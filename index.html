@@ -126,6 +126,61 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 99px; }
         .dark ::-webkit-scrollbar-thumb { background: #334155; }
+
+        /* ---------------------------------------------------- */
+        /* DANGER ZONE: แดชบอร์ดผู้พัฒนาระบบ (เข้มทั้งโหมดสว่าง/มืด ตัวอักษรชัด) */
+        /* ---------------------------------------------------- */
+        @keyframes dzPulse {
+            0%, 100% { box-shadow: 0 0 0 1px rgba(239,68,68,.45), 0 0 26px -4px rgba(239,68,68,.45), inset 0 0 40px rgba(127,29,29,.25); }
+            50%      { box-shadow: 0 0 0 1px rgba(248,113,113,.8), 0 0 42px -2px rgba(239,68,68,.75), inset 0 0 40px rgba(127,29,29,.35); }
+        }
+        #devDashboard.danger-zone {
+            background: linear-gradient(160deg, #14040a 0%, #240709 55%, #0d0507 100%);
+            border: 2px solid #ef4444;
+            color: #f8fafc;
+            padding: 0;
+            overflow: hidden;
+            animation: dzPulse 3.2s ease-in-out infinite;
+        }
+        #devDashboard .dz-stripes {
+            height: 12px;
+            background: repeating-linear-gradient(-45deg, #facc15 0 14px, #0a0a0a 14px 28px);
+        }
+        #devDashboard .dz-body { padding: 1.5rem; }
+        #devDashboard .dz-title { color: #fff; text-shadow: 0 0 14px rgba(239,68,68,.65); letter-spacing: .02em; }
+        #devDashboard .dz-badge { background: #dc2626; color: #fff; border: 1px solid #fecaca; }
+        #devDashboard .dz-note  { color: #e2e8f0; }
+        #devDashboard .dz-muted { color: #cbd5e1; }
+        #devDashboard .dz-label { color: #fecaca; font-weight: 600; }
+        #devDashboard .dz-text  { color: #f8fafc; }
+        #devDashboard .dz-section { margin-top: 1.1rem; padding-top: 1.1rem; border-top: 1px dashed rgba(248,113,113,.45); }
+        #devDashboard .dz-link-red { color: #fca5a5; }
+        #devDashboard .dz-link-sky { color: #7dd3fc; }
+        #devDashboard .dz-input {
+            width: 100%;
+            background: #07070a; color: #fff;
+            border: 1px solid #991b1b; border-radius: .75rem;
+            padding: .55rem .8rem; font-size: .75rem;
+        }
+        #devDashboard .dz-input::placeholder { color: #9ca3af; }
+        #devDashboard .dz-input:focus { outline: none; border-color: #f87171; box-shadow: 0 0 0 3px rgba(239,68,68,.35); }
+        #devDashboard select.dz-input option { background: #0b0b0f; color: #fff; }
+        #devDashboard .dz-list {
+            background: rgba(0,0,0,.55); border: 1px solid #7f1d1d; border-radius: .75rem;
+            color: #f1f5f9; padding: .75rem; font-size: 11px;
+        }
+        #devDashboard input[type="checkbox"] { accent-color: #ef4444; }
+        #devDashboard .dz-warnbox {
+            background: rgba(220,38,38,.14); border: 1px solid rgba(248,113,113,.6);
+            color: #fee2e2; border-radius: .75rem; padding: .6rem .8rem; font-size: 11px;
+        }
+
+        #composeConfirmModal .cc-card { background:#14040a; border:2px solid #ef4444; color:#f8fafc; box-shadow:0 0 40px -6px rgba(239,68,68,.7); }
+        #composeConfirmModal .cc-input {
+            width:100%; text-align:center; letter-spacing:.6em; font-size:1.25rem; font-family:monospace;
+            background:#07070a; color:#fff; border:1px solid #991b1b; border-radius:.75rem; padding:.6rem;
+        }
+        #composeConfirmModal .cc-input:focus { outline:none; border-color:#f87171; box-shadow:0 0 0 3px rgba(239,68,68,.35); }
     </style>
 </head>
 <body class="min-h-screen bg-custom-light dark:bg-custom-dark text-slate-800 dark:text-slate-100 pb-12 transition-colors duration-500">
@@ -241,9 +296,12 @@
                     <h4 class="font-bold text-base text-slate-800 dark:text-white mb-1">สแกน QR Code ชำระเงิน</h4>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">บัญชี: ต้องรัก แดวขุนทด (MAKE by KBank)</p>
                     <div class="bg-white p-3.5 rounded-3xl shadow-md border border-slate-100 transform hover:scale-105 transition duration-300 glow-indigo">
-                        <img src="qrcodepayment.jpg" alt="QR Code Payment" class="w-48 h-auto mx-auto rounded-2xl">
+                        <img id="qrImage" src="qrcodepayment.jpg" alt="QR Code Payment" class="w-48 h-auto mx-auto rounded-2xl">
                     </div>
                     <span class="inline-block mt-4 px-4 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full text-xs font-semibold glow-emerald">ยอดชำระ: 50.00 บาท</span>
+                    <button type="button" onclick="saveQrImage()" class="mt-3 inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold text-indigo-700 dark:text-indigo-200 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-700 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 btn-hover">
+                        <i class="fa-solid fa-download"></i> บันทึกรูป QR Code
+                    </button>
                 </div>
 
                 <!-- SLIP UPLOAD -->
@@ -288,91 +346,131 @@
         <!-- ADMIN DASHBOARD -->
         <div id="adminDashboard" class="hidden space-y-6">
 
-            <!-- DEVELOPER DASHBOARD (มองเห็นได้เฉพาะผู้พัฒนาระบบ 6920504529 เท่านั้น) -->
-            <div id="devDashboard" class="hidden glass-card p-6 rounded-3xl shadow-xl border-2 border-dashed border-purple-400 dark:border-purple-600 bg-purple-50/40 dark:bg-purple-950/20 animate-fade-in-up">
-                <h3 class="text-base font-bold text-purple-700 dark:text-purple-300 flex items-center mb-1">
-                    <i class="fa-solid fa-code mr-2"></i> แดชบอร์ดผู้พัฒนาระบบ
-                </h3>
-                <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4">เครื่องมือส่วนนี้มองเห็นได้เฉพาะผู้พัฒนาระบบเท่านั้น ใช้สำหรับการทดสอบและตั้งค่าระบบก่อนเปิดใช้งานจริง</p>
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="requestClearCache()" class="bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
-                        <i class="fa-solid fa-trash-can mr-1.5"></i> ล้างแคชระบบ (รีเซ็ตข้อมูลที่แสดงผล)
-                    </button>
-                    <button onclick="setSiteMode('normal')" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
-                        <i class="fa-solid fa-door-open mr-1.5"></i> เปิดใช้งานจริง (หน้าล็อกอินปกติ)
-                    </button>
-                    <button onclick="setSiteMode('maintenance')" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
-                        <i class="fa-solid fa-screwdriver-wrench mr-1.5"></i> ปิดปรับปรุงระบบ (ซ่อนหน้าล็อกอิน)
-                    </button>
-                </div>
-                <p id="siteModeStatus" class="text-[11px] text-slate-400 dark:text-slate-500 mt-3"></p>
+            <!-- DEVELOPER DASHBOARD : DANGER ZONE (มองเห็นได้เฉพาะผู้พัฒนาระบบ 6920504529 เท่านั้น) -->
+            <div id="devDashboard" class="hidden danger-zone glass-card rounded-3xl shadow-xl animate-fade-in-up">
+                <div class="dz-stripes"></div>
+                <div class="dz-body">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                        <h3 class="dz-title text-base font-bold flex items-center">
+                            <i class="fa-solid fa-triangle-exclamation text-yellow-400 mr-2"></i> DANGER ZONE — แดชบอร์ดผู้พัฒนาระบบ
+                        </h3>
+                        <span class="dz-badge text-[10px] font-bold px-2.5 py-1 rounded-full"><i class="fa-solid fa-skull-crossbones mr-1"></i> เฉพาะผู้พัฒนาระบบ</span>
+                    </div>
+                    <p class="dz-note text-[11px] mb-4">เครื่องมือส่วนนี้ส่งผลกับระบบจริงและนิสิตทุกคน (ล้างแคช ปิดระบบ ส่งอีเมลจริง) โปรดตรวจสอบให้แน่ใจก่อนกดทุกครั้ง</p>
 
-                <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/40">
-                    <div class="flex flex-wrap items-center justify-between gap-3">
-                        <div>
-                            <p class="text-xs font-semibold text-slate-700 dark:text-slate-200"><i class="fa-solid fa-robot mr-1.5 text-purple-500"></i> ส่งอีเมลแจ้งเตือนค่าห้องอัตโนมัติ (วันที่ 1, 10, 20, 25, 30 เวลา 9:00 น.)</p>
-                            <p id="autoReminderStatus" class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">กำลังตรวจสอบสถานะ...</p>
-                        </div>
-                        <button id="autoReminderToggleBtn" onclick="toggleAutoReminder()" class="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-slate-400 btn-hover" disabled>
-                            กำลังโหลด...
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="requestClearCache()" class="bg-gradient-to-r from-rose-600 to-red-700 hover:from-rose-500 hover:to-red-600 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover border border-red-300/40">
+                            <i class="fa-solid fa-trash-can mr-1.5"></i> ล้างแคชระบบ (รีเซ็ตข้อมูลที่แสดงผล)
+                        </button>
+                        <button onclick="setSiteMode('normal')" class="bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover border border-emerald-300/40">
+                            <i class="fa-solid fa-door-open mr-1.5"></i> เปิดใช้งานจริง (หน้าล็อกอินปกติ)
+                        </button>
+                        <button onclick="setSiteMode('maintenance')" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover border border-amber-200/40">
+                            <i class="fa-solid fa-screwdriver-wrench mr-1.5"></i> ปิดปรับปรุงระบบ (ซ่อนหน้าล็อกอิน)
                         </button>
                     </div>
-                    <p class="text-[10px] text-slate-400 mt-1.5">ปิดสวิตช์นี้จะหยุดเฉพาะการส่งอัตโนมัติ ปุ่มทดสอบส่งด้านล่างยังใช้งานได้ตามปกติ</p>
-                </div>
+                    <p id="siteModeStatus" class="dz-muted text-[11px] mt-3"></p>
 
-                <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/40">
-                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
-                        ทดสอบส่งอีเมลแจ้งเตือนค่าห้องทันที (ไม่ต้องรอถึงวันที่ 1/10/20/25/30) — <b>จะส่งจริง</b> ไปยังคนที่เลือกไว้เท่านั้น <b>โดยไม่สนใจว่าจ่ายแล้วหรือยังไม่จ่าย</b>
-                    </p>
-                    <div class="flex flex-wrap gap-2 items-center">
-                        <select id="testReminderVariant" class="px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-xl focus:outline-none">
-                            <option value="new_month">แบบวันที่ 1 (เข้าเดือนใหม่)</option>
-                            <option value="mid_month" selected>แบบวันที่ 10/20 (ค้างจ่าย รีบจ่าย)</option>
-                            <option value="end_month">แบบวันที่ 25/30 (ใกล้สิ้นเดือน)</option>
-                        </select>
-                        <button onclick="testSendReminder()" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
-                            <i class="fa-solid fa-paper-plane mr-1.5"></i> ทดสอบส่งอีเมลตอนนี้
+                    <div class="dz-section">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <p class="dz-text text-xs font-semibold"><i class="fa-solid fa-robot mr-1.5 text-red-400"></i> ส่งอีเมลแจ้งเตือนค่าห้องอัตโนมัติ (วันที่ 1, 10, 20, 25, 30 เวลา 9:00 น.)</p>
+                                <p id="autoReminderStatus" class="dz-muted text-[11px] mt-1">กำลังตรวจสอบสถานะ...</p>
+                            </div>
+                            <button id="autoReminderToggleBtn" onclick="toggleAutoReminder()" class="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-slate-500 btn-hover" disabled>
+                                กำลังโหลด...
+                            </button>
+                        </div>
+                        <p class="dz-muted text-[10px] mt-1.5">ปิดสวิตช์นี้จะหยุดเฉพาะการส่งอัตโนมัติ ปุ่มทดสอบส่งด้านล่างยังใช้งานได้ตามปกติ</p>
+                    </div>
+
+                    <div class="dz-section">
+                        <p class="dz-note text-[11px] mb-2">
+                            ทดสอบส่งอีเมลแจ้งเตือนค่าห้องทันที (ไม่ต้องรอถึงวันที่ 1/10/20/25/30) — <b class="text-red-300">จะส่งจริง</b> ไปยังคนที่เลือกไว้เท่านั้น <b class="text-red-300">โดยไม่สนใจว่าจ่ายแล้วหรือยังไม่จ่าย</b>
+                        </p>
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <select id="testReminderVariant" class="dz-input" style="width:auto;">
+                                <option value="new_month">แบบวันที่ 1 (เข้าเดือนใหม่)</option>
+                                <option value="mid_month" selected>แบบวันที่ 10/20 (ค้างจ่าย รีบจ่าย)</option>
+                                <option value="end_month">แบบวันที่ 25/30 (ใกล้สิ้นเดือน)</option>
+                            </select>
+                            <button onclick="testSendReminder()" class="bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-500 hover:to-purple-600 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover border border-indigo-300/40">
+                                <i class="fa-solid fa-paper-plane mr-1.5"></i> ทดสอบส่งอีเมลตอนนี้
+                            </button>
+                        </div>
+
+                        <button type="button" onclick="toggleCollapse('reminderRecipientPanel')" class="dz-link-red mt-3 text-[11px] font-semibold flex items-center gap-1 hover:underline">
+                            <i class="fa-solid fa-chevron-down text-[9px]" id="reminderRecipientPanelIcon"></i> เลือกผู้รับ (ต้องเลือกอย่างน้อย 1 คนก่อนส่ง)
+                        </button>
+                        <div id="reminderRecipientPanel" class="hidden mt-2">
+                            <div class="flex items-center gap-2 mb-2">
+                                <label class="dz-text flex items-center gap-1.5 text-xs font-medium cursor-pointer">
+                                    <input type="checkbox" id="reminderSelectAll" onchange="toggleAllReminderRecipients()" class="w-3.5 h-3.5">
+                                    เลือกทั้งหมด (34 คน)
+                                </label>
+                            </div>
+                            <div id="reminderStudentList" class="dz-list max-h-40 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-1">
+                                <!-- รายชื่อนิสิตจะถูกสร้างด้วย JavaScript จาก initialStudents -->
+                            </div>
+                            <p class="dz-muted text-[10px] mt-1.5">ระบบจะส่งให้ทุกคนที่ติ๊กเลือกเท่านั้น ไม่ว่าจะจ่ายค่าห้องแล้วหรือยัง</p>
+                        </div>
+                    </div>
+
+                    <div class="dz-section">
+                        <p class="dz-note text-[11px] mb-2">
+                            ส่งอีเมลทดสอบระบบ (ข้อความคงที่ "(KU_AE) ทดสอบระบบการแจ้งเตือน โปรดเพิกเฉย") — เลือกผู้รับได้เอง ไม่เกี่ยวกับสถานะการจ่ายเงิน
+                        </p>
+                        <button type="button" onclick="toggleCollapse('customEmailRecipientPanel')" class="dz-link-sky text-[11px] font-semibold flex items-center gap-1 hover:underline">
+                            <i class="fa-solid fa-chevron-down text-[9px]" id="customEmailRecipientPanelIcon"></i> เลือกผู้รับ
+                        </button>
+                        <div id="customEmailRecipientPanel" class="hidden mt-2">
+                            <div class="flex items-center gap-2 mb-2">
+                                <label class="dz-text flex items-center gap-1.5 text-xs font-medium cursor-pointer">
+                                    <input type="checkbox" id="testEmailSelectAll" onchange="toggleAllTestEmailRecipients()" class="w-3.5 h-3.5">
+                                    เลือกทั้งหมด (34 คน)
+                                </label>
+                            </div>
+                            <div id="testEmailStudentList" class="dz-list max-h-40 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-1">
+                                <!-- รายชื่อนิสิตจะถูกสร้างด้วย JavaScript จาก initialStudents -->
+                            </div>
+                        </div>
+                        <button onclick="sendCustomTestEmail()" class="mt-3 bg-gradient-to-r from-sky-600 to-cyan-700 hover:from-sky-500 hover:to-cyan-600 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover border border-sky-300/40">
+                            <i class="fa-solid fa-envelope-circle-check mr-1.5"></i> ส่งอีเมลทดสอบให้ผู้ที่เลือก
                         </button>
                     </div>
 
-                    <button type="button" onclick="toggleCollapse('reminderRecipientPanel')" class="mt-3 text-[11px] text-indigo-600 dark:text-indigo-400 font-medium flex items-center gap-1 hover:underline">
-                        <i class="fa-solid fa-chevron-down text-[9px]" id="reminderRecipientPanelIcon"></i> เลือกผู้รับ (ต้องเลือกอย่างน้อย 1 คนก่อนส่ง)
-                    </button>
-                    <div id="reminderRecipientPanel" class="hidden mt-2">
-                        <div class="flex items-center gap-2 mb-2">
-                            <label class="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 cursor-pointer">
-                                <input type="checkbox" id="reminderSelectAll" onchange="toggleAllReminderRecipients()" class="w-3.5 h-3.5">
-                                เลือกทั้งหมด (34 คน)
-                            </label>
-                        </div>
-                        <div id="reminderStudentList" class="max-h-40 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-1 p-3 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px]">
-                            <!-- รายชื่อนิสิตจะถูกสร้างด้วย JavaScript จาก initialStudents -->
-                        </div>
-                        <p class="text-[10px] text-slate-400 mt-1.5">ระบบจะส่งให้ทุกคนที่ติ๊กเลือกเท่านั้น ไม่ว่าจะจ่ายค่าห้องแล้วหรือยัง</p>
-                    </div>
-                </div>
+                    <!-- ส่งอีเมลข้อความกำหนดเอง -->
+                    <div class="dz-section">
+                        <p class="dz-text text-xs font-bold mb-1"><i class="fa-solid fa-envelope-open-text mr-1.5 text-red-400"></i> ส่งอีเมลถึงผู้รับที่เลือก (ข้อความกำหนดเอง)</p>
+                        <p class="dz-note text-[11px] mb-3">เขียนหัวข้อและข้อความเอง แล้วติ๊กเลือกผู้รับ ระบบจะขอรหัสยืนยันอีกครั้งก่อนส่งจริง</p>
 
-                <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/40">
-                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
-                        ส่งอีเมลทดสอบระบบ (ข้อความคงที่ "(KU_AE) ทดสอบระบบการแจ้งเตือน โปรดเพิกเฉย") — เลือกผู้รับได้เอง ไม่เกี่ยวกับสถานะการจ่ายเงิน
-                    </p>
-                    <button type="button" onclick="toggleCollapse('customEmailRecipientPanel')" class="text-[11px] text-sky-600 dark:text-sky-400 font-medium flex items-center gap-1 hover:underline">
-                        <i class="fa-solid fa-chevron-down text-[9px]" id="customEmailRecipientPanelIcon"></i> เลือกผู้รับ
-                    </button>
-                    <div id="customEmailRecipientPanel" class="hidden mt-2">
-                        <div class="flex items-center gap-2 mb-2">
-                            <label class="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 cursor-pointer">
-                                <input type="checkbox" id="testEmailSelectAll" onchange="toggleAllTestEmailRecipients()" class="w-3.5 h-3.5">
-                                เลือกทั้งหมด (34 คน)
-                            </label>
+                        <label class="dz-label block text-[11px] mb-1" for="composeSubject">หัวข้ออีเมล</label>
+                        <input type="text" id="composeSubject" maxlength="150" placeholder="เช่น แจ้งกำหนดประชุมห้อง" class="dz-input mb-3">
+
+                        <label class="dz-label block text-[11px] mb-1" for="composeBody">ข้อความเพิ่มเติม</label>
+                        <textarea id="composeBody" rows="5" maxlength="3000" oninput="updateComposeCount()" placeholder="พิมพ์ข้อความที่ต้องการส่ง..." class="dz-input" style="resize:vertical;"></textarea>
+                        <p class="dz-muted text-[10px] text-right mt-1"><span id="composeBodyCount">0</span>/3000</p>
+
+                        <button type="button" onclick="toggleCollapse('composeRecipientPanel')" class="dz-link-red mt-2 text-[11px] font-semibold flex items-center gap-1 hover:underline">
+                            <i class="fa-solid fa-chevron-up text-[9px]" id="composeRecipientPanelIcon"></i> เลือกผู้รับ (<span id="composeSelectedCount">0</span> คน)
+                        </button>
+                        <div id="composeRecipientPanel" class="mt-2">
+                            <div class="flex items-center gap-2 mb-2">
+                                <label class="dz-text flex items-center gap-1.5 text-xs font-medium cursor-pointer">
+                                    <input type="checkbox" id="composeSelectAll" onchange="toggleAllComposeRecipients()" class="w-3.5 h-3.5">
+                                    เลือกทั้งหมด (34 คน)
+                                </label>
+                            </div>
+                            <div id="composeStudentList" class="dz-list max-h-48 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-1">
+                                <!-- รายชื่อนิสิตจะถูกสร้างด้วย JavaScript จาก initialStudents -->
+                            </div>
                         </div>
-                        <div id="testEmailStudentList" class="max-h-40 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-1 p-3 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px]">
-                            <!-- รายชื่อนิสิตจะถูกสร้างด้วย JavaScript จาก initialStudents -->
-                        </div>
+
+                        <div class="dz-warnbox mt-3"><i class="fa-solid fa-circle-exclamation mr-1"></i> อีเมลจะถูกส่งจริงทันทีหลังยืนยันรหัส และไม่สามารถเรียกคืนได้</div>
+                        <button type="button" onclick="openComposeConfirm()" class="mt-3 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white px-5 py-2.5 rounded-xl text-xs font-bold btn-hover border border-red-300/40">
+                            <i class="fa-solid fa-paper-plane mr-1.5"></i> ส่งอีเมล
+                        </button>
                     </div>
-                    <button onclick="sendCustomTestEmail()" class="mt-3 bg-gradient-to-r from-sky-500 to-cyan-600 hover:from-sky-600 hover:to-cyan-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
-                        <i class="fa-solid fa-envelope-circle-check mr-1.5"></i> ส่งอีเมลทดสอบให้ผู้ที่เลือก
-                    </button>
                 </div>
             </div>
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center glass-card p-6 rounded-3xl shadow-xl border-l-8 border-amber-500 gap-4 animate-fade-in-up">
@@ -553,6 +651,27 @@
         </div>
     </div>
 
+    <!-- COMPOSE EMAIL CONFIRM MODAL (ต้องกรอกรหัสยืนยันก่อนส่ง) -->
+    <div id="composeConfirmModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div class="cc-card p-6 rounded-3xl max-w-sm w-full animate-pop-in">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl bg-gradient-to-tr from-red-600 to-rose-600 text-white">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h4 class="font-bold text-base text-center mb-1">ยืนยันการส่งอีเมล</h4>
+            <div class="text-xs text-slate-200 bg-black/40 border border-red-900 rounded-xl p-3 mb-3 space-y-1">
+                <div><span class="text-red-200 font-semibold">หัวข้อ:</span> <span id="composeConfirmSubject" class="break-words"></span></div>
+                <div><span class="text-red-200 font-semibold">ผู้รับ:</span> <span id="composeConfirmCount"></span> คน</div>
+            </div>
+            <label class="block text-xs font-semibold text-red-200 mb-1.5 text-center" for="composeConfirmCode">กรอกรหัสยืนยัน 4 หลักเพื่อส่งอีเมล</label>
+            <input type="password" id="composeConfirmCode" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="••••" class="cc-input" onkeydown="if(event.key==='Enter') submitComposeEmail()">
+            <p id="composeConfirmError" class="hidden text-[11px] text-red-300 text-center mt-2 font-semibold"></p>
+            <div class="flex gap-2 mt-4">
+                <button type="button" onclick="closeComposeConfirm()" class="flex-1 py-2.5 rounded-xl text-xs font-semibold bg-slate-700 hover:bg-slate-600 text-white btn-hover">ยกเลิก</button>
+                <button type="button" id="composeConfirmBtn" onclick="submitComposeEmail()" class="flex-1 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white btn-hover">ยืนยันและส่ง</button>
+            </div>
+        </div>
+    </div>
+
     <!-- CUSTOM POPUP NOTIFICATION MODAL -->
     <div id="customPopup" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 z-50">
         <div id="customPopupContent" class="bg-white dark:bg-slate-800 p-6 rounded-3xl max-w-xs w-full text-center shadow-2xl border border-slate-100 dark:border-slate-700">
@@ -566,7 +685,7 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzmev5-TJqY733ZvKpwpVFdjeeiFkOpkfR9H0W_iMBzWGDv4tYF9CnL3y_8mjIk-ix7/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-fWcSZfj8f8ncAomerYcJhU_v8yzF-IDKYHhs5p7DhQef9oAKxUye623uI7LTDRMx/exec";
         const ROOM_FEE = 50;
 
         const initialStudents = [
@@ -649,16 +768,51 @@
         // ตรวจสอบสถานะเว็บไซต์ (ปกติ/ปิดปรับปรุง) จากเซิร์ฟเวอร์ตอนโหลดหน้าเว็บ
         // ถ้าปิดปรับปรุงอยู่ จะซ่อนหน้า Login แล้วแสดงหน้า "ขออภัยในความไม่สะดวก" แทน
         // ถ้าเช็กไม่สำเร็จ (เช่น เน็ตหลุด) จะปล่อยให้เห็นหน้า Login ตามปกติ กันไม่ให้ทุกคนเข้าเว็บไม่ได้โดยไม่ตั้งใจ
+        // ===== แคชฝั่งเบราว์เซอร์ (localStorage) แบบ "แสดงค่าเก่าทันที แล้วอัปเดตเป็นค่าใหม่เบื้องหลัง" =====
+        // ทำให้หน้าเว็บ/ยอดเงิน/สถานะการชำระขึ้นทันทีโดยไม่ต้องรอ Apps Script ตอบกลับ
+        const DATA_CACHE_KEY = 'ae_data_cache_v1';
+        const DATA_CACHE_MAX_AGE = 12 * 60 * 60 * 1000;      // ใช้ค่าเก่าได้ไม่เกิน 12 ชั่วโมง
+        const SITEMODE_CACHE_KEY = 'ae_sitemode_cache_v1';
+        const SITEMODE_CACHE_MAX_AGE = 6 * 60 * 60 * 1000;   // 6 ชั่วโมง
+
+        function readLocalCache(key, maxAge) {
+            try {
+                const raw = localStorage.getItem(key);
+                if (!raw) return null;
+                const obj = JSON.parse(raw);
+                if (!obj || !obj.t || (Date.now() - obj.t) > maxAge) return null;
+                return obj.v;
+            } catch (e) { return null; }
+        }
+        function writeLocalCache(key, value) {
+            try { localStorage.setItem(key, JSON.stringify({ t: Date.now(), v: value })); } catch (e) { /* เต็ม/ถูกปิด ก็ข้ามไป */ }
+        }
+        function removeLocalCache(key) {
+            try { localStorage.removeItem(key); } catch (e) {}
+        }
+
+        function applySiteMode(mode) {
+            if (mode === 'maintenance') {
+                if (currentUser) return; // ล็อกอินอยู่แล้ว ไม่ต้องสลับหน้าทับ
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('maintenanceSection').classList.remove('hidden');
+            } else {
+                document.getElementById('maintenanceSection').classList.add('hidden');
+                if (!currentUser) document.getElementById('loginSection').classList.remove('hidden');
+            }
+        }
+
+        // ตรวจสอบสถานะเว็บไซต์ (ปกติ/ปิดปรับปรุง) — ใช้ค่าแคชแสดงทันที แล้วเช็กกับเซิร์ฟเวอร์เบื้องหลังเพื่อแก้ให้ตรงเสมอ
+        // ถ้าเช็กไม่สำเร็จ (เช่น เน็ตหลุด) จะปล่อยให้เห็นหน้า Login ตามปกติ กันไม่ให้ทุกคนเข้าเว็บไม่ได้โดยไม่ตั้งใจ
         async function checkSiteMode() {
+            const cachedMode = readLocalCache(SITEMODE_CACHE_KEY, SITEMODE_CACHE_MAX_AGE);
+            if (cachedMode) applySiteMode(cachedMode);
             try {
                 const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getSiteMode`);
                 const data = await res.json();
-                if (data && data.mode === 'maintenance') {
-                    document.getElementById('loginSection').classList.add('hidden');
-                    document.getElementById('maintenanceSection').classList.remove('hidden');
-                } else {
-                    document.getElementById('maintenanceSection').classList.add('hidden');
-                }
+                const mode = (data && data.mode === 'maintenance') ? 'maintenance' : 'normal';
+                writeLocalCache(SITEMODE_CACHE_KEY, mode);
+                applySiteMode(mode);
             } catch(e) {
                 console.error('ไม่สามารถตรวจสอบสถานะเว็บไซต์ได้', e);
             }
@@ -666,6 +820,7 @@
 
         initTheme();
         checkSiteMode();
+        warmDataCache(); // โหลดข้อมูลล่วงหน้าตั้งแต่เปิดเว็บ พอล็อกอินจะขึ้นทันที
 
         // --- CUSTOM POPUP SYSTEM ---
         function showPopup(title, message, type = 'info') {
@@ -703,17 +858,66 @@
         function getExpenses() { return globalData.expenses; }
         function getDonations() { return globalData.donations || { monthly: {}, overall: 0 }; }
 
-        async function fetchDataAndRender() {
-            try {
-                const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getData`);
-                const data = await res.json();
-                if (data && data.payments) {
-                    globalData = data;
-                    if (!globalData.donations) globalData.donations = { monthly: {}, overall: 0 };
-                    if (!globalData.transactions) globalData.transactions = [];
+        function applyData(data) {
+            globalData = data;
+            if (!globalData.donations) globalData.donations = { monthly: {}, overall: 0 };
+            if (!globalData.transactions) globalData.transactions = [];
+        }
+
+        function renderCurrentView() {
+            if (currentUser && currentUser.type === 'student') {
+                renderStudentStatus();
+            } else if (currentUser && currentUser.type === 'admin') {
+                renderAdminTable();
+            }
+        }
+
+        // ดึงข้อมูลจากเซิร์ฟเวอร์ (Apps Script ตอบจากแคชฝั่งเซิร์ฟเวอร์อยู่แล้ว) แล้วเก็บลงแคชในเบราว์เซอร์
+        // reuse = true: ถ้ามีคำขอที่กำลังโหลดอยู่ (เช่น โหลดล่วงหน้าตอนเปิดเว็บ) ให้ใช้ผลอันเดียวกัน ไม่ยิงซ้ำ
+        let dataFetchPromise = null;
+        function fetchDataFromServer(reuse) {
+            if (reuse && dataFetchPromise) return dataFetchPromise;
+            const p = fetch(`${GOOGLE_SCRIPT_URL}?action=getData`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.payments) {
+                        writeLocalCache(DATA_CACHE_KEY, data);
+                        return data;
+                    }
+                    throw new Error('invalid data');
+                });
+            if (reuse) {
+                dataFetchPromise = p;
+                p.finally(() => { if (dataFetchPromise === p) dataFetchPromise = null; }).catch(() => {});
+            }
+            return p;
+        }
+
+        function warmDataCache() {
+            fetchDataFromServer(true).catch(() => {});
+        }
+
+        // opts.useCache = true  -> แสดงข้อมูลจากแคชทันทีก่อน แล้วอัปเดตเป็นข้อมูลล่าสุดเมื่อโหลดเสร็จ (ใช้ตอนล็อกอิน)
+        // เรียกแบบไม่ส่งค่า (หลังบันทึก/แก้ไขข้อมูล) = ดึงข้อมูลสดเสมอ ไม่ใช้แคชเก่า
+        async function fetchDataAndRender(opts) {
+            const useCache = !!(opts && opts.useCache === true);
+            let shownFromCache = false;
+
+            if (useCache) {
+                const cached = readLocalCache(DATA_CACHE_KEY, DATA_CACHE_MAX_AGE);
+                if (cached && cached.payments) {
+                    applyData(cached);
+                    renderCurrentView();
+                    shownFromCache = true;
                 }
+            }
+
+            try {
+                const data = await fetchDataFromServer(useCache);
+                applyData(data);
             } catch(e) {
-                if(!globalData.payments || Object.keys(globalData.payments).length === 0) {
+                // เซิร์ฟเวอร์ไม่ตอบ: ถ้ามีข้อมูลจากแคชแสดงอยู่แล้วก็ใช้ต่อ ไม่มีก็ใช้ค่าเริ่มต้นเป็น "ยังไม่จ่าย"
+                if (!shownFromCache && (!globalData.payments || Object.keys(globalData.payments).length === 0)) {
                     initialStudents.forEach(s => {
                         globalData.payments[s.id] = {};
                         months.forEach(m => globalData.payments[s.id][m] = { status: 'unpaid', slip: null });
@@ -721,11 +925,7 @@
                 }
             }
 
-            if (currentUser && currentUser.type === 'student') {
-                renderStudentStatus();
-            } else if (currentUser && currentUser.type === 'admin') {
-                renderAdminTable();
-            }
+            renderCurrentView();
         }
 
         async function loginStudent() {
@@ -739,7 +939,7 @@
                 document.getElementById('userBadge').innerText = `${student.prefix}${student.fname} ${student.lname}`;
                 document.getElementById('stdName').innerText = `${student.prefix}${student.fname} ${student.lname}`;
                 document.getElementById('stdId').innerText = student.id;
-                await fetchDataAndRender();
+                await fetchDataAndRender({ useCache: true });
             } else {
                 showPopup('เข้าสู่ระบบไม่สำเร็จ', 'ไม่พบรหัสนิสิตนี้ในระบบ กรุณาตรวจสอบอีกครั้ง', 'error');
             }
@@ -919,11 +1119,12 @@
                     refreshSiteModeStatus();
                     refreshAutoReminderStatus();
                     renderTestEmailStudentList();
+                    updateComposeCount();
                 } else {
                     document.getElementById('devDashboard').classList.add('hidden');
                 }
 
-                await fetchDataAndRender();
+                await fetchDataAndRender({ useCache: true });
             } else {
                 showPopup('เข้าสู่ระบบไม่สำเร็จ', 'รหัสนิสิตหรือรหัสผ่านผู้ดูแลระบบไม่ถูกต้อง', 'error');
             }
@@ -1264,6 +1465,7 @@
             try {
                 const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getSiteMode`);
                 const data = await res.json();
+                writeLocalCache(SITEMODE_CACHE_KEY, data.mode === 'maintenance' ? 'maintenance' : 'normal');
                 el.innerText = 'สถานะปัจจุบันของเว็บไซต์: ' + (data.mode === 'maintenance'
                     ? '🟠 ปิดปรับปรุงระบบ (คนอื่นจะเห็นหน้าแจ้งปิดปรับปรุงแทนหน้าล็อกอิน)'
                     : '🟢 เปิดใช้งานปกติ (ทุกคนเข้าหน้าล็อกอินได้ตามปกติ)');
@@ -1344,6 +1546,8 @@
                 });
                 const result = await res.json();
                 if (result.result === 'success') {
+                    removeLocalCache(DATA_CACHE_KEY);
+                    removeLocalCache(SITEMODE_CACHE_KEY);
                     showPopup('สำเร็จ', 'ล้างแคชระบบเรียบร้อยแล้ว กำลังโหลดข้อมูลใหม่...', 'success');
                     await fetchDataAndRender();
                 } else {
@@ -1412,6 +1616,12 @@
         function renderTestEmailStudentList() {
             renderStudentCheckboxList('reminderStudentList', 'reminder-email-checkbox');
             renderStudentCheckboxList('testEmailStudentList', 'test-email-checkbox');
+            renderStudentCheckboxList('composeStudentList', 'compose-email-checkbox');
+            const composeList = document.getElementById('composeStudentList');
+            if (composeList && !composeList.dataset.bound) {
+                composeList.addEventListener('change', updateComposeCount);
+                composeList.dataset.bound = 'true';
+            }
         }
 
         // ติ๊ก/ยกเลิกติ๊กช่องเลือกผู้รับของตัวทดสอบวันที่ 1/10/20/25/30 ทั้งหมดพร้อมกัน
@@ -1459,12 +1669,149 @@
             }
         }
 
+        // ===== บันทึกรูป QR Code ชำระเงิน =====
+        function triggerDownload(url, fileName) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        }
+
+        async function saveQrImage() {
+            const img = document.getElementById('qrImage');
+            const fileName = 'QR-payment-AE.jpg';
+            try {
+                const res = await fetch(img.src);
+                const blob = await res.blob();
+                const file = new File([blob], fileName, { type: blob.type || 'image/jpeg' });
+                const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+                // มือถือ: เปิดหน้าต่างแชร์ของเครื่อง (มีปุ่ม "บันทึกรูปภาพ" ลงแกลเลอรี)
+                if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({ files: [file], title: 'QR Code ชำระค่าห้อง' });
+                        return;
+                    } catch (shareErr) {
+                        if (shareErr && shareErr.name === 'AbortError') return; // ผู้ใช้กดปิดเอง
+                    }
+                }
+
+                const objUrl = URL.createObjectURL(blob);
+                triggerDownload(objUrl, fileName);
+                setTimeout(() => URL.revokeObjectURL(objUrl), 2000);
+                showPopup('สำเร็จ', 'บันทึกรูป QR Code ลงเครื่องแล้ว', 'success');
+            } catch (e) {
+                // สำรอง: ดาวน์โหลดจากลิงก์รูปโดยตรง
+                triggerDownload(img.src, fileName);
+            }
+        }
+
+        // ===== ส่งอีเมลข้อความกำหนดเอง (ต้องยืนยันด้วยรหัส 1680 ก่อนส่ง) =====
+        const COMPOSE_CONFIRM_CODE = '1680';
+
+        function updateComposeCount() {
+            const body = document.getElementById('composeBody');
+            const bodyCount = document.getElementById('composeBodyCount');
+            if (body && bodyCount) bodyCount.innerText = body.value.length;
+            const selected = document.querySelectorAll('.compose-email-checkbox:checked').length;
+            const total = document.querySelectorAll('.compose-email-checkbox').length;
+            const countEl = document.getElementById('composeSelectedCount');
+            if (countEl) countEl.innerText = selected;
+            const all = document.getElementById('composeSelectAll');
+            if (all) all.checked = total > 0 && selected === total;
+        }
+
+        function toggleAllComposeRecipients() {
+            const selectAll = document.getElementById('composeSelectAll').checked;
+            document.querySelectorAll('.compose-email-checkbox').forEach(cb => cb.checked = selectAll);
+            updateComposeCount();
+        }
+
+        function openComposeConfirm() {
+            const subject = document.getElementById('composeSubject').value.trim();
+            const message = document.getElementById('composeBody').value.trim();
+            const ids = Array.from(document.querySelectorAll('.compose-email-checkbox:checked')).map(cb => cb.value);
+
+            if (!subject) { showPopup('แจ้งเตือน', 'กรุณากรอกหัวข้ออีเมล', 'error'); return; }
+            if (!message) { showPopup('แจ้งเตือน', 'กรุณากรอกข้อความที่ต้องการส่ง', 'error'); return; }
+            if (ids.length === 0) { showPopup('แจ้งเตือน', 'กรุณาเลือกผู้รับอย่างน้อย 1 คน', 'error'); return; }
+
+            document.getElementById('composeConfirmSubject').innerText = subject;
+            document.getElementById('composeConfirmCount').innerText = ids.length;
+            document.getElementById('composeConfirmCode').value = '';
+            document.getElementById('composeConfirmError').classList.add('hidden');
+            document.getElementById('composeConfirmModal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('composeConfirmCode').focus(), 50);
+        }
+
+        function closeComposeConfirm() {
+            document.getElementById('composeConfirmModal').classList.add('hidden');
+            document.getElementById('composeConfirmCode').value = '';
+        }
+
+        async function submitComposeEmail() {
+            const code = document.getElementById('composeConfirmCode').value.trim();
+            const errEl = document.getElementById('composeConfirmError');
+            if (code !== COMPOSE_CONFIRM_CODE) {
+                errEl.innerText = 'รหัสยืนยันไม่ถูกต้อง';
+                errEl.classList.remove('hidden');
+                document.getElementById('composeConfirmCode').value = '';
+                document.getElementById('composeConfirmCode').focus();
+                return;
+            }
+            if (!currentUser || !currentUser.data || currentUser.data.id !== DEVELOPER_ADMIN_ID) return;
+
+            const subject = document.getElementById('composeSubject').value.trim();
+            const message = document.getElementById('composeBody').value.trim();
+            const studentIds = Array.from(document.querySelectorAll('.compose-email-checkbox:checked')).map(cb => cb.value);
+            if (!subject || !message || studentIds.length === 0) { closeComposeConfirm(); return; }
+
+            const btn = document.getElementById('composeConfirmBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> กำลังส่ง...';
+
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: 'sendCustomEmail',
+                        subject: subject,
+                        message: message,
+                        studentIds: studentIds,
+                        confirmCode: code,
+                        adminId: currentUser.data.id
+                    })
+                });
+                const result = await res.json();
+                closeComposeConfirm();
+                if (result.result === 'success') {
+                    const failed = result.failedCount ? ` (ส่งไม่สำเร็จ ${result.failedCount} คน)` : '';
+                    showPopup('สำเร็จ', `ส่งอีเมลแล้วทั้งหมด ${result.sentCount} คน${failed}`, 'success');
+                    document.getElementById('composeSubject').value = '';
+                    document.getElementById('composeBody').value = '';
+                    document.querySelectorAll('.compose-email-checkbox').forEach(cb => cb.checked = false);
+                    updateComposeCount();
+                } else {
+                    showPopup('ผิดพลาด', result.error || 'ไม่สามารถส่งอีเมลได้', 'error');
+                }
+            } catch(e) {
+                closeComposeConfirm();
+                showPopup('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'ยืนยันและส่ง';
+            }
+        }
+
         function logout() {
             currentUser = null;
             document.getElementById('userInfo').classList.add('hidden');
             document.getElementById('studentDashboard').classList.add('hidden');
             document.getElementById('adminDashboard').classList.add('hidden');
             document.getElementById('devDashboard').classList.add('hidden');
+            closeComposeConfirm();
             document.getElementById('loginSection').classList.remove('hidden');
             document.getElementById('studentIdInput').value = '';
             document.getElementById('adminIdInput').value = '';
