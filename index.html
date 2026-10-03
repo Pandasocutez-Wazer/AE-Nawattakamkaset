@@ -121,6 +121,81 @@
             transform: translateY(0) scale(0.97);
         }
 
+
+        /* ---------------------------------------------------- */
+        /* DANGER ZONE: แดชบอร์ดผู้พัฒนาระบบ (โทนแดงเข้ม + อ่านชัดในโหมดมืด) */
+        /* ---------------------------------------------------- */
+        .dev-danger {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            padding-top: 2rem !important;
+            background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+            border: 2px solid #e11d48;
+            box-shadow: 0 0 0 4px rgba(225, 29, 72, 0.12), 0 12px 32px -10px rgba(225, 29, 72, 0.55);
+            color: #4c0519;
+        }
+        .dev-danger::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 10px;
+            background: repeating-linear-gradient(45deg, #facc15 0 14px, #111827 14px 28px);
+        }
+        .dev-danger [class*="text-slate-"] { color: #881337; }
+        .dev-danger input, .dev-danger select, .dev-danger textarea {
+            background: #ffffff; color: #1f2937; border-color: #fda4af !important;
+        }
+        .dev-danger input::placeholder, .dev-danger textarea::placeholder { color: #9f1239; opacity: .55; }
+        .dev-danger input:focus, .dev-danger select:focus, .dev-danger textarea:focus {
+            outline: none; box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.5);
+        }
+
+        .dark .dev-danger {
+            background: linear-gradient(135deg, #1a0306 0%, #2b0a10 55%, #12020a 100%);
+            border-color: #ef4444;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.22), 0 0 42px -6px rgba(239, 68, 68, 0.6);
+            color: #ffe4e6;
+        }
+        .dark .dev-danger [class*="text-slate-"] { color: #fecdd3 !important; }
+        .dark .dev-danger [class*="text-rose-"],
+        .dark .dev-danger [class*="text-sky-"],
+        .dark .dev-danger [class*="text-indigo-"],
+        .dark .dev-danger [class*="text-purple-"] { color: #fda4af !important; }
+        .dark .dev-danger b { color: #ffffff; }
+        .dark .dev-danger input, .dark .dev-danger select, .dark .dev-danger textarea {
+            background: #0a0103 !important; color: #ffffff !important; border-color: #b91c1c !important;
+        }
+        .dark .dev-danger input::placeholder, .dark .dev-danger textarea::placeholder { color: #fda4af; opacity: .6; }
+        .dark .dev-danger [class*="bg-white/60"], .dark .dev-danger [class*="bg-white/50"] {
+            background: rgba(0, 0, 0, 0.45) !important; border-color: #7f1d1d !important;
+        }
+        .dark .dev-danger [class*="border-rose-"] { border-color: #7f1d1d !important; }
+        .dark .dev-danger .ann-row { background: rgba(0, 0, 0, 0.4); border-color: #7f1d1d; }
+        .dev-danger .ann-row { background: rgba(255, 255, 255, 0.7); border: 1px solid #fda4af; }
+        @keyframes dangerPulse { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
+        .danger-badge { animation: dangerPulse 1.6s ease-in-out infinite; }
+
+
+        /* ---- ตัวแก้ไขประกาศ (แดชบอร์ดผู้พัฒนา) ---- */
+        .ann-seg { display: inline-flex; border: 1px solid #fb7185; border-radius: .6rem; overflow: hidden; }
+        .ann-seg button { padding: .3rem .7rem; font-size: 11px; font-weight: 600; color: #9f1239; background: transparent; transition: background .15s; }
+        .ann-seg button.active { background: #dc2626; color: #fff; }
+        .dark .ann-seg { border-color: #b91c1c; }
+        .dark .ann-seg button { color: #fecdd3; }
+        .dark .ann-seg button.active { background: #dc2626; color: #fff; }
+        .ann-icon-btn { width: 2rem; height: 2rem; border-radius: .6rem; display: inline-flex; align-items: center; justify-content: center; background: #475569; color: #fff; font-size: 12px; transition: filter .15s, transform .15s; }
+        .ann-icon-btn:hover:not(:disabled) { filter: brightness(1.2); transform: translateY(-1px); }
+        .ann-icon-btn.danger { background: #dc2626; }
+        .ann-icon-btn:disabled { opacity: .3; cursor: not-allowed; }
+        .ann-preview { background: #ffffff; border-left: 4px solid #a855f7; border-radius: 1rem; padding: 1rem; color: #475569; font-size: 12px; line-height: 1.7; box-shadow: 0 4px 14px -6px rgba(0,0,0,.3); }
+        .dark .ann-preview { background: #121826; color: #cbd5e1; }
+        .ann-prev-title { font-weight: 700; font-size: 13px; color: #1e293b; margin-bottom: .6rem; }
+        .dark .ann-prev-title { color: #ffffff; }
+        .ann-prev-row { display: flex; gap: .5rem; margin-bottom: .5rem; }
+        .ann-prev-dot { color: #a855f7; font-weight: 700; }
+        .ann-prev-center { width: 100%; text-align: center; font-weight: 500; color: #9333ea; }
+        .dark .ann-prev-center { color: #c084fc; }
+        .ann-prev-text { white-space: pre-line; margin: 0; word-break: break-word; }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -193,7 +268,7 @@
                 </div>
             </div>
 
-            <!-- ANNOUNCEMENT SECTION -->
+            <!-- ANNOUNCEMENT SECTION (เนื้อหาโหลดจากระบบ แก้ไขได้ที่แดชบอร์ดผู้พัฒนาระบบ) -->
             <div class="glass-card p-6 rounded-3xl shadow-lg border-l-4 border-purple-500">
                 <div class="flex items-center mb-3">
                     <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-500 to-pink-500 text-white flex items-center justify-center mr-3 font-bold shadow-md shadow-purple-500/20">
@@ -201,17 +276,8 @@
                     </div>
                     <h3 class="font-bold text-slate-800 dark:text-white text-sm">ประกาศ / ประชาสัมพันธ์</h3>
                 </div>
-                
-                <div class="text-xs text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed">
-                    <div class="flex items-start space-x-2">
-                        <span class="text-purple-500 font-bold">•</span>
-                        <p>ระบบการจ่ายเงินค่าห้อง ท่านสามารถจ่ายค่าห้องโดยระบบนี้ โดยกรอกรหัสนิสิต เพื่อดำเนินการจ่ายเงินผ่านระบบ ระบบจะเก็บบันทึกการจ่ายเงินให้เมื่ออัพโหลดสลิปเงินอย่างถูกต้อง</p>
-                    </div>
-                    <div class="flex items-start space-x-2">
-                        <span class="text-purple-500 font-bold"><!-- ตรงนี้คือเอาไว้ใส่ • ถ้าจะเพิ่มหัวข้อ --></span>
-                        <p class="text-center w-full font-medium text-purple-600 dark:text-purple-400">งานเหรัญญิก</p>
-                    </div>
-                </div>
+
+                <div id="announcementList" class="text-xs text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed"></div>
             </div>
 
         </div>
@@ -241,9 +307,12 @@
                     <h4 class="font-bold text-base text-slate-800 dark:text-white mb-1">สแกน QR Code ชำระเงิน</h4>
                     <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">บัญชี: ต้องรัก แดวขุนทด (MAKE by KBank)</p>
                     <div class="bg-white p-3.5 rounded-3xl shadow-md border border-slate-100 transform hover:scale-105 transition duration-300 glow-indigo">
-                        <img src="qrcodepayment.jpg" alt="QR Code Payment" class="w-48 h-auto mx-auto rounded-2xl">
+                        <img id="qrImage" src="qrcodepayment.jpg" alt="QR Code Payment" class="w-48 h-auto mx-auto rounded-2xl">
                     </div>
                     <span class="inline-block mt-4 px-4 py-1.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-full text-xs font-semibold glow-emerald">ยอดชำระ: 50.00 บาท</span>
+                    <button type="button" onclick="saveQrImage()" class="mt-3 inline-flex items-center px-4 py-2 rounded-2xl text-xs font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 glow-indigo btn-hover">
+                        <i class="fa-solid fa-download mr-1.5"></i> บันทึกรูป QR Code
+                    </button>
                 </div>
 
                 <!-- SLIP UPLOAD -->
@@ -289,11 +358,12 @@
         <div id="adminDashboard" class="hidden space-y-6">
 
             <!-- DEVELOPER DASHBOARD (มองเห็นได้เฉพาะผู้พัฒนาระบบ 6920504529 เท่านั้น) -->
-            <div id="devDashboard" class="hidden glass-card p-6 rounded-3xl shadow-xl border-2 border-dashed border-purple-400 dark:border-purple-600 bg-purple-50/40 dark:bg-purple-950/20 animate-fade-in-up">
-                <h3 class="text-base font-bold text-purple-700 dark:text-purple-300 flex items-center mb-1">
-                    <i class="fa-solid fa-code mr-2"></i> แดชบอร์ดผู้พัฒนาระบบ
+            <div id="devDashboard" class="hidden dev-danger p-6 shadow-xl animate-fade-in-up">
+                <h3 class="text-base font-bold text-rose-700 dark:text-rose-300 flex flex-wrap items-center gap-2 mb-1">
+                    <i class="fa-solid fa-triangle-exclamation text-red-600 dark:text-red-400"></i> แดชบอร์ดผู้พัฒนาระบบ
+                    <span class="danger-badge px-2.5 py-0.5 rounded-lg bg-red-600 text-white text-[10px] tracking-widest font-bold">DANGER ZONE</span>
                 </h3>
-                <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4">เครื่องมือส่วนนี้มองเห็นได้เฉพาะผู้พัฒนาระบบเท่านั้น ใช้สำหรับการทดสอบและตั้งค่าระบบก่อนเปิดใช้งานจริง</p>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4">เครื่องมือส่วนนี้มองเห็นได้เฉพาะผู้พัฒนาระบบเท่านั้น ใช้สำหรับการทดสอบและตั้งค่าระบบก่อนเปิดใช้งานจริง <b>ทุกการกระทำในโซนนี้มีผลกับระบบจริงและผู้ใช้ทุกคน โปรดตรวจสอบก่อนกดทุกครั้ง</b></p>
                 <div class="flex flex-wrap gap-2">
                     <button onclick="requestClearCache()" class="bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
                         <i class="fa-solid fa-trash-can mr-1.5"></i> ล้างแคชระบบ (รีเซ็ตข้อมูลที่แสดงผล)
@@ -307,10 +377,10 @@
                 </div>
                 <p id="siteModeStatus" class="text-[11px] text-slate-400 dark:text-slate-500 mt-3"></p>
 
-                <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/40">
+                <div class="mt-4 pt-4 border-t border-rose-300 dark:border-rose-900/70">
                     <div class="flex flex-wrap items-center justify-between gap-3">
                         <div>
-                            <p class="text-xs font-semibold text-slate-700 dark:text-slate-200"><i class="fa-solid fa-robot mr-1.5 text-purple-500"></i> ส่งอีเมลแจ้งเตือนค่าห้องอัตโนมัติ (วันที่ 1, 10, 20, 25, 30 เวลา 9:00 น.)</p>
+                            <p class="text-xs font-semibold text-slate-700 dark:text-slate-200"><i class="fa-solid fa-robot mr-1.5 text-rose-500"></i> ส่งอีเมลแจ้งเตือนค่าห้องอัตโนมัติ (วันที่ 1, 10, 20, 25, 30 เวลา 9:00 น.)</p>
                             <p id="autoReminderStatus" class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">กำลังตรวจสอบสถานะ...</p>
                         </div>
                         <button id="autoReminderToggleBtn" onclick="toggleAutoReminder()" class="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-slate-400 btn-hover" disabled>
@@ -320,7 +390,7 @@
                     <p class="text-[10px] text-slate-400 mt-1.5">ปิดสวิตช์นี้จะหยุดเฉพาะการส่งอัตโนมัติ ปุ่มทดสอบส่งด้านล่างยังใช้งานได้ตามปกติ</p>
                 </div>
 
-                <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/40">
+                <div class="mt-4 pt-4 border-t border-rose-300 dark:border-rose-900/70">
                     <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
                         ทดสอบส่งอีเมลแจ้งเตือนค่าห้องทันที (ไม่ต้องรอถึงวันที่ 1/10/20/25/30) — <b>จะส่งจริง</b> ไปยังคนที่เลือกไว้เท่านั้น <b>โดยไม่สนใจว่าจ่ายแล้วหรือยังไม่จ่าย</b>
                     </p>
@@ -330,12 +400,12 @@
                             <option value="mid_month" selected>แบบวันที่ 10/20 (ค้างจ่าย รีบจ่าย)</option>
                             <option value="end_month">แบบวันที่ 25/30 (ใกล้สิ้นเดือน)</option>
                         </select>
-                        <button onclick="testSendReminder()" class="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
+                        <button onclick="testSendReminder()" class="bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 hover:to-rose-800 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
                             <i class="fa-solid fa-paper-plane mr-1.5"></i> ทดสอบส่งอีเมลตอนนี้
                         </button>
                     </div>
 
-                    <button type="button" onclick="toggleCollapse('reminderRecipientPanel')" class="mt-3 text-[11px] text-indigo-600 dark:text-indigo-400 font-medium flex items-center gap-1 hover:underline">
+                    <button type="button" onclick="toggleCollapse('reminderRecipientPanel')" class="mt-3 text-[11px] text-rose-700 dark:text-rose-300 font-medium flex items-center gap-1 hover:underline">
                         <i class="fa-solid fa-chevron-down text-[9px]" id="reminderRecipientPanelIcon"></i> เลือกผู้รับ (ต้องเลือกอย่างน้อย 1 คนก่อนส่ง)
                     </button>
                     <div id="reminderRecipientPanel" class="hidden mt-2">
@@ -352,11 +422,11 @@
                     </div>
                 </div>
 
-                <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/40">
+                <div class="mt-4 pt-4 border-t border-rose-300 dark:border-rose-900/70">
                     <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
                         ส่งอีเมลทดสอบระบบ (ข้อความคงที่ "(KU_AE) ทดสอบระบบการแจ้งเตือน โปรดเพิกเฉย") — เลือกผู้รับได้เอง ไม่เกี่ยวกับสถานะการจ่ายเงิน
                     </p>
-                    <button type="button" onclick="toggleCollapse('customEmailRecipientPanel')" class="text-[11px] text-sky-600 dark:text-sky-400 font-medium flex items-center gap-1 hover:underline">
+                    <button type="button" onclick="toggleCollapse('customEmailRecipientPanel')" class="text-[11px] text-rose-700 dark:text-rose-300 font-medium flex items-center gap-1 hover:underline">
                         <i class="fa-solid fa-chevron-down text-[9px]" id="customEmailRecipientPanelIcon"></i> เลือกผู้รับ
                     </button>
                     <div id="customEmailRecipientPanel" class="hidden mt-2">
@@ -370,8 +440,69 @@
                             <!-- รายชื่อนิสิตจะถูกสร้างด้วย JavaScript จาก initialStudents -->
                         </div>
                     </div>
-                    <button onclick="sendCustomTestEmail()" class="mt-3 bg-gradient-to-r from-sky-500 to-cyan-600 hover:from-sky-600 hover:to-cyan-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
+                    <button onclick="sendCustomTestEmail()" class="mt-3 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
                         <i class="fa-solid fa-envelope-circle-check mr-1.5"></i> ส่งอีเมลทดสอบให้ผู้ที่เลือก
+                    </button>
+                </div>
+
+                <!-- ===== แก้ไขประกาศ / ประชาสัมพันธ์ ===== -->
+                <div class="mt-4 pt-4 border-t border-rose-300 dark:border-rose-900/70">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <p class="text-xs font-semibold text-slate-700 dark:text-slate-200"><i class="fa-solid fa-bullhorn mr-1.5 text-rose-500"></i> แก้ไขประกาศ / ประชาสัมพันธ์ (แสดงที่หน้าเข้าสู่ระบบ)</p>
+                        <span id="annDirtyBadge" class="hidden danger-badge px-2.5 py-0.5 rounded-lg bg-amber-400 text-black text-[10px] font-bold">● ยังไม่ได้บันทึก</span>
+                    </div>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-1">พิมพ์แก้ในช่องได้เลย ตัวอย่างฝั่งขวา (หรือด้านล่างบนมือถือ) จะเปลี่ยนตามทันที แก้เสร็จแล้วกด "บันทึกประกาศ"</p>
+
+                    <div class="grid lg:grid-cols-2 gap-3 mt-3">
+                        <div>
+                            <div id="announcementEditorList" class="space-y-2"></div>
+                            <div id="annUndoBar" class="hidden mt-2 flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-slate-800 text-white text-[11px]">
+                                <span>ลบรายการแล้ว</span>
+                                <button type="button" onclick="undoDeleteAnnouncement()" class="font-bold text-amber-300 hover:underline"><i class="fa-solid fa-rotate-left mr-1"></i> เลิกทำ</button>
+                            </div>
+                            <button type="button" onclick="addAnnouncementItem('bullet')" class="mt-2 w-full py-2.5 rounded-xl border-2 border-dashed border-rose-400 text-rose-700 dark:text-rose-300 text-xs font-semibold btn-hover">
+                                <i class="fa-solid fa-plus mr-1.5"></i> เพิ่มประกาศใหม่
+                            </button>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-1"><i class="fa-solid fa-eye mr-1"></i> ตัวอย่างที่ผู้ใช้จะเห็น</p>
+                            <div class="ann-preview">
+                                <div class="ann-prev-title"><i class="fa-solid fa-bullhorn mr-1.5" style="color:#a855f7"></i> ประกาศ / ประชาสัมพันธ์</div>
+                                <div id="announcementPreview"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <button type="button" id="saveAnnouncementsBtn" onclick="saveAnnouncements()" class="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover"><i class="fa-solid fa-floppy-disk mr-1.5"></i> บันทึกประกาศ</button>
+                        <button type="button" id="discardAnnouncementsBtn" onclick="discardAnnouncementChanges()" class="bg-gradient-to-r from-slate-600 to-slate-700 text-white px-3.5 py-2 rounded-xl text-xs font-semibold btn-hover"><i class="fa-solid fa-xmark mr-1.5"></i> ยกเลิกการแก้ไข</button>
+                        <button type="button" onclick="resetAnnouncementsToDefault()" class="bg-gradient-to-r from-amber-500 to-orange-600 text-white px-3.5 py-2 rounded-xl text-xs font-semibold btn-hover"><i class="fa-solid fa-rotate-left mr-1.5"></i> คืนค่าเริ่มต้น</button>
+                    </div>
+                </div>
+
+                <!-- ===== ส่งอีเมลข้อความกำหนดเอง (ต้องยืนยันด้วยรหัส) ===== -->
+                <div class="mt-4 pt-4 border-t border-rose-300 dark:border-rose-900/70">
+                    <p class="text-xs font-semibold text-slate-700 dark:text-slate-200"><i class="fa-solid fa-envelope-open-text mr-1.5 text-rose-500"></i> ส่งอีเมลถึงผู้รับที่เลือก (เขียนข้อความเอง)</p>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-1 mb-2">ระบบจะใส่คำขึ้นต้น "เรียน (ชื่อผู้รับ)" และท้ายอีเมลให้อัตโนมัติ — <b>ก่อนส่งต้องกรอกรหัสยืนยันอีกครั้ง</b></p>
+                    <div class="space-y-2">
+                        <input type="text" id="composeSubject" maxlength="150" placeholder="หัวข้ออีเมล (ระบบจะเติม (KU_AE) นำหน้าให้ถ้ายังไม่มี)" class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-xl">
+                        <textarea id="composeMessage" rows="5" maxlength="3000" placeholder="ข้อความเพิ่มเติม..." class="w-full px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-xl resize-y"></textarea>
+                    </div>
+
+                    <button type="button" onclick="toggleCollapse('composeRecipientPanel')" class="mt-3 text-[11px] text-rose-700 dark:text-rose-300 font-medium flex items-center gap-1 hover:underline">
+                        <i class="fa-solid fa-chevron-down text-[9px]" id="composeRecipientPanelIcon"></i> เลือกผู้รับ <span id="composeRecipientCount" class="font-bold">(เลือกแล้ว 0 คน)</span>
+                    </button>
+                    <div id="composeRecipientPanel" class="hidden mt-2">
+                        <div class="flex items-center gap-2 mb-2">
+                            <label class="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 cursor-pointer">
+                                <input type="checkbox" id="composeSelectAll" onchange="toggleAllComposeRecipients()" class="w-3.5 h-3.5">
+                                เลือกทั้งหมด (34 คน)
+                            </label>
+                        </div>
+                        <div id="composeEmailStudentList" onchange="updateComposeRecipientCount()" class="max-h-40 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-1 p-3 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px]"></div>
+                    </div>
+                    <button type="button" onclick="openEmailConfirm()" class="mt-3 bg-gradient-to-r from-red-600 to-rose-700 hover:from-red-700 hover:to-rose-800 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
+                        <i class="fa-solid fa-paper-plane mr-1.5"></i> ตรวจสอบและส่งอีเมล
                     </button>
                 </div>
             </div>
@@ -553,6 +684,29 @@
         </div>
     </div>
 
+    <!-- EMAIL CONFIRM MODAL (ยืนยันการส่งอีเมลด้วยรหัส) -->
+    <div id="emailConfirmModal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center p-4 z-50">
+        <div id="emailConfirmContent" class="bg-white dark:bg-slate-900 p-6 rounded-3xl max-w-sm w-full shadow-2xl border-2 border-red-500">
+            <h3 class="text-base font-bold mb-1 text-red-600 dark:text-red-400 flex items-center">
+                <i class="fa-solid fa-triangle-exclamation mr-2"></i> ยืนยันการส่งอีเมล
+            </h3>
+            <div class="text-xs text-slate-600 dark:text-slate-300 mb-4 space-y-1 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 rounded-xl p-3">
+                <p>หัวข้อ: <b id="confirmEmailSubject" class="break-words"></b></p>
+                <p>ผู้รับ: <b id="confirmEmailCount"></b> คน</p>
+                <p class="text-[10px] text-red-600 dark:text-red-300">เมื่อส่งแล้วไม่สามารถเรียกคืนได้</p>
+            </div>
+            <label class="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">กรอกรหัสยืนยันเพื่อส่ง:</label>
+            <input type="password" id="emailConfirmCode" inputmode="numeric" autocomplete="off" placeholder="รหัสยืนยัน" class="w-full px-3.5 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-800 dark:text-white rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-red-500/60">
+            <p id="emailConfirmError" class="hidden text-[11px] text-red-600 dark:text-red-400 mt-1.5"></p>
+            <div class="flex justify-end space-x-2 mt-5">
+                <button onclick="closeEmailConfirm()" class="px-4 py-2 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 rounded-xl text-xs font-medium btn-hover">ยกเลิก</button>
+                <button id="emailConfirmSendBtn" onclick="confirmSendComposedEmail()" class="px-4 py-2 bg-gradient-to-r from-red-600 to-rose-700 text-white rounded-xl text-xs font-semibold btn-hover">
+                    <i class="fa-solid fa-paper-plane mr-1"></i> ส่งอีเมล
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- CUSTOM POPUP NOTIFICATION MODAL -->
     <div id="customPopup" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 z-50">
         <div id="customPopupContent" class="bg-white dark:bg-slate-800 p-6 rounded-3xl max-w-xs w-full text-center shadow-2xl border border-slate-100 dark:border-slate-700">
@@ -566,7 +720,7 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzmev5-TJqY733ZvKpwpVFdjeeiFkOpkfR9H0W_iMBzWGDv4tYF9CnL3y_8mjIk-ix7/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbynvCWC2RM4HFIcOlA-rSXUFwJuwJHRWqX9CwujdzLzbUELtgRVThgGiRtHZGdTOO_Z/exec";
         const ROOM_FEE = 50;
 
         const initialStudents = [
@@ -624,7 +778,7 @@
         // --- DARK MODE FUNCTIONALITY ---
         function initTheme() {
             const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            if (savedTheme === 'dark') { // ค่าเริ่มต้นคือธีมสว่าง จะเป็นธีมมืดก็ต่อเมื่อผู้ใช้กดสลับเองและเคยบันทึกไว้
                 document.documentElement.classList.add('dark');
                 document.getElementById('themeIcon').className = 'fa-solid fa-sun text-lg';
             } else {
@@ -666,6 +820,8 @@
 
         initTheme();
         checkSiteMode();
+        renderAnnouncements(currentAnnouncements);
+        loadAnnouncements();
 
         // --- CUSTOM POPUP SYSTEM ---
         function showPopup(title, message, type = 'info') {
@@ -919,6 +1075,7 @@
                     refreshSiteModeStatus();
                     refreshAutoReminderStatus();
                     renderTestEmailStudentList();
+                    initAnnouncementEditor();
                 } else {
                     document.getElementById('devDashboard').classList.add('hidden');
                 }
@@ -1412,6 +1569,7 @@
         function renderTestEmailStudentList() {
             renderStudentCheckboxList('reminderStudentList', 'reminder-email-checkbox');
             renderStudentCheckboxList('testEmailStudentList', 'test-email-checkbox');
+            renderStudentCheckboxList('composeEmailStudentList', 'compose-email-checkbox');
         }
 
         // ติ๊ก/ยกเลิกติ๊กช่องเลือกผู้รับของตัวทดสอบวันที่ 1/10/20/25/30 ทั้งหมดพร้อมกัน
@@ -1456,6 +1614,406 @@
                 }
             } catch(e) {
                 showPopup('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
+            }
+        }
+
+        // ============================================================
+        //  ประกาศ / ประชาสัมพันธ์ (แก้ไขได้จากแดชบอร์ดผู้พัฒนาระบบ)
+        // ============================================================
+        const DEFAULT_ANNOUNCEMENTS = [
+            { type: 'bullet', text: 'ระบบการจ่ายเงินค่าห้อง ท่านสามารถจ่ายค่าห้องโดยระบบนี้ โดยกรอกรหัสนิสิต เพื่อดำเนินการจ่ายเงินผ่านระบบ ระบบจะเก็บบันทึกการจ่ายเงินให้เมื่ออัพโหลดสลิปเงินอย่างถูกต้อง' },
+            { type: 'center', text: 'งานเหรัญญิก' }
+        ];
+        let currentAnnouncements = DEFAULT_ANNOUNCEMENTS.map(a => ({ ...a }));
+        let announcementDraft = [];
+
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        function renderAnnouncements(list) {
+            const container = document.getElementById('announcementList');
+            if (!container) return;
+            container.innerHTML = '';
+            if (!list || list.length === 0) {
+                const empty = document.createElement('p');
+                empty.className = 'text-center text-slate-400';
+                empty.textContent = 'ยังไม่มีประกาศในขณะนี้';
+                container.appendChild(empty);
+                return;
+            }
+            list.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'flex items-start space-x-2';
+                const p = document.createElement('p');
+                p.textContent = item.text;
+                if (item.type === 'center') {
+                    p.className = 'text-center w-full font-medium text-purple-600 dark:text-purple-400 whitespace-pre-line';
+                    row.appendChild(p);
+                } else {
+                    const dot = document.createElement('span');
+                    dot.className = 'text-purple-500 font-bold';
+                    dot.textContent = '•';
+                    p.className = 'whitespace-pre-line';
+                    row.appendChild(dot);
+                    row.appendChild(p);
+                }
+                container.appendChild(row);
+            });
+        }
+
+        async function loadAnnouncements() {
+            try {
+                const res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getAnnouncements`);
+                const data = await res.json();
+                if (data && Array.isArray(data.announcements)) {
+                    currentAnnouncements = data.announcements;
+                    renderAnnouncements(currentAnnouncements);
+                    if (currentUser && currentUser.type === 'admin' && !isAnnouncementDirty()) initAnnouncementEditor();
+                }
+            } catch (e) {
+                console.error('โหลดประกาศไม่สำเร็จ ใช้ข้อความเริ่มต้นแทน', e);
+            }
+        }
+
+        let announcementSaved = '[]';
+        let lastDeletedAnnouncement = null;
+        let annUndoTimer = null;
+
+        function cleanAnnouncements(list) {
+            return list
+                .map(a => ({ type: a.type === 'center' ? 'center' : 'bullet', text: (a.text || '').trim() }))
+                .filter(a => a.text);
+        }
+
+        function isAnnouncementDirty() {
+            return JSON.stringify(cleanAnnouncements(announcementDraft)) !== announcementSaved;
+        }
+
+        function updateAnnouncementDirtyUI() {
+            const dirty = isAnnouncementDirty();
+            const badge = document.getElementById('annDirtyBadge');
+            const saveBtn = document.getElementById('saveAnnouncementsBtn');
+            const discardBtn = document.getElementById('discardAnnouncementsBtn');
+            if (badge) badge.classList.toggle('hidden', !dirty);
+            [saveBtn, discardBtn].forEach(b => {
+                if (!b) return;
+                b.disabled = !dirty;
+                b.style.opacity = dirty ? '1' : '.45';
+                b.style.cursor = dirty ? 'pointer' : 'not-allowed';
+            });
+        }
+
+        function initAnnouncementEditor() {
+            announcementDraft = currentAnnouncements.map(a => ({ type: a.type, text: a.text }));
+            announcementSaved = JSON.stringify(cleanAnnouncements(announcementDraft));
+            renderAnnouncementEditor();
+        }
+
+        function autoGrowTextarea(el) {
+            el.style.height = 'auto';
+            el.style.height = (el.scrollHeight + 2) + 'px';
+        }
+
+        function renderAnnouncementPreview() {
+            const box = document.getElementById('announcementPreview');
+            if (!box) return;
+            box.innerHTML = '';
+            const list = cleanAnnouncements(announcementDraft);
+            if (list.length === 0) {
+                const p = document.createElement('p');
+                p.className = 'ann-prev-text';
+                p.style.textAlign = 'center';
+                p.style.opacity = '.6';
+                p.textContent = 'ยังไม่มีประกาศ';
+                box.appendChild(p);
+                return;
+            }
+            list.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'ann-prev-row';
+                const p = document.createElement('p');
+                p.className = 'ann-prev-text';
+                p.textContent = item.text;
+                if (item.type === 'center') {
+                    p.classList.add('ann-prev-center');
+                    row.appendChild(p);
+                } else {
+                    const dot = document.createElement('span');
+                    dot.className = 'ann-prev-dot';
+                    dot.textContent = '•';
+                    row.appendChild(dot);
+                    row.appendChild(p);
+                }
+                box.appendChild(row);
+            });
+        }
+
+        function renderAnnouncementEditor() {
+            const container = document.getElementById('announcementEditorList');
+            if (!container) return;
+            if (announcementDraft.length === 0) {
+                container.innerHTML = '<p class="text-[11px] text-slate-500 dark:text-slate-400 py-2">ยังไม่มีประกาศ — กด "เพิ่มประกาศใหม่" ด้านล่าง</p>';
+            } else {
+                const last = announcementDraft.length - 1;
+                container.innerHTML = announcementDraft.map((item, i) => `
+                    <div class="ann-row p-3 rounded-xl">
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-full bg-red-600 text-white text-[11px] font-bold flex items-center justify-center shrink-0">${i + 1}</span>
+                                <div class="ann-seg">
+                                    <button type="button" class="${item.type !== 'center' ? 'active' : ''}" onclick="setAnnouncementType(${i}, 'bullet')">• มีจุด</button>
+                                    <button type="button" class="${item.type === 'center' ? 'active' : ''}" onclick="setAnnouncementType(${i}, 'center')">กึ่งกลาง</button>
+                                </div>
+                            </div>
+                            <div class="flex gap-1">
+                                <button type="button" class="ann-icon-btn" ${i === 0 ? 'disabled' : ''} onclick="moveAnnouncement(${i}, -1)" title="เลื่อนขึ้น"><i class="fa-solid fa-arrow-up"></i></button>
+                                <button type="button" class="ann-icon-btn" ${i === last ? 'disabled' : ''} onclick="moveAnnouncement(${i}, 1)" title="เลื่อนลง"><i class="fa-solid fa-arrow-down"></i></button>
+                                <button type="button" class="ann-icon-btn danger" onclick="deleteAnnouncement(${i})" title="ลบ"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <textarea id="annText${i}" rows="2" maxlength="600" placeholder="พิมพ์ข้อความประกาศที่นี่... (กด Enter เพื่อขึ้นบรรทัดใหม่)" oninput="onAnnouncementInput(${i}, this)" class="w-full px-3 py-2 text-xs border rounded-lg resize-none overflow-hidden">${escapeHtml(item.text)}</textarea>
+                        <div class="text-right text-[10px] text-slate-500 dark:text-slate-400 mt-1"><span id="annCount${i}">${item.text.length}</span>/600</div>
+                    </div>
+                `).join('');
+                container.querySelectorAll('textarea').forEach(autoGrowTextarea);
+            }
+            renderAnnouncementPreview();
+            updateAnnouncementDirtyUI();
+        }
+
+        // พิมพ์ในช่อง: อัปเดตเฉพาะข้อมูล/ตัวอย่าง ไม่วาดช่องใหม่ เพื่อให้เคอร์เซอร์ไม่หลุดตอนพิมพ์
+        function onAnnouncementInput(i, el) {
+            announcementDraft[i].text = el.value;
+            autoGrowTextarea(el);
+            const counter = document.getElementById('annCount' + i);
+            if (counter) counter.textContent = el.value.length;
+            renderAnnouncementPreview();
+            updateAnnouncementDirtyUI();
+        }
+
+        function addAnnouncementItem(type) {
+            announcementDraft.push({ type: type || 'bullet', text: '' });
+            renderAnnouncementEditor();
+            const el = document.getElementById('annText' + (announcementDraft.length - 1));
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.focus();
+            }
+        }
+
+        function setAnnouncementType(i, type) {
+            announcementDraft[i].type = type;
+            renderAnnouncementEditor();
+        }
+
+        function moveAnnouncement(i, dir) {
+            const j = i + dir;
+            if (j < 0 || j >= announcementDraft.length) return;
+            [announcementDraft[i], announcementDraft[j]] = [announcementDraft[j], announcementDraft[i]];
+            renderAnnouncementEditor();
+        }
+
+        // ลบทันทีไม่ต้องกดยืนยัน แต่มีปุ่ม "เลิกทำ" ให้กดคืนได้ภายใน 8 วินาที
+        function deleteAnnouncement(i) {
+            const removed = announcementDraft.splice(i, 1)[0];
+            lastDeletedAnnouncement = { item: removed, index: i };
+            renderAnnouncementEditor();
+            const bar = document.getElementById('annUndoBar');
+            if (bar) bar.classList.remove('hidden');
+            clearTimeout(annUndoTimer);
+            annUndoTimer = setTimeout(hideAnnouncementUndo, 8000);
+        }
+
+        function hideAnnouncementUndo() {
+            const bar = document.getElementById('annUndoBar');
+            if (bar) bar.classList.add('hidden');
+            lastDeletedAnnouncement = null;
+            clearTimeout(annUndoTimer);
+        }
+
+        function undoDeleteAnnouncement() {
+            if (!lastDeletedAnnouncement) return;
+            const idx = Math.min(lastDeletedAnnouncement.index, announcementDraft.length);
+            announcementDraft.splice(idx, 0, lastDeletedAnnouncement.item);
+            hideAnnouncementUndo();
+            renderAnnouncementEditor();
+        }
+
+        function discardAnnouncementChanges() {
+            if (!isAnnouncementDirty()) return;
+            if (!confirm('ยกเลิกการแก้ไขที่ยังไม่ได้บันทึก และกลับไปใช้ประกาศล่าสุดที่บันทึกไว้ใช่หรือไม่?')) return;
+            hideAnnouncementUndo();
+            initAnnouncementEditor();
+        }
+
+        function resetAnnouncementsToDefault() {
+            if (!confirm('คืนค่าประกาศเป็นข้อความเริ่มต้นใช่หรือไม่? (ยังไม่มีผลจนกว่าจะกด "บันทึกประกาศ")')) return;
+            hideAnnouncementUndo();
+            announcementDraft = DEFAULT_ANNOUNCEMENTS.map(a => ({ ...a }));
+            renderAnnouncementEditor();
+        }
+
+        async function saveAnnouncements() {
+            if (!isAnnouncementDirty()) return;
+            const cleaned = cleanAnnouncements(announcementDraft);
+
+            const btn = document.getElementById('saveAnnouncementsBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> กำลังบันทึก...';
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: 'setAnnouncements',
+                        announcements: cleaned,
+                        adminId: currentUser && currentUser.data ? currentUser.data.id : ''
+                    })
+                });
+                const result = await res.json();
+                if (result.result === 'success') {
+                    currentAnnouncements = cleaned;
+                    renderAnnouncements(currentAnnouncements);
+                    hideAnnouncementUndo();
+                    initAnnouncementEditor();
+                    showPopup('สำเร็จ', 'บันทึกประกาศเรียบร้อยแล้ว ผู้ใช้ทุกคนจะเห็นข้อความใหม่ที่หน้าเข้าสู่ระบบ', 'success');
+                } else {
+                    showPopup('ผิดพลาด', result.error || 'ไม่สามารถบันทึกประกาศได้', 'error');
+                }
+            } catch (e) {
+                showPopup('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk mr-1.5"></i> บันทึกประกาศ';
+                updateAnnouncementDirtyUI();
+            }
+        }
+
+        // เตือนก่อนปิดหน้าเว็บ ถ้ายังมีประกาศที่แก้ไขแต่ไม่ได้บันทึก
+        window.addEventListener('beforeunload', function (e) {
+            if (currentUser && currentUser.type === 'admin' && isAnnouncementDirty()) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        // ============================================================
+        //  ส่งอีเมลข้อความกำหนดเอง (ต้องกรอกรหัสยืนยันก่อนส่ง)
+        // ============================================================
+        const EMAIL_CONFIRM_CODE = '1680';
+        let pendingComposedEmail = null;
+
+        function updateComposeRecipientCount() {
+            const n = document.querySelectorAll('.compose-email-checkbox:checked').length;
+            const el = document.getElementById('composeRecipientCount');
+            if (el) el.innerText = `(เลือกแล้ว ${n} คน)`;
+        }
+
+        function toggleAllComposeRecipients() {
+            const selectAll = document.getElementById('composeSelectAll').checked;
+            document.querySelectorAll('.compose-email-checkbox').forEach(cb => cb.checked = selectAll);
+            updateComposeRecipientCount();
+        }
+
+        function openEmailConfirm() {
+            const subject = document.getElementById('composeSubject').value.trim();
+            const message = document.getElementById('composeMessage').value.trim();
+            const studentIds = Array.from(document.querySelectorAll('.compose-email-checkbox:checked')).map(cb => cb.value);
+
+            if (!subject) { showPopup('แจ้งเตือน', 'กรุณากรอกหัวข้ออีเมล', 'error'); return; }
+            if (!message) { showPopup('แจ้งเตือน', 'กรุณากรอกข้อความอีเมล', 'error'); return; }
+            if (studentIds.length === 0) { showPopup('แจ้งเตือน', 'กรุณาเลือกผู้รับอย่างน้อย 1 คน', 'error'); return; }
+
+            pendingComposedEmail = { subject, message, studentIds };
+            document.getElementById('confirmEmailSubject').innerText = subject;
+            document.getElementById('confirmEmailCount').innerText = studentIds.length;
+            document.getElementById('emailConfirmCode').value = '';
+            document.getElementById('emailConfirmError').classList.add('hidden');
+            document.getElementById('emailConfirmModal').classList.remove('hidden');
+            document.getElementById('emailConfirmContent').classList.add('animate-pop-in');
+            document.getElementById('emailConfirmCode').focus();
+        }
+
+        function closeEmailConfirm() {
+            document.getElementById('emailConfirmContent').classList.remove('animate-pop-in');
+            document.getElementById('emailConfirmModal').classList.add('hidden');
+            document.getElementById('emailConfirmCode').value = '';
+            pendingComposedEmail = null;
+        }
+
+        async function confirmSendComposedEmail() {
+            if (!pendingComposedEmail) return;
+            const code = document.getElementById('emailConfirmCode').value.trim();
+            const errEl = document.getElementById('emailConfirmError');
+            if (code !== EMAIL_CONFIRM_CODE) {
+                errEl.innerText = 'รหัสยืนยันไม่ถูกต้อง';
+                errEl.classList.remove('hidden');
+                return;
+            }
+            errEl.classList.add('hidden');
+
+            const btn = document.getElementById('emailConfirmSendBtn');
+            const payload = pendingComposedEmail;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> กำลังส่ง...';
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: 'sendComposedEmail',
+                        subject: payload.subject,
+                        message: payload.message,
+                        studentIds: payload.studentIds,
+                        confirmCode: code,
+                        adminId: currentUser && currentUser.data ? currentUser.data.id : ''
+                    })
+                });
+                const result = await res.json();
+                closeEmailConfirm();
+                if (result.result === 'success') {
+                    const failed = result.failedCount ? ` (ส่งไม่สำเร็จ ${result.failedCount} คน)` : '';
+                    showPopup('สำเร็จ', `ส่งอีเมลแล้วทั้งหมด ${result.sentCount} คน${failed}`, result.failedCount ? 'info' : 'success');
+                    document.getElementById('composeSubject').value = '';
+                    document.getElementById('composeMessage').value = '';
+                    document.getElementById('composeSelectAll').checked = false;
+                    document.querySelectorAll('.compose-email-checkbox').forEach(cb => cb.checked = false);
+                    updateComposeRecipientCount();
+                } else {
+                    showPopup('ผิดพลาด', result.error || 'ไม่สามารถส่งอีเมลได้', 'error');
+                }
+            } catch (e) {
+                closeEmailConfirm();
+                showPopup('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาตรวจสอบกล่องจดหมายที่ส่งไปก่อนลองส่งซ้ำ', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-paper-plane mr-1"></i> ส่งอีเมล';
+            }
+        }
+
+        // ============================================================
+        //  บันทึกรูป QR Code
+        // ============================================================
+        async function saveQrImage() {
+            const img = document.getElementById('qrImage');
+            if (!img) return;
+            const src = img.getAttribute('src');
+            const filename = 'QR-Payment-' + (src.split('/').pop().split('?')[0] || 'qr.jpg');
+            const triggerDownload = (href) => {
+                const a = document.createElement('a');
+                a.href = href;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            };
+            try {
+                const res = await fetch(src);
+                if (!res.ok) throw new Error('fetch failed');
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                triggerDownload(url);
+                setTimeout(() => URL.revokeObjectURL(url), 2000);
+            } catch (e) {
+                triggerDownload(src);
             }
         }
 
