@@ -1459,6 +1459,45 @@
             }
         }
 
+        // ===== บันทึกรูป QR Code ชำระเงิน =====
+        function triggerDownload(url, fileName) {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        }
+
+        async function saveQrImage() {
+            const img = document.getElementById('qrImage');
+            const fileName = 'QR-payment-AE.jpg';
+            try {
+                const res = await fetch(img.src);
+                const blob = await res.blob();
+                const file = new File([blob], fileName, { type: blob.type || 'image/jpeg' });
+                const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+                // มือถือ: เปิดหน้าต่างแชร์ของเครื่อง (มีปุ่ม "บันทึกรูปภาพ" ลงแกลเลอรี)
+                if (isMobile && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({ files: [file], title: 'QR Code ชำระค่าห้อง' });
+                        return;
+                    } catch (shareErr) {
+                        if (shareErr && shareErr.name === 'AbortError') return; // ผู้ใช้กดปิดเอง
+                    }
+                }
+
+                const objUrl = URL.createObjectURL(blob);
+                triggerDownload(objUrl, fileName);
+                setTimeout(() => URL.revokeObjectURL(objUrl), 2000);
+                showPopup('สำเร็จ', 'บันทึกรูป QR Code ลงเครื่องแล้ว', 'success');
+            } catch (e) {
+                // สำรอง: ดาวน์โหลดจากลิงก์รูปโดยตรง
+                triggerDownload(img.src, fileName);
+            }
+        }
+
         function logout() {
             currentUser = null;
             document.getElementById('userInfo').classList.add('hidden');
