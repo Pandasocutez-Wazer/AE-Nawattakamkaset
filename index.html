@@ -292,11 +292,13 @@
         <div id="adminDashboard" class="hidden space-y-6">
 
             <!-- DEVELOPER DASHBOARD (มองเห็นได้เฉพาะผู้พัฒนาระบบ 6920504529 เท่านั้น) -->
-            <div id="devDashboard" class="hidden glass-card p-6 rounded-3xl shadow-xl border-2 border-dashed border-purple-400 dark:border-purple-600 bg-purple-50/40 dark:bg-purple-950/20 animate-fade-in-up">
-                <h3 class="text-base font-bold text-purple-700 dark:text-purple-300 flex items-center mb-1">
-                    <i class="fa-solid fa-code mr-2"></i> แดชบอร์ดผู้พัฒนาระบบ
+            <div id="devDashboard" class="hidden rounded-3xl shadow-xl border-4 border-dashed border-yellow-400 bg-black p-0 overflow-hidden animate-fade-in-up">
+                <div style="height:10px; background-image: repeating-linear-gradient(45deg, #facc15 0 14px, #18181b 14px 28px);"></div>
+                <div class="p-6">
+                <h3 class="text-base font-extrabold tracking-wide uppercase text-yellow-400 flex items-center mb-1">
+                    <i class="fa-solid fa-triangle-exclamation mr-2"></i> Danger Zone — แดชบอร์ดผู้พัฒนาระบบ
                 </h3>
-                <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-4">เครื่องมือส่วนนี้มองเห็นได้เฉพาะผู้พัฒนาระบบเท่านั้น ใช้สำหรับการทดสอบและตั้งค่าระบบก่อนเปิดใช้งานจริง</p>
+                <p class="text-[11px] text-red-300 mb-4">⚠️ เครื่องมือส่วนนี้มองเห็นได้เฉพาะผู้พัฒนาระบบเท่านั้น ใช้สำหรับการทดสอบและตั้งค่าระบบก่อนเปิดใช้งานจริง ใช้งานด้วยความระมัดระวัง</p>
                 <div class="flex flex-wrap gap-2">
                     <button onclick="requestClearCache()" class="bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
                         <i class="fa-solid fa-trash-can mr-1.5"></i> ล้างแคชระบบ (รีเซ็ตข้อมูลที่แสดงผล)
@@ -308,27 +310,27 @@
                         <i class="fa-solid fa-screwdriver-wrench mr-1.5"></i> ปิดปรับปรุงระบบ (ซ่อนหน้าล็อกอิน)
                     </button>
                 </div>
-                <p id="siteModeStatus" class="text-[11px] text-slate-400 dark:text-slate-500 mt-3"></p>
+                <p id="siteModeStatus" class="text-[11px] text-slate-400 mt-3"></p>
 
-                <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/40">
+                <div class="mt-4 pt-4 border-t border-yellow-600/40">
                     <div class="flex flex-wrap items-center justify-between gap-3">
                         <div>
-                            <p class="text-xs font-semibold text-slate-700 dark:text-slate-200"><i class="fa-solid fa-robot mr-1.5 text-purple-500"></i> ส่งอีเมลแจ้งเตือนค่าห้องอัตโนมัติ (วันที่ 1, 10, 20, 25, 30 เวลา 9:00 น.)</p>
-                            <p id="autoReminderStatus" class="text-[11px] text-slate-400 dark:text-slate-500 mt-1">กำลังตรวจสอบสถานะ...</p>
+                            <p class="text-xs font-semibold text-slate-200"><i class="fa-solid fa-robot mr-1.5 text-yellow-500"></i> ส่งอีเมลแจ้งเตือนค่าห้องอัตโนมัติ (วันที่ 1, 10, 20, 25, 30 เวลา 9:00 น.)</p>
+                            <p id="autoReminderStatus" class="text-[11px] text-slate-400 mt-1">กำลังตรวจสอบสถานะ...</p>
                         </div>
-                        <button id="autoReminderToggleBtn" onclick="toggleAutoReminder()" class="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-slate-400 btn-hover" disabled>
+                        <button id="autoReminderToggleBtn" onclick="toggleAutoReminder()" class="px-4 py-2 rounded-xl text-xs font-semibold text-white bg-slate-600 btn-hover" disabled>
                             กำลังโหลด...
                         </button>
                     </div>
-                    <p class="text-[10px] text-slate-400 mt-1.5">ปิดสวิตช์นี้จะหยุดเฉพาะการส่งอัตโนมัติ ปุ่มทดสอบส่งด้านล่างยังใช้งานได้ตามปกติ</p>
+                    <p class="text-[10px] text-slate-500 mt-1.5">ปิดสวิตช์นี้จะหยุดเฉพาะการส่งอัตโนมัติ ปุ่มทดสอบส่งด้านล่างยังใช้งานได้ตามปกติ</p>
                 </div>
 
-                <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/40">
-                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
-                        ทดสอบส่งอีเมลแจ้งเตือนค่าห้องทันที (ไม่ต้องรอถึงวันที่ 1/10/20/25/30) — <b>จะส่งจริง</b> ไปยังคนที่เลือกไว้เท่านั้น <b>โดยไม่สนใจว่าจ่ายแล้วหรือยังไม่จ่าย</b>
+                <div class="mt-4 pt-4 border-t border-yellow-600/40">
+                    <p class="text-[11px] text-slate-400 mb-2">
+                        ทดสอบส่งอีเมลแจ้งเตือนค่าห้องทันที (ไม่ต้องรอถึงวันที่ 1/10/20/25/30) — <b class="text-red-400">จะส่งจริง</b> ไปยังคนที่เลือกไว้เท่านั้น <b class="text-red-400">โดยไม่สนใจว่าจ่ายแล้วหรือยังไม่จ่าย</b>
                     </p>
                     <div class="flex flex-wrap gap-2 items-center">
-                        <select id="testReminderVariant" class="px-3 py-2 text-xs border border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-xl focus:outline-none">
+                        <select id="testReminderVariant" class="px-3 py-2 text-xs border border-yellow-700/50 bg-zinc-900 text-slate-100 rounded-xl focus:outline-none">
                             <option value="new_month">แบบวันที่ 1 (เข้าเดือนใหม่)</option>
                             <option value="mid_month" selected>แบบวันที่ 10/20 (ค้างจ่าย รีบจ่าย)</option>
                             <option value="end_month">แบบวันที่ 25/30 (ใกล้สิ้นเดือน)</option>
@@ -338,44 +340,71 @@
                         </button>
                     </div>
 
-                    <button type="button" onclick="toggleCollapse('reminderRecipientPanel')" class="mt-3 text-[11px] text-indigo-600 dark:text-indigo-400 font-medium flex items-center gap-1 hover:underline">
+                    <button type="button" onclick="toggleCollapse('reminderRecipientPanel')" class="mt-3 text-[11px] text-yellow-400 font-medium flex items-center gap-1 hover:underline">
                         <i class="fa-solid fa-chevron-down text-[9px]" id="reminderRecipientPanelIcon"></i> เลือกผู้รับ (ต้องเลือกอย่างน้อย 1 คนก่อนส่ง)
                     </button>
                     <div id="reminderRecipientPanel" class="hidden mt-2">
                         <div class="flex items-center gap-2 mb-2">
-                            <label class="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 cursor-pointer">
+                            <label class="flex items-center gap-1.5 text-xs font-medium text-slate-300 cursor-pointer">
                                 <input type="checkbox" id="reminderSelectAll" onchange="toggleAllReminderRecipients()" class="w-3.5 h-3.5">
                                 เลือกทั้งหมด (34 คน)
                             </label>
                         </div>
-                        <div id="reminderStudentList" class="max-h-40 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-1 p-3 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px]">
+                        <div id="reminderStudentList" class="max-h-40 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-1 p-3 bg-zinc-900 rounded-xl border border-yellow-700/30 text-[11px] text-slate-200">
                             <!-- รายชื่อนิสิตจะถูกสร้างด้วย JavaScript จาก initialStudents -->
                         </div>
-                        <p class="text-[10px] text-slate-400 mt-1.5">ระบบจะส่งให้ทุกคนที่ติ๊กเลือกเท่านั้น ไม่ว่าจะจ่ายค่าห้องแล้วหรือยัง</p>
+                        <p class="text-[10px] text-slate-500 mt-1.5">ระบบจะส่งให้ทุกคนที่ติ๊กเลือกเท่านั้น ไม่ว่าจะจ่ายค่าห้องแล้วหรือยัง</p>
                     </div>
                 </div>
 
-                <div class="mt-4 pt-4 border-t border-purple-200 dark:border-purple-900/40">
-                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
+                <div class="mt-4 pt-4 border-t border-yellow-600/40">
+                    <p class="text-[11px] text-slate-400 mb-2">
                         ส่งอีเมลทดสอบระบบ (ข้อความคงที่ "(KU_AE) ทดสอบระบบการแจ้งเตือน โปรดเพิกเฉย") — เลือกผู้รับได้เอง ไม่เกี่ยวกับสถานะการจ่ายเงิน
                     </p>
-                    <button type="button" onclick="toggleCollapse('customEmailRecipientPanel')" class="text-[11px] text-sky-600 dark:text-sky-400 font-medium flex items-center gap-1 hover:underline">
+                    <button type="button" onclick="toggleCollapse('customEmailRecipientPanel')" class="text-[11px] text-yellow-400 font-medium flex items-center gap-1 hover:underline">
                         <i class="fa-solid fa-chevron-down text-[9px]" id="customEmailRecipientPanelIcon"></i> เลือกผู้รับ
                     </button>
                     <div id="customEmailRecipientPanel" class="hidden mt-2">
                         <div class="flex items-center gap-2 mb-2">
-                            <label class="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 cursor-pointer">
+                            <label class="flex items-center gap-1.5 text-xs font-medium text-slate-300 cursor-pointer">
                                 <input type="checkbox" id="testEmailSelectAll" onchange="toggleAllTestEmailRecipients()" class="w-3.5 h-3.5">
                                 เลือกทั้งหมด (34 คน)
                             </label>
                         </div>
-                        <div id="testEmailStudentList" class="max-h-40 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-1 p-3 bg-white/60 dark:bg-slate-800/60 rounded-xl border border-slate-200 dark:border-slate-700 text-[11px]">
+                        <div id="testEmailStudentList" class="max-h-40 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-1 p-3 bg-zinc-900 rounded-xl border border-yellow-700/30 text-[11px] text-slate-200">
                             <!-- รายชื่อนิสิตจะถูกสร้างด้วย JavaScript จาก initialStudents -->
                         </div>
                     </div>
                     <button onclick="sendCustomTestEmail()" class="mt-3 bg-gradient-to-r from-sky-500 to-cyan-600 hover:from-sky-600 hover:to-cyan-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
                         <i class="fa-solid fa-envelope-circle-check mr-1.5"></i> ส่งอีเมลทดสอบให้ผู้ที่เลือก
                     </button>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-yellow-600/40">
+                    <p class="text-[11px] text-slate-400 mb-2">
+                        ส่งอีเมลข้อความกำหนดเอง — พิมพ์หัวข้อและเนื้อหาเองได้อิสระ แล้วเลือกผู้รับก่อนส่ง
+                    </p>
+                    <input type="text" id="composeEmailSubject" placeholder="หัวข้ออีเมล" class="w-full px-3 py-2 text-xs border border-yellow-700/50 bg-zinc-900 text-slate-100 rounded-xl focus:outline-none mb-2 placeholder:text-slate-500">
+                    <textarea id="composeEmailBody" placeholder="เนื้อหาอีเมล" rows="4" class="w-full px-3 py-2 text-xs border border-yellow-700/50 bg-zinc-900 text-slate-100 rounded-xl focus:outline-none resize-y placeholder:text-slate-500"></textarea>
+
+                    <button type="button" onclick="toggleCollapse('composeEmailRecipientPanel')" class="mt-2 text-[11px] text-yellow-400 font-medium flex items-center gap-1 hover:underline">
+                        <i class="fa-solid fa-chevron-down text-[9px]" id="composeEmailRecipientPanelIcon"></i> เลือกผู้รับ (ต้องเลือกอย่างน้อย 1 คนก่อนส่ง)
+                    </button>
+                    <div id="composeEmailRecipientPanel" class="hidden mt-2">
+                        <div class="flex items-center gap-2 mb-2">
+                            <label class="flex items-center gap-1.5 text-xs font-medium text-slate-300 cursor-pointer">
+                                <input type="checkbox" id="composeEmailSelectAll" onchange="toggleAllComposeEmailRecipients()" class="w-3.5 h-3.5">
+                                เลือกทั้งหมด (34 คน)
+                            </label>
+                        </div>
+                        <div id="composeEmailStudentList" class="max-h-40 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-1 p-3 bg-zinc-900 rounded-xl border border-yellow-700/30 text-[11px] text-slate-200">
+                            <!-- รายชื่อนิสิตจะถูกสร้างด้วย JavaScript จาก initialStudents -->
+                        </div>
+                    </div>
+                    <button onclick="sendComposedEmail()" class="mt-3 bg-gradient-to-r from-yellow-500 to-red-600 hover:from-yellow-600 hover:to-red-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
+                        <i class="fa-solid fa-paper-plane mr-1.5"></i> ส่งอีเมลข้อความกำหนดเอง
+                    </button>
+                </div>
                 </div>
             </div>
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center glass-card p-6 rounded-3xl shadow-xl border-l-8 border-amber-500 gap-4 animate-fade-in-up">
@@ -1307,6 +1336,8 @@
         // ล้างแคชระบบ (เฉพาะผู้พัฒนาระบบ) — ยืนยัน 2 ชั้น: กด confirm ก่อน แล้วกรอกรหัสผ่านซ้ำอีกครั้ง
         // ตรวจสอบรหัสผ่านผู้พัฒนาระบบ (ใช้ซ้ำได้ทุกจุดที่ต้องยืนยันตัวตนก่อนทำรายการสำคัญ)
         // คืนค่า true ถ้ารหัสถูกต้อง, false ถ้ากดยกเลิกหรือรหัสผิด (จะแจ้ง error ให้เองถ้ารหัสผิด)
+        // คืนค่ารหัสผ่านกลับมาด้วย (เป็น string) เมื่อถูกต้อง เผื่อต้องส่งไปยืนยันซ้ำฝั่งเซิร์ฟเวอร์ (เช่น confirmCode ของ sendCustomEmail)
+        // คืนค่า false เมื่อกดยกเลิกหรือรหัสผิด — ใช้กับ if (!verifyDeveloperPassword()) ได้เหมือนเดิมทุกจุด
         function verifyDeveloperPassword() {
             const password = prompt('กรุณากรอกรหัสผ่านผู้ดูแลระบบของผู้พัฒนาระบบ (รหัสเดียวกับที่ใช้ล็อกอิน) เพื่อยืนยันก่อนดำเนินการ:');
             if (password === null) return false; // ผู้ใช้กดยกเลิก
@@ -1316,7 +1347,7 @@
                 showPopup('ผิดพลาด', 'รหัสผ่านไม่ถูกต้อง ยกเลิกการดำเนินการ', 'error');
                 return false;
             }
-            return true;
+            return password;
         }
 
         // ย่อ/ขยายกล่องเลือกผู้รับ (ใช้ร่วมกันได้ทุกส่วนในแดชบอร์ดผู้พัฒนาระบบ)
@@ -1415,6 +1446,7 @@
         function renderTestEmailStudentList() {
             renderStudentCheckboxList('reminderStudentList', 'reminder-email-checkbox');
             renderStudentCheckboxList('testEmailStudentList', 'test-email-checkbox');
+            renderStudentCheckboxList('composeEmailStudentList', 'compose-email-checkbox');
         }
 
         // ติ๊ก/ยกเลิกติ๊กช่องเลือกผู้รับของตัวทดสอบวันที่ 1/10/20/25/30 ทั้งหมดพร้อมกัน
@@ -1427,6 +1459,57 @@
         function toggleAllTestEmailRecipients() {
             const selectAll = document.getElementById('testEmailSelectAll').checked;
             document.querySelectorAll('.test-email-checkbox').forEach(cb => cb.checked = selectAll);
+        }
+
+        // ติ๊ก/ยกเลิกติ๊กช่องเลือกผู้รับของอีเมลข้อความกำหนดเอง (พิมพ์หัวข้อ/เนื้อหาเอง) ทั้งหมดพร้อมกัน
+        function toggleAllComposeEmailRecipients() {
+            const selectAll = document.getElementById('composeEmailSelectAll').checked;
+            document.querySelectorAll('.compose-email-checkbox').forEach(cb => cb.checked = selectAll);
+        }
+
+        // ส่งอีเมลข้อความกำหนดเอง (หัวข้อ+เนื้อหาพิมพ์เอง) ไปยังนิสิตที่เลือกไว้เท่านั้น
+        // เรียกใช้ action "sendCustomEmail" ที่มีอยู่แล้วฝั่ง Code.gs (มีเช็กโควตาอีเมลรายวันและรหัสยืนยันในตัว)
+        async function sendComposedEmail() {
+            const subject = document.getElementById('composeEmailSubject').value.trim();
+            const body = document.getElementById('composeEmailBody').value.trim();
+            const checkedBoxes = document.querySelectorAll('.compose-email-checkbox:checked');
+            const studentIds = Array.from(checkedBoxes).map(cb => cb.value);
+
+            if (!subject || !body) {
+                showPopup('แจ้งเตือน', 'กรุณากรอกทั้งหัวข้อและเนื้อหาอีเมลก่อนส่ง', 'error');
+                return;
+            }
+            if (studentIds.length === 0) {
+                showPopup('แจ้งเตือน', 'กรุณาเลือกผู้รับอย่างน้อย 1 คนก่อนส่ง', 'error');
+                return;
+            }
+
+            if (!confirm(`ยืนยันส่งอีเมลหัวข้อ "${subject}" ไปยัง ${studentIds.length} คนที่เลือกไว้ตอนนี้เลยใช่หรือไม่?`)) return;
+            const password = verifyDeveloperPassword();
+            if (!password) return;
+
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        type: 'sendCustomEmail',
+                        subject: subject,
+                        message: body,
+                        studentIds: studentIds,
+                        confirmCode: password,
+                        adminId: currentUser && currentUser.data ? currentUser.data.id : ''
+                    })
+                });
+                const result = await res.json();
+                if (result.result === 'success') {
+                    const failedNote = result.failedCount ? ` (ส่งไม่สำเร็จ ${result.failedCount} คน)` : '';
+                    showPopup('สำเร็จ', `ส่งอีเมลแล้วทั้งหมด ${result.sentCount} คน${failedNote}`, 'success');
+                } else {
+                    showPopup('ผิดพลาด', result.error || 'ไม่สามารถส่งอีเมลได้', 'error');
+                }
+            } catch(e) {
+                showPopup('ผิดพลาด', 'เชื่อมต่อระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง', 'error');
+            }
         }
 
         // ส่งอีเมลทดสอบข้อความคงที่ (ประกาศทดสอบระบบ) ไปยังนิสิตที่เลือกไว้เท่านั้น
