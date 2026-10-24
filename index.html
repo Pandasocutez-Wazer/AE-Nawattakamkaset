@@ -25,6 +25,10 @@
             theme: {
                 extend: {
                     colors: {
+                        slate: { 50: 'rgb(var(--c-slate-50) / <alpha-value>)', 100: 'rgb(var(--c-slate-100) / <alpha-value>)', 200: 'rgb(var(--c-slate-200) / <alpha-value>)', 300: 'rgb(var(--c-slate-300) / <alpha-value>)', 400: 'rgb(var(--c-slate-400) / <alpha-value>)', 500: 'rgb(var(--c-slate-500) / <alpha-value>)', 600: 'rgb(var(--c-slate-600) / <alpha-value>)', 700: 'rgb(var(--c-slate-700) / <alpha-value>)', 800: 'rgb(var(--c-slate-800) / <alpha-value>)', 900: 'rgb(var(--c-slate-900) / <alpha-value>)', 950: 'rgb(var(--c-slate-950) / <alpha-value>)' },
+                        indigo: { 50: 'rgb(var(--c-indigo-50) / <alpha-value>)', 100: 'rgb(var(--c-indigo-100) / <alpha-value>)', 200: 'rgb(var(--c-indigo-200) / <alpha-value>)', 300: 'rgb(var(--c-indigo-300) / <alpha-value>)', 400: 'rgb(var(--c-indigo-400) / <alpha-value>)', 500: 'rgb(var(--c-indigo-500) / <alpha-value>)', 600: 'rgb(var(--c-indigo-600) / <alpha-value>)', 700: 'rgb(var(--c-indigo-700) / <alpha-value>)', 800: 'rgb(var(--c-indigo-800) / <alpha-value>)', 900: 'rgb(var(--c-indigo-900) / <alpha-value>)', 950: 'rgb(var(--c-indigo-950) / <alpha-value>)' },
+                        purple: { 50: 'rgb(var(--c-purple-50) / <alpha-value>)', 100: 'rgb(var(--c-purple-100) / <alpha-value>)', 200: 'rgb(var(--c-purple-200) / <alpha-value>)', 300: 'rgb(var(--c-purple-300) / <alpha-value>)', 400: 'rgb(var(--c-purple-400) / <alpha-value>)', 500: 'rgb(var(--c-purple-500) / <alpha-value>)', 600: 'rgb(var(--c-purple-600) / <alpha-value>)', 700: 'rgb(var(--c-purple-700) / <alpha-value>)', 800: 'rgb(var(--c-purple-800) / <alpha-value>)', 900: 'rgb(var(--c-purple-900) / <alpha-value>)', 950: 'rgb(var(--c-purple-950) / <alpha-value>)' },
+                        pink: { 50: 'rgb(var(--c-pink-50) / <alpha-value>)', 100: 'rgb(var(--c-pink-100) / <alpha-value>)', 200: 'rgb(var(--c-pink-200) / <alpha-value>)', 300: 'rgb(var(--c-pink-300) / <alpha-value>)', 400: 'rgb(var(--c-pink-400) / <alpha-value>)', 500: 'rgb(var(--c-pink-500) / <alpha-value>)', 600: 'rgb(var(--c-pink-600) / <alpha-value>)', 700: 'rgb(var(--c-pink-700) / <alpha-value>)', 800: 'rgb(var(--c-pink-800) / <alpha-value>)', 900: 'rgb(var(--c-pink-900) / <alpha-value>)', 950: 'rgb(var(--c-pink-950) / <alpha-value>)' },
                         brand: {
                             50: '#f0fdf4',
                             500: '#22c55e',
@@ -54,39 +58,261 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Light Mode: สีพาสเทล (ฟ้า -> เขียว -> ม่วง -> ชมพู -> เหลือง -> ส้ม) */
-        .bg-custom-light {
-            background: linear-gradient(-45deg, #bae6fd, #bbf7d0, #e9d5ff, #fbcfe8, #fef08a, #fed7aa);
-            background-size: 500% 500%;
-            animation: customGradient 18s ease infinite;
+        [data-theme="glass"] {
+            --c-slate-50: 248 250 252;
+            --c-slate-100: 241 245 249;
+            --c-slate-200: 226 232 240;
+            --c-slate-300: 203 213 225;
+            --c-slate-400: 148 163 184;
+            --c-slate-500: 100 116 139;
+            --c-slate-600: 71 85 105;
+            --c-slate-700: 51 65 85;
+            --c-slate-800: 30 41 59;
+            --c-slate-900: 15 23 42;
+            --c-slate-950: 2 6 23;
+            --c-indigo-50: 238 242 255;
+            --c-indigo-100: 224 231 255;
+            --c-indigo-200: 199 210 254;
+            --c-indigo-300: 165 180 252;
+            --c-indigo-400: 129 140 248;
+            --c-indigo-500: 99 102 241;
+            --c-indigo-600: 79 70 229;
+            --c-indigo-700: 67 56 202;
+            --c-indigo-800: 55 48 163;
+            --c-indigo-900: 49 46 129;
+            --c-indigo-950: 30 27 75;
+            --c-purple-50: 250 245 255;
+            --c-purple-100: 243 232 255;
+            --c-purple-200: 233 213 255;
+            --c-purple-300: 216 180 254;
+            --c-purple-400: 192 132 252;
+            --c-purple-500: 168 85 247;
+            --c-purple-600: 147 51 234;
+            --c-purple-700: 126 34 206;
+            --c-purple-800: 107 33 168;
+            --c-purple-900: 88 28 135;
+            --c-purple-950: 59 7 100;
+            --c-pink-50: 253 242 248;
+            --c-pink-100: 252 231 243;
+            --c-pink-200: 251 207 232;
+            --c-pink-300: 249 168 212;
+            --c-pink-400: 244 114 182;
+            --c-pink-500: 236 72 153;
+            --c-pink-600: 219 39 119;
+            --c-pink-700: 190 24 93;
+            --c-pink-800: 157 23 77;
+            --c-pink-900: 131 24 67;
+            --c-pink-950: 80 7 36;
+        }
+        [data-theme="midnight"] {
+            --c-slate-50: 248 250 252;
+            --c-slate-100: 241 245 249;
+            --c-slate-200: 226 232 240;
+            --c-slate-300: 203 213 225;
+            --c-slate-400: 148 163 184;
+            --c-slate-500: 100 116 139;
+            --c-slate-600: 71 85 105;
+            --c-slate-700: 51 65 85;
+            --c-slate-800: 30 41 59;
+            --c-slate-900: 15 23 42;
+            --c-slate-950: 2 6 23;
+            --c-indigo-50: 245 243 255;
+            --c-indigo-100: 237 233 254;
+            --c-indigo-200: 221 214 254;
+            --c-indigo-300: 196 181 253;
+            --c-indigo-400: 167 139 250;
+            --c-indigo-500: 139 92 246;
+            --c-indigo-600: 124 58 237;
+            --c-indigo-700: 109 40 217;
+            --c-indigo-800: 91 33 182;
+            --c-indigo-900: 76 29 149;
+            --c-indigo-950: 46 16 101;
+            --c-purple-50: 250 245 255;
+            --c-purple-100: 243 232 255;
+            --c-purple-200: 233 213 255;
+            --c-purple-300: 216 180 254;
+            --c-purple-400: 192 132 252;
+            --c-purple-500: 168 85 247;
+            --c-purple-600: 147 51 234;
+            --c-purple-700: 126 34 206;
+            --c-purple-800: 107 33 168;
+            --c-purple-900: 88 28 135;
+            --c-purple-950: 59 7 100;
+            --c-pink-50: 253 242 248;
+            --c-pink-100: 252 231 243;
+            --c-pink-200: 251 207 232;
+            --c-pink-300: 249 168 212;
+            --c-pink-400: 244 114 182;
+            --c-pink-500: 236 72 153;
+            --c-pink-600: 219 39 119;
+            --c-pink-700: 190 24 93;
+            --c-pink-800: 157 23 77;
+            --c-pink-900: 131 24 67;
+            --c-pink-950: 80 7 36;
+        }
+        [data-theme="cozy"] {
+            --c-slate-50: 250 250 249;
+            --c-slate-100: 245 245 244;
+            --c-slate-200: 231 229 228;
+            --c-slate-300: 214 211 209;
+            --c-slate-400: 168 162 158;
+            --c-slate-500: 120 113 108;
+            --c-slate-600: 87 83 78;
+            --c-slate-700: 68 64 60;
+            --c-slate-800: 41 37 36;
+            --c-slate-900: 28 25 23;
+            --c-slate-950: 12 10 9;
+            --c-indigo-50: 250 246 240;
+            --c-indigo-100: 242 232 218;
+            --c-indigo-200: 230 210 184;
+            --c-indigo-300: 214 182 143;
+            --c-indigo-400: 195 152 104;
+            --c-indigo-500: 168 122 77;
+            --c-indigo-600: 140 98 57;
+            --c-indigo-700: 111 77 46;
+            --c-indigo-800: 90 63 42;
+            --c-indigo-900: 63 44 29;
+            --c-indigo-950: 42 28 18;
+            --c-purple-50: 252 248 239;
+            --c-purple-100: 246 236 210;
+            --c-purple-200: 236 215 164;
+            --c-purple-300: 224 188 111;
+            --c-purple-400: 212 162 74;
+            --c-purple-500: 192 138 51;
+            --c-purple-600: 160 108 40;
+            --c-purple-700: 126 81 34;
+            --c-purple-800: 103 65 31;
+            --c-purple-900: 85 55 29;
+            --c-purple-950: 48 28 14;
+            --c-pink-50: 251 243 239;
+            --c-pink-100: 245 225 215;
+            --c-pink-200: 235 195 174;
+            --c-pink-300: 222 159 128;
+            --c-pink-400: 207 123 87;
+            --c-pink-500: 189 95 60;
+            --c-pink-600: 162 75 47;
+            --c-pink-700: 132 60 40;
+            --c-pink-800: 108 51 37;
+            --c-pink-900: 88 45 34;
+            --c-pink-950: 48 21 15;
+        }
+        [data-theme="petal"] {
+            --c-slate-50: 248 250 252;
+            --c-slate-100: 241 245 249;
+            --c-slate-200: 226 232 240;
+            --c-slate-300: 203 213 225;
+            --c-slate-400: 148 163 184;
+            --c-slate-500: 100 116 139;
+            --c-slate-600: 71 85 105;
+            --c-slate-700: 51 65 85;
+            --c-slate-800: 30 41 59;
+            --c-slate-900: 15 23 42;
+            --c-slate-950: 2 6 23;
+            --c-indigo-50: 239 246 255;
+            --c-indigo-100: 219 234 254;
+            --c-indigo-200: 191 219 254;
+            --c-indigo-300: 147 197 253;
+            --c-indigo-400: 96 165 250;
+            --c-indigo-500: 59 130 246;
+            --c-indigo-600: 37 99 235;
+            --c-indigo-700: 29 78 216;
+            --c-indigo-800: 30 64 175;
+            --c-indigo-900: 30 58 138;
+            --c-indigo-950: 23 37 84;
+            --c-purple-50: 250 245 255;
+            --c-purple-100: 243 232 255;
+            --c-purple-200: 233 213 255;
+            --c-purple-300: 216 180 254;
+            --c-purple-400: 192 132 252;
+            --c-purple-500: 168 85 247;
+            --c-purple-600: 147 51 234;
+            --c-purple-700: 126 34 206;
+            --c-purple-800: 107 33 168;
+            --c-purple-900: 88 28 135;
+            --c-purple-950: 59 7 100;
+            --c-pink-50: 253 242 248;
+            --c-pink-100: 252 231 243;
+            --c-pink-200: 251 207 232;
+            --c-pink-300: 249 168 212;
+            --c-pink-400: 244 114 182;
+            --c-pink-500: 236 72 153;
+            --c-pink-600: 219 39 119;
+            --c-pink-700: 190 24 93;
+            --c-pink-800: 157 23 77;
+            --c-pink-900: 131 24 67;
+            --c-pink-950: 80 7 36;
         }
 
-        /* Dark Mode: สีโทนมืดตามระบุ (#00536E -> #58006E -> #6E0028 -> #006E51 -> #383838) */
-        .dark .bg-custom-dark {
-            background: linear-gradient(-45deg, #00536E, #58006E, #6E0028, #006E51, #383838);
-            background-size: 500% 500%;
-            animation: customGradient 18s ease infinite;
+        /* ---------------------------------------------------- */
+        /* ธีม 4 แบบ: glass (กระจกใส) / midnight (ราตรี) / cozy (ครีมอุ่น) / petal (กลีบดอกไม้) */
+        /* ---------------------------------------------------- */
+        [data-theme="glass"] body {
+            background:
+                radial-gradient(60% 50% at 8% 78%, rgba(96,165,250,0.55), transparent 70%),
+                radial-gradient(45% 40% at 92% 70%, rgba(251,146,160,0.40), transparent 70%),
+                radial-gradient(40% 40% at 70% 8%, rgba(167,139,250,0.35), transparent 70%),
+                linear-gradient(135deg, #dbe7f5, #e4e3f7 55%, #f2e4ee);
+            background-attachment: fixed;
+        }
+        [data-theme="midnight"] body {
+            background:
+                radial-gradient(50% 40% at 15% 0%, rgba(124,58,237,0.28), transparent 70%),
+                radial-gradient(45% 40% at 95% 90%, rgba(20,184,166,0.20), transparent 70%),
+                #0b0b10;
+            background-attachment: fixed;
+        }
+        [data-theme="cozy"] body {
+            background: linear-gradient(160deg, #f8f1e7, #f3e6d3 60%, #ecd9c0);
+            background-attachment: fixed;
+        }
+        [data-theme="petal"] body {
+            background:
+                radial-gradient(55% 45% at 0% 0%, rgba(251,207,232,0.95), transparent 70%),
+                radial-gradient(55% 45% at 100% 100%, rgba(147,197,253,0.90), transparent 70%),
+                #f1f2fb;
+            background-attachment: fixed;
         }
 
-        /* Colorful Glassmorphism Cards */
+        /* การ์ดแบบกระจกฝ้า (ปรับตามธีม) */
         .glass-card {
-            background: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.62);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            box-shadow: 0 12px 32px -12px rgba(60, 70, 120, 0.22);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .dark .glass-card {
-            background: rgba(18, 24, 38, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+        [data-theme="midnight"] .glass-card {
+            background: rgba(26, 26, 34, 0.82);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.7);
+        }
+        [data-theme="cozy"] .glass-card {
+            background: #fffaf3;
+            backdrop-filter: none; -webkit-backdrop-filter: none;
+            border: 1px solid #ecdcc6;
+            border-radius: 1.25rem;
+            box-shadow: 0 10px 24px -12px rgba(111, 77, 46, 0.35);
+        }
+        [data-theme="petal"] .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(255, 255, 255, 1);
+            box-shadow: 0 14px 34px -14px rgba(120, 110, 200, 0.30);
         }
 
+        /* แถบนำทางด้านบน (ปรับตามธีม) */
+        .app-nav { transition: background 0.3s ease, border-color 0.3s ease; }
+        [data-theme="cozy"] .app-nav { background: #ecd5bb !important; border-color: #dcc0a0 !important; }
+        [data-theme="petal"] .app-nav { background: linear-gradient(90deg, rgba(251,207,232,0.85), rgba(191,219,254,0.85)) !important; border-color: rgba(255,255,255,0.7) !important; }
+        [data-theme="midnight"] .app-nav { background: rgba(15, 15, 20, 0.85) !important; border-color: rgba(255,255,255,0.07) !important; }
+
+        /* ตัวเลือกธีม */
+        .theme-option { transition: background 0.2s ease, transform 0.2s ease; }
+        .theme-option:hover { transform: translateX(2px); }
+        .theme-option.active { outline: 2px solid rgb(var(--c-indigo-500)); }
+
         /* Vibrant Glowing Effects */
-        .glow-indigo { box-shadow: 0 8px 25px -5px rgba(99, 102, 241, 0.4); }
+        .glow-indigo { box-shadow: 0 8px 25px -5px rgb(var(--c-indigo-500) / 0.4); }
         .glow-emerald { box-shadow: 0 8px 25px -5px rgba(16, 185, 129, 0.4); }
         .glow-amber { box-shadow: 0 8px 25px -5px rgba(245, 158, 11, 0.4); }
         .glow-rose { box-shadow: 0 8px 25px -5px rgba(244, 63, 94, 0.4); }
@@ -121,17 +347,34 @@
             transform: translateY(0) scale(0.97);
         }
 
+        /* Dial ring (วงแหวนความก้าวหน้ายอดเงิน) */
+        .dial-ring-progress {
+            transition: stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: drop-shadow(0 0 6px rgb(var(--c-indigo-500) / 0.45));
+        }
+        .dial-track { stroke: rgba(148, 163, 184, 0.25); }
+
+        /* Horizontal progress bar (แถบความก้าวหน้าการจ่ายเงินรายบุคคล) */
+        .pay-bar-track { background: rgba(148, 163, 184, 0.25); border-radius: 9999px; overflow: hidden; }
+        .pay-bar-fill {
+            height: 100%;
+            border-radius: 9999px;
+            background: linear-gradient(90deg, #10b981, #14b8a6, #38bdf8);
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .pay-bar-fill.full { background: linear-gradient(90deg, #22c55e, #84cc16, #facc15); }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 99px; }
-        .dark ::-webkit-scrollbar-thumb { background: #334155; }
+        ::-webkit-scrollbar-thumb { background: rgb(var(--c-indigo-300)); border-radius: 99px; }
+        [data-theme="midnight"] ::-webkit-scrollbar-thumb { background: #334155; }
     </style>
 </head>
-<body class="min-h-screen bg-custom-light dark:bg-custom-dark text-slate-800 dark:text-slate-100 pb-12 transition-colors duration-500">
+<body class="min-h-screen text-slate-800 dark:text-slate-100 pb-12 transition-colors duration-500">
 
     <!-- NAVBAR -->
-    <nav class="bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl sticky top-0 z-40 border-b border-indigo-100/50 dark:border-slate-800/80 transition-colors duration-300">
+    <nav class="app-nav bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl sticky top-0 z-40 border-b border-indigo-100/50 dark:border-slate-800/80 transition-colors duration-300">
         <div class="max-w-6xl mx-auto px-4 py-3.5 flex justify-between items-center">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 text-white flex items-center justify-center glow-indigo transform hover:rotate-12 transition-transform">
@@ -141,10 +384,31 @@
             </div>
 
             <div class="flex items-center space-x-3">
-                <!-- DARK MODE TOGGLE BUTTON -->
-                <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500/10 to-purple-500/10 dark:from-amber-400/20 dark:to-orange-500/20 text-indigo-600 dark:text-amber-400 border border-indigo-200/50 dark:border-amber-500/30 flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-sm">
-                    <i id="themeIcon" class="fa-solid fa-moon text-lg"></i>
-                </button>
+                <!-- THEME PICKER: เลือกธีมได้ 4 แบบ -->
+                <div class="relative">
+                    <button onclick="toggleThemeMenu(event)" title="เปลี่ยนธีม" class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500/15 to-purple-500/15 text-indigo-600 dark:text-indigo-300 border border-indigo-200/50 dark:border-indigo-400/30 flex items-center justify-center hover:scale-110 transition-all duration-300 shadow-sm">
+                        <i class="fa-solid fa-palette text-lg"></i>
+                    </button>
+                    <div id="themeMenu" class="hidden absolute right-0 mt-2 w-60 glass-card rounded-2xl p-2 z-50 animate-pop-in">
+                        <p class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 px-2 py-1">เลือกธีม</p>
+                        <button data-theme-btn="glass" onclick="setTheme('glass')" class="theme-option w-full flex items-center gap-3 p-2 rounded-xl text-left hover:bg-slate-500/10">
+                            <span class="w-8 h-8 rounded-xl shrink-0 border border-white" style="background:linear-gradient(135deg,#bfdbfe,#e9d5ff 55%,#fbcfe8)"></span>
+                            <span class="text-xs"><b class="block text-slate-800 dark:text-slate-100">กระจกใส</b><span class="text-slate-500 dark:text-slate-400">สว่าง โปร่งแสง</span></span>
+                        </button>
+                        <button data-theme-btn="midnight" onclick="setTheme('midnight')" class="theme-option w-full flex items-center gap-3 p-2 rounded-xl text-left hover:bg-slate-500/10">
+                            <span class="w-8 h-8 rounded-xl shrink-0 border border-slate-600" style="background:linear-gradient(135deg,#0b0b10,#6d28d9 70%,#14b8a6)"></span>
+                            <span class="text-xs"><b class="block text-slate-800 dark:text-slate-100">ราตรี</b><span class="text-slate-500 dark:text-slate-400">โทนมืด ม่วง-เขียวมิ้นต์</span></span>
+                        </button>
+                        <button data-theme-btn="cozy" onclick="setTheme('cozy')" class="theme-option w-full flex items-center gap-3 p-2 rounded-xl text-left hover:bg-slate-500/10">
+                            <span class="w-8 h-8 rounded-xl shrink-0 border border-amber-200" style="background:linear-gradient(135deg,#f8f1e7,#e6d2b8 60%,#8c6239)"></span>
+                            <span class="text-xs"><b class="block text-slate-800 dark:text-slate-100">ครีมอุ่น</b><span class="text-slate-500 dark:text-slate-400">โทนน้ำตาลครีมอบอุ่น</span></span>
+                        </button>
+                        <button data-theme-btn="petal" onclick="setTheme('petal')" class="theme-option w-full flex items-center gap-3 p-2 rounded-xl text-left hover:bg-slate-500/10">
+                            <span class="w-8 h-8 rounded-xl shrink-0 border border-white" style="background:linear-gradient(135deg,#fbcfe8,#bfdbfe)"></span>
+                            <span class="text-xs"><b class="block text-slate-800 dark:text-slate-100">กลีบดอกไม้</b><span class="text-slate-500 dark:text-slate-400">พาสเทลชมพู-ฟ้า</span></span>
+                        </button>
+                    </div>
+                </div>
 
                 <!-- USER INFO -->
                 <div id="userInfo" class="hidden flex items-center space-x-3">
@@ -233,6 +497,14 @@
             <div class="glass-card p-6 rounded-3xl shadow-xl border-l-8 border-indigo-600 animate-fade-in-up">
                 <h3 class="text-xl font-bold text-slate-800 dark:text-white" id="stdName">---</h3>
                 <p class="text-slate-500 dark:text-slate-400 text-xs mt-1">รหัสนิสิต: <span id="stdId" class="font-mono font-semibold text-indigo-600 dark:text-indigo-400">---</span> | ค่าห้องเดือนละ <span class="font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950/60 dark:text-emerald-400 px-2 py-0.5 rounded-lg border border-emerald-200/50">50 บาท</span></p>
+                <div class="mt-4">
+                    <div class="flex justify-between items-end mb-1.5 text-xs">
+                        <span class="font-semibold text-slate-600 dark:text-slate-300"><i class="fa-solid fa-bars-progress text-emerald-500 mr-1"></i> ความก้าวหน้าการชำระเงิน</span>
+                        <span class="font-bold text-emerald-600 dark:text-emerald-400 text-sm" id="stdProgressPct">0%</span>
+                    </div>
+                    <div class="pay-bar-track h-3.5"><div id="stdProgressBar" class="pay-bar-fill" style="width:0%"></div></div>
+                    <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5" id="stdProgressText">จ่ายแล้ว 0 จาก 300 บาท</p>
+                </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
@@ -262,11 +534,6 @@
                             <option value="มกราคม">มกราคม</option>
                             <option value="กุมภาพันธ์">กุมภาพันธ์</option>
                             <option value="มีนาคม">มีนาคม</option>
-                            <option value="เมษายน">เมษายน</option>
-                            <option value="พฤษภาคม">พฤษภาคม</option>
-                            <option value="มิถุนายน">มิถุนายน</option>
-                            <option value="กรกฎาคม">กรกฎาคม</option>
-                            <option value="สิงหาคม">สิงหาคม</option>
                         </select>
                     </div>
 
@@ -322,6 +589,17 @@
                         </button>
                     </div>
                     <p class="text-[10px] text-slate-500 mt-1.5">ปิดสวิตช์นี้จะหยุดเฉพาะการส่งอัตโนมัติ ปุ่มทดสอบส่งด้านล่างยังใช้งานได้ตามปกติ</p>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-yellow-600/40">
+                    <p class="text-xs font-semibold text-slate-200 mb-2"><i class="fa-solid fa-bullseye mr-1.5 text-yellow-500"></i> ตั้งเป้าหมายยอดเงิน (สำหรับ dial ring ในแดชบอร์ดผู้ดูแลระบบ)</p>
+                    <div class="flex flex-wrap gap-2 items-center">
+                        <input type="number" id="goalInput" min="1" placeholder="เป้าหมาย (บาท)" class="px-3 py-2 text-xs border border-yellow-700/50 bg-zinc-900 text-slate-100 rounded-xl focus:outline-none placeholder:text-slate-500 w-44">
+                        <button onclick="saveFundGoal()" class="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white px-4 py-2 rounded-xl text-xs font-semibold btn-hover">
+                            <i class="fa-solid fa-floppy-disk mr-1.5"></i> บันทึกเป้าหมาย
+                        </button>
+                    </div>
+                    <p id="goalStatus" class="text-[10px] text-slate-500 mt-1.5"></p>
                 </div>
 
                 <div class="mt-4 pt-4 border-t border-yellow-600/40">
@@ -426,6 +704,38 @@
                 </div>
             </div>
 
+            <!-- DIAL RING: ความก้าวหน้ายอดเงินรวมเทียบเป้าหมาย -->
+            <div class="glass-card p-6 rounded-3xl shadow-xl border-t-4 border-purple-500 animate-fade-in-up" style="animation-delay: 0.08s;">
+                <h4 class="font-bold text-slate-800 dark:text-white mb-4 flex items-center text-sm">
+                    <i class="fa-solid fa-bullseye text-purple-500 mr-2"></i> ความก้าวหน้ายอดเงินเทียบเป้าหมาย
+                </h4>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                    <div class="relative w-48 h-48 shrink-0">
+                        <svg viewBox="0 0 180 180" class="w-full h-full -rotate-90">
+                            <defs>
+                                <linearGradient id="dialGradient" x1="0" y1="0" x2="1" y2="1">
+                                    <stop offset="0%" style="stop-color:rgb(var(--c-indigo-500))"/>
+                                    <stop offset="55%" style="stop-color:rgb(var(--c-purple-500))"/>
+                                    <stop offset="100%" style="stop-color:rgb(var(--c-pink-500))"/>
+                                </linearGradient>
+                            </defs>
+                            <circle class="dial-track" cx="90" cy="90" r="74" fill="none" stroke-width="16"/>
+                            <circle id="dialRingProgress" class="dial-ring-progress" cx="90" cy="90" r="74" fill="none" stroke="url(#dialGradient)" stroke-width="16" stroke-linecap="round" stroke-dasharray="464.96" stroke-dashoffset="464.96"/>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                            <span id="dialPercent" class="text-3xl font-extrabold text-slate-800 dark:text-white">0%</span>
+                            <span class="text-[10px] text-slate-500 dark:text-slate-400">ของเป้าหมาย</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-xs w-full sm:w-auto sm:min-w-[220px]">
+                        <div class="flex justify-between gap-6"><span class="text-slate-500 dark:text-slate-400">ยอดเงินรวมในระบบ:</span><span id="dialCurrent" class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">0.00 บาท</span></div>
+                        <div class="flex justify-between gap-6"><span class="text-slate-500 dark:text-slate-400">เป้าหมาย:</span><span id="dialGoal" class="font-bold text-purple-600 dark:text-purple-400 text-sm">0.00 บาท</span></div>
+                        <div class="flex justify-between gap-6"><span class="text-slate-500 dark:text-slate-400">ยังขาดอีก:</span><span id="dialRemain" class="font-bold text-rose-500 dark:text-rose-400 text-sm">0.00 บาท</span></div>
+                        <p class="text-[10px] text-slate-400 dark:text-slate-500">ยอดเงินรวม = เงินคงเหลือกองกลางรวม (ค่าห้อง + เงินสนับสนุน − ค่าใช้จ่าย)</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- FINANCIAL SUMMARY CARDS -->
             <div class="grid md:grid-cols-2 gap-6">
                 <!-- สรุปงบประจำเดือน -->
@@ -501,11 +811,6 @@
                     <option value="มกราคม">มกราคม</option>
                     <option value="กุมภาพันธ์">กุมภาพันธ์</option>
                     <option value="มีนาคม">มีนาคม</option>
-                    <option value="เมษายน">เมษายน</option>
-                    <option value="พฤษภาคม">พฤษภาคม</option>
-                    <option value="มิถุนายน">มิถุนายน</option>
-                    <option value="กรกฎาคม">กรกฎาคม</option>
-                    <option value="สิงหาคม">สิงหาคม</option>
                 </select>
             </div>
 
@@ -517,6 +822,7 @@
                                 <th class="p-4 font-semibold">ลำดับ</th>
                                 <th class="p-4 font-semibold">รหัสนิสิต</th>
                                 <th class="p-4 font-semibold">ชื่อ - นามสกุล</th>
+                                <th class="p-4 font-semibold min-w-[170px]">ความก้าวหน้า (เต็ม 300 บาท)</th>
                                 <th class="p-4 font-semibold text-center">สถานะ</th>
                                 <th class="p-4 font-semibold text-center">หลักฐานสลิป</th>
                                 <th class="p-4 font-semibold text-center">จัดการสถานะ</th>
@@ -596,8 +902,13 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwA7y8hHCNxvPv1gb9_RJOJ3J7FaU_12MF5BDAFfsvV8-tJ_xyR3Bj2OqVuiEC6dmGZ/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOwJsVW3wKu9kYiy7NJNgq90sAiXGEMF1Jq2d0zgDAOuGlWtaJE9O4WnGdORzaXrz7/exec";
         const ROOM_FEE = 50;
+        // ยอดที่นิสิตแต่ละคนต้องจ่ายทั้งหมด (ใช้คำนวณแถบความก้าวหน้ารายบุคคล)
+        const PERSON_TARGET = 300;
+        // ค่าเริ่มต้นของเป้าหมายยอดเงินกองกลาง (ค่าจริงอ่านจากเซิร์ฟเวอร์ ผู้พัฒนาระบบแก้ไขได้)
+        const DEFAULT_FUND_GOAL = 10200;
+        const LIVE_REFRESH_MS = 15000;
 
         const initialStudents = [
             { id: "6920502020", prefix: "นาย", fname: "กิติศักดิ์", lname: "กาญจนี" },
@@ -642,7 +953,7 @@
             { id: "6920502062", name: "นาย ต้องรัก แดวขุนทด", pass: "2222" }
         ];
 
-        const months = ["ตุลาคม", "พฤศจิกายน", "ธันวาคม" ,"มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม"];
+        const months = ["ตุลาคม", "พฤศจิกายน", "ธันวาคม" ,"มกราคม", "กุมภาพันธ์", "มีนาคม"];
 
         // รหัสนิสิตของผู้พัฒนาระบบ ใช้เพื่อแสดงแดชบอร์ดผู้พัฒนาระบบและตรวจสอบสิทธิ์ฝั่งหน้าเว็บ
         // (ฝั่ง Apps Script ก็ตรวจสอบซ้ำอีกชั้นหนึ่งเช่นกัน เพื่อความปลอดภัย)
@@ -651,31 +962,49 @@
         let currentUser = null;
         let globalData = { payments: {}, expenses: { monthly: {}, overall: 0 }, donations: { monthly: {}, overall: 0 }, transactions: [] };
 
-        // --- DARK MODE FUNCTIONALITY ---
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-                document.getElementById('themeIcon').className = 'fa-solid fa-sun text-lg';
-            } else {
-                document.documentElement.classList.remove('dark');
-                document.getElementById('themeIcon').className = 'fa-solid fa-moon text-lg';
-            }
+        // --- THEME SYSTEM (4 ธีม: glass / midnight / cozy / petal) ---
+        const THEMES = ['glass', 'midnight', 'cozy', 'petal'];
+
+        function applyTheme(name) {
+            if (!THEMES.includes(name)) name = 'glass';
+            const html = document.documentElement;
+            html.setAttribute('data-theme', name);
+            // ธีมราตรีเป็นโทนมืด จึงเปิดคลาส dark เพื่อให้สไตล์ dark: ของ Tailwind ทำงาน
+            html.classList.toggle('dark', name === 'midnight');
+            document.querySelectorAll('[data-theme-btn]').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-theme-btn') === name);
+            });
         }
 
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            const icon = document.getElementById('themeIcon');
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                icon.className = 'fa-solid fa-moon text-lg';
-                localStorage.setItem('theme', 'light');
-            } else {
-                html.classList.add('dark');
-                icon.className = 'fa-solid fa-sun text-lg';
-                localStorage.setItem('theme', 'dark');
-            }
+        function setTheme(name) {
+            applyTheme(name);
+            try { localStorage.setItem('uiTheme', name); } catch (e) {}
+            document.getElementById('themeMenu').classList.add('hidden');
         }
+
+        function toggleThemeMenu(ev) {
+            ev.stopPropagation();
+            document.getElementById('themeMenu').classList.toggle('hidden');
+        }
+
+        document.addEventListener('click', (ev) => {
+            const menu = document.getElementById('themeMenu');
+            if (menu && !menu.classList.contains('hidden') && !menu.contains(ev.target)) menu.classList.add('hidden');
+        });
+
+        function initTheme() {
+            let saved = null;
+            try { saved = localStorage.getItem('uiTheme'); } catch (e) {}
+            if (!saved) {
+                // รองรับผู้ใช้เดิมที่เคยเลือกโหมดสว่าง/มืดไว้
+                let old = null;
+                try { old = localStorage.getItem('theme'); } catch (e) {}
+                if (old === 'dark' || (!old && window.matchMedia('(prefers-color-scheme: dark)').matches)) saved = 'midnight';
+                else saved = 'glass';
+            }
+            applyTheme(saved);
+        }
+
         // ตรวจสอบสถานะเว็บไซต์ (ปกติ/ปิดปรับปรุง) จากเซิร์ฟเวอร์ตอนโหลดหน้าเว็บ
         // ถ้าปิดปรับปรุงอยู่ จะซ่อนหน้า Login แล้วแสดงหน้า "ขออภัยในความไม่สะดวก" แทน
         // ถ้าเช็กไม่สำเร็จ (เช่น เน็ตหลุด) จะปล่อยให้เห็นหน้า Login ตามปกติ กันไม่ให้ทุกคนเข้าเว็บไม่ได้โดยไม่ตั้งใจ
@@ -729,6 +1058,99 @@
             popup.classList.add('hidden');
         }
 
+        // ---------- ความก้าวหน้าการจ่ายเงินรายบุคคล (อ่านจากสถานะในระบบ) ----------
+        function getPersonProgress(stdId) {
+            const stdPay = (globalData.payments && globalData.payments[stdId]) || {};
+            let paidMonths = 0;
+            months.forEach(m => {
+                // เดือนพฤศจิกายนเหรัญญิกจ่ายให้ทุกคนแล้ว (แสดงเป็นจ่ายแล้วในหน้านิสิต) จึงนับรวมในความก้าวหน้าด้วย
+                if (m === 'พฤศจิกายน' || (stdPay[m] && stdPay[m].status === 'paid')) paidMonths++;
+            });
+            const paidAmount = paidMonths * ROOM_FEE;
+            const pct = Math.min(100, Math.round((paidAmount / PERSON_TARGET) * 100));
+            return { paidAmount, pct };
+        }
+
+        function progressBarHtml(stdId) {
+            const p = getPersonProgress(stdId);
+            return `
+                <div class="flex items-center gap-2">
+                    <div class="pay-bar-track h-2.5 flex-1"><div class="pay-bar-fill ${p.pct >= 100 ? 'full' : ''}" style="width:${p.pct}%"></div></div>
+                    <span class="font-semibold text-[11px] w-9 text-right">${p.pct}%</span>
+                </div>
+                <div class="text-[10px] text-slate-400 mt-0.5">${p.paidAmount} / ${PERSON_TARGET} บาท</div>`;
+        }
+
+        function renderStudentProgress() {
+            if (!currentUser || currentUser.type !== 'student') return;
+            const p = getPersonProgress(currentUser.data.id);
+            document.getElementById('stdProgressPct').innerText = p.pct + '%';
+            const bar = document.getElementById('stdProgressBar');
+            bar.style.width = p.pct + '%';
+            bar.classList.toggle('full', p.pct >= 100);
+            document.getElementById('stdProgressText').innerText = `จ่ายแล้ว ${p.paidAmount} จาก ${PERSON_TARGET} บาท`;
+        }
+
+        // ---------- Dial ring: ยอดเงินรวมในระบบเทียบเป้าหมาย ----------
+        function getFundGoal() {
+            const g = Number(globalData.goal);
+            return (isFinite(g) && g > 0) ? g : DEFAULT_FUND_GOAL;
+        }
+
+        function renderDial(currentTotal) {
+            const goal = getFundGoal();
+            const ratio = Math.max(0, Math.min(1, currentTotal / goal));
+            const circumference = 2 * Math.PI * 74;
+            const ring = document.getElementById('dialRingProgress');
+            ring.setAttribute('stroke-dasharray', circumference.toFixed(2));
+            ring.setAttribute('stroke-dashoffset', (circumference * (1 - ratio)).toFixed(2));
+            document.getElementById('dialPercent').innerText = Math.round(ratio * 100) + '%';
+            document.getElementById('dialCurrent').innerText = currentTotal.toFixed(2) + ' บาท';
+            document.getElementById('dialGoal').innerText = goal.toFixed(2) + ' บาท';
+            document.getElementById('dialRemain').innerText = Math.max(0, goal - currentTotal).toFixed(2) + ' บาท';
+        }
+
+        async function saveFundGoal() {
+            if (!currentUser || currentUser.type !== 'admin' || currentUser.data.id !== DEVELOPER_ADMIN_ID) {
+                showPopup('ไม่มีสิทธิ์', 'เฉพาะผู้พัฒนาระบบเท่านั้นที่แก้ไขเป้าหมายได้', 'error');
+                return;
+            }
+            const goal = parseFloat(document.getElementById('goalInput').value);
+            if (isNaN(goal) || goal <= 0) {
+                showPopup('เตือน', 'กรุณากรอกจำนวนเป้าหมายที่ถูกต้อง', 'error');
+                return;
+            }
+            try {
+                const res = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ type: 'setFundGoal', adminId: currentUser.data.id, goal: goal })
+                });
+                const result = await res.json();
+                if (result.result === 'success') {
+                    globalData.goal = goal;
+                    document.getElementById('goalInput').value = '';
+                    renderAdminTable();
+                    showPopup('สำเร็จ', `ตั้งเป้าหมายเป็น ${goal.toFixed(2)} บาทเรียบร้อยแล้ว`, 'success');
+                } else {
+                    showPopup('ผิดพลาด', result.error || 'บันทึกเป้าหมายไม่สำเร็จ', 'error');
+                }
+            } catch (e) {
+                showPopup('ผิดพลาด', 'เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาลองใหม่', 'error');
+            }
+        }
+
+        // ---------- อัปเดตข้อมูลแบบเรียลไทม์ (ดึงข้อมูลใหม่ทุก 15 วินาทีขณะล็อกอินอยู่) ----------
+        let liveTimer = null;
+        function startLivePolling() {
+            if (liveTimer) return;
+            liveTimer = setInterval(() => {
+                if (!document.hidden && currentUser) fetchDataAndRender();
+            }, LIVE_REFRESH_MS);
+        }
+        function stopLivePolling() {
+            if (liveTimer) { clearInterval(liveTimer); liveTimer = null; }
+        }
+
         function getPayments() { return globalData.payments; }
         function getExpenses() { return globalData.expenses; }
         function getDonations() { return globalData.donations || { monthly: {}, overall: 0 }; }
@@ -741,6 +1163,7 @@
                     globalData = data;
                     if (!globalData.donations) globalData.donations = { monthly: {}, overall: 0 };
                     if (!globalData.transactions) globalData.transactions = [];
+                    if (!globalData.goal) globalData.goal = DEFAULT_FUND_GOAL;
                 }
             } catch(e) {
                 if(!globalData.payments || Object.keys(globalData.payments).length === 0) {
@@ -769,6 +1192,7 @@
                 document.getElementById('userBadge').innerText = `${student.prefix}${student.fname} ${student.lname}`;
                 document.getElementById('stdName').innerText = `${student.prefix}${student.fname} ${student.lname}`;
                 document.getElementById('stdId').innerText = student.id;
+                startLivePolling();
                 await fetchDataAndRender();
             } else {
                 showPopup('เข้าสู่ระบบไม่สำเร็จ', 'ไม่พบรหัสนิสิตนี้ในระบบ กรุณาตรวจสอบอีกครั้ง', 'error');
@@ -776,6 +1200,7 @@
         }
 
         function renderStudentStatus() {
+            renderStudentProgress();
             const payments = getPayments();
             const stdPayments = payments[currentUser.data.id] || {};
             const container = document.getElementById('studentStatusList');
@@ -959,6 +1384,7 @@
                     document.getElementById('devDashboard').classList.add('hidden');
                 }
 
+                startLivePolling();
                 await fetchDataAndRender();
             } else {
                 showPopup('เข้าสู่ระบบไม่สำเร็จ', 'รหัสนิสิตหรือรหัสผ่านผู้ดูแลระบบไม่ถูกต้อง', 'error');
@@ -1035,6 +1461,7 @@
                     <td class="p-3.5 text-slate-400">${idx + 1}</td>
                     <td class="p-3.5 font-mono font-medium">${std.id}</td>
                     <td class="p-3.5 font-medium">${std.prefix}${std.fname} ${std.lname}</td>
+                    <td class="p-3.5">${progressBarHtml(std.id)}</td>
                     <td class="p-3.5 text-center">
                         <span class="px-3 py-1 rounded-full text-[10px] font-semibold shadow-sm ${isPaid ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white' : 'bg-gradient-to-r from-rose-500 to-pink-500 text-white'}">
                             ${isPaid ? 'จ่ายแล้ว' : 'ยังไม่จ่าย'}
@@ -1079,6 +1506,9 @@
             document.getElementById('overallDonationTotal').innerText = overallDonation.toFixed(2) + ' บาท';
             document.getElementById('overallExpenseTotal').innerText = overallExpense.toFixed(2) + ' บาท';
             document.getElementById('overallNetTotal').innerText = overallNet.toFixed(2) + ' บาท';
+            renderDial(overallNet);
+            const goalStatusEl = document.getElementById('goalStatus');
+            if (goalStatusEl) goalStatusEl.innerText = `เป้าหมายปัจจุบัน: ${getFundGoal().toFixed(2)} บาท`;
 
             renderTransactionHistory();
         }
@@ -1589,6 +2019,7 @@
         }
 
         function logout() {
+            stopLivePolling();
             currentUser = null;
             document.getElementById('userInfo').classList.add('hidden');
             document.getElementById('studentDashboard').classList.add('hidden');
