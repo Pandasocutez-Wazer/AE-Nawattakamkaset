@@ -529,11 +529,7 @@
                     <div class="mb-4">
                         <label class="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">เลือกเดือนที่ต้องการแจ้งจ่าย:</label>
                         <select id="monthSelect" class="w-full p-2.5 bg-white/80 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium focus:ring-2 focus:ring-indigo-500/50">
-                            <option value="ตุลาคม">ตุลาคม</option>
-                            <option value="ธันวาคม">ธันวาคม</option>
-                            <option value="มกราคม">มกราคม</option>
-                            <option value="กุมภาพันธ์">กุมภาพันธ์</option>
-                            <option value="มีนาคม">มีนาคม</option>
+                            <option value="" disabled selected>กำลังโหลดข้อมูล...</option>
                         </select>
                     </div>
 
@@ -1199,8 +1195,46 @@
             }
         }
 
+        // ซิงก์ตัวเลือกเดือนใน dropdown กับสถานะการจ่ายของนิสิตที่ล็อกอินอยู่
+        // เดือนที่จ่ายแล้ว (และเดือนที่เหรัญญิกจ่ายให้) จะไม่แสดงในตัวเลือก เหลือเฉพาะเดือนที่ยังไม่จ่าย
+        function updateMonthSelectOptions() {
+            const select = document.getElementById('monthSelect');
+            const btn = document.getElementById('uploadBtn');
+            if (!select || !currentUser || currentUser.type !== 'student') return;
+
+            const stdPayments = (globalData.payments && globalData.payments[currentUser.data.id]) || {};
+            const unpaidMonths = months.filter(m => {
+                if (m === 'พฤศจิกายน') return false; // เหรัญญิกจ่ายให้ทุกคนแล้ว
+                return !(stdPayments[m] && stdPayments[m].status === 'paid');
+            });
+
+            const previous = select.value; // จำเดือนที่เลือกค้างไว้ (กันค่ากระโดดตอนระบบรีเฟรชอัตโนมัติ)
+            select.innerHTML = '';
+
+            if (unpaidMonths.length === 0) {
+                const opt = document.createElement('option');
+                opt.value = '';
+                opt.textContent = 'จ่ายครบทุกเดือนแล้ว 🎉';
+                select.appendChild(opt);
+                select.disabled = true;
+                if (btn && !btn.dataset.busy) btn.disabled = true;
+                return;
+            }
+
+            unpaidMonths.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m;
+                opt.textContent = m;
+                select.appendChild(opt);
+            });
+            select.disabled = false;
+            if (unpaidMonths.includes(previous)) select.value = previous;
+            if (btn && !btn.dataset.busy) btn.disabled = false;
+        }
+
         function renderStudentStatus() {
             renderStudentProgress();
+            updateMonthSelectOptions();
             const payments = getPayments();
             const stdPayments = payments[currentUser.data.id] || {};
             const container = document.getElementById('studentStatusList');
@@ -1271,6 +1305,11 @@
             const fileInput = document.getElementById('slipInput');
             const btn = document.getElementById('uploadBtn');
 
+            if (!month) {
+                showPopup('แจ้งเตือน', 'ไม่มีเดือนที่ต้องแจ้งจ่ายแล้ว คุณจ่ายครบทุกเดือนเรียบร้อย', 'success');
+                return;
+            }
+
             if (!fileInput.files || fileInput.files.length === 0) {
                 showPopup('แจ้งเตือน', 'กรุณาเลือกรูปภาพสลิปการโอนเงินก่อนทำรายการ', 'error');
                 return;
@@ -1278,6 +1317,7 @@
 
             const file = fileInput.files[0];
 
+            btn.dataset.busy = '1';
             btn.disabled = true;
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> กำลังตรวจสอบรูปภาพ...`;
 
@@ -1286,12 +1326,14 @@
                 const hasQr = await detectQrCodeInFile(file);
                 if (!hasQr) {
                     showPopup('แจ้งเตือน', 'ไม่พบ QR Code สำหรับตรวจสอบในรูปภาพนี้ กรุณาแนบรูปสลิปการโอนเงินที่ถูกต้อง', 'error');
+                    delete btn.dataset.busy;
                     btn.disabled = false;
                     btn.innerHTML = `<i class="fa-solid fa-upload mr-1.5"></i> ส่งสลิปแจ้งจ่ายเงิน`;
                     return;
                 }
             } catch (err) {
                 showPopup('แจ้งเตือน', 'ไม่สามารถตรวจสอบรูปภาพนี้ได้ กรุณาลองแนบไฟล์รูปภาพใหม่อีกครั้ง', 'error');
+                delete btn.dataset.busy;
                 btn.disabled = false;
                 btn.innerHTML = `<i class="fa-solid fa-upload mr-1.5"></i> ส่งสลิปแจ้งจ่ายเงิน`;
                 return;
@@ -1335,8 +1377,10 @@
                 } catch (err) {
                     showPopup('ผิดพลาด', 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์', 'error');
                 } finally {
+                    delete btn.dataset.busy;
                     btn.disabled = false;
                     btn.innerHTML = `<i class="fa-solid fa-upload mr-1.5"></i> ส่งสลิปแจ้งจ่ายเงิน`;
+                    updateMonthSelectOptions();
                 }
             };
             reader.readAsDataURL(file);
